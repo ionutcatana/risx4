@@ -44,25 +44,25 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
                 uintptr_t framebuffer = (uintptr_t)fb_tag->common.framebuffer_addr;
 
                 if (
-                    fb_tag->common.framebuffer_type == MULTIBOOT2_FRAMEBUFFER_TYPE_RGB &&
-                    fb_tag->common.framebuffer_bpp == 24
+                    fb_tag->common.framebuffer_type != MULTIBOOT2_FRAMEBUFFER_TYPE_RGB ||
+                    fb_tag->common.framebuffer_bpp != 24
                 ) {
-                    // fill the screen with white color
-                    struct color {
-                        uint8_t red;
-                        uint8_t green;
-                        uint8_t blue;
-                    } color = {0xFF, 0xFF, 0xFF}; // default white color
-
-                    for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
-                        for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
-                            struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
-                            *pixel = color;
-                        }
-                    }
-                } else {
                     // other video modes and bit depths are not supported
                     return 1;
+                }
+
+                // fill the screen with white color
+                struct color {
+                    uint8_t red;
+                    uint8_t green;
+                    uint8_t blue;
+                } color = {0xFF, 0xFF, 0xFF}; // default white color
+
+                for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
+                    for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
+                        struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
+                        *pixel = color;
+                    }
                 }
 
                 break;
