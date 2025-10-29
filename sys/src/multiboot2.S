@@ -39,7 +39,7 @@ mbfb:   .word   FRAMEBUFFER
         .long   20
         .long   1024                    # width
         .long   768                     # height
-        .long   32                      # depth
+        .long   24                      # depth
         .align  8
 mbfoot: .word   0                       # last required tag
         .word   0
