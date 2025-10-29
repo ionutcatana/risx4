@@ -10,6 +10,7 @@
 #endif
         .equ    LENGTH, (mbend - mbhead)
         .equ    CHECKSUM, (-(MAGIC + ARCH + (mbend - mbhead)))
+        .equ    FRAMEBUFFER, 5
 
         .section .multiboot2
         .global multiboot2_header
@@ -19,6 +20,14 @@ mbhead: .long   MAGIC                   # multiboot 2 header
         .long   ARCH
         .long   LENGTH
         .long   CHECKSUM
+        .align  8                       # every tag needs to be aligned
+mbfb:   .word   FRAMEBUFFER
+        .word   0
+        .long   20
+        .long   1024                    # width
+        .long   768                     # height
+        .long   24                      # depth
+        .align  8
 mbfoot: .word   0                       # last required tag
         .word   0
         .long   8
