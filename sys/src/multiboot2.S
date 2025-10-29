@@ -10,7 +10,13 @@
 #endif
         .equ    LENGTH, (mbend - mbhead)
         .equ    CHECKSUM, (-(MAGIC + ARCH + (mbend - mbhead)))
-        .equ    FRAMEBUFFER, 5
+
+        .equ    INFO, 1                 # request information
+        .equ    REQ_MMAP, 6             # memory map
+        .equ    REQ_CMDLINE, 1          # command line args
+        .equ    REQ_FRAMEBUFFER, 8      # framebuffer information
+
+        .equ    FRAMEBUFFER, 5          # framebuffer preferences
 
         .section .multiboot2
         .global multiboot2_header
@@ -21,8 +27,15 @@ mbhead: .long   MAGIC                   # multiboot 2 header
         .long   LENGTH
         .long   CHECKSUM
         .align  8                       # every tag needs to be aligned
+mbinfo: .word   INFO
+        .word   0                       # required
+        .long   20
+        .long   REQ_MMAP
+        .long   REQ_CMDLINE
+        .long   REQ_FRAMEBUFFER
+        .align  8
 mbfb:   .word   FRAMEBUFFER
-        .word   0
+        .word   0                       # required
         .long   20
         .long   1024                    # width
         .long   768                     # height
