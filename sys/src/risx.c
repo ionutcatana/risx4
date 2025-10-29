@@ -53,16 +53,24 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
 
                 // fill the screen with white color
                 struct color {
-                    uint8_t red;
-                    uint8_t green;
                     uint8_t blue;
-                } color = {0xFF, 0xFF, 0xFF}; // default white color
+                    uint8_t green;
+                    uint8_t red;
+                } color = {0xFF, 0xFF, 0xFF};
 
                 for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
                     for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
                         struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
                         *pixel = color;
                     }
+                }
+
+                // draw a diagonal line in red color
+                color = (struct color){.blue = 0x00, .green = 0x00, .red = 0xFF};
+
+                for (size_t i = 0; i < fb_tag->common.framebuffer_height && i < fb_tag->common.framebuffer_width; i++) {
+                    struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + i * (fb_tag->common.framebuffer_bpp / 8));
+                    *pixel = color;
                 }
 
                 break;
