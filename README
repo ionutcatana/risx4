@@ -10,3 +10,4 @@ the root of the repository.
 The following files are derived from other projects:
     multiboot2.h: Multiboot specification 2.0
     gdt.S: xv6
+    terminus16lat2.psf: Terminus font
