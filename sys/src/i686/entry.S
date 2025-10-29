@@ -11,6 +11,8 @@
         .global _start
 _start: lea     esp, stack0             # initialize stack
         mov     ebp, esp
+        push    0
+        popf                            # clear EFLAGS register
         push    ebx                     # phys address of multiboot info struct
         push    eax                     # magic number
 
