@@ -41,28 +41,29 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
 
             case MULTIBOOT2_TAG_TYPE_FRAMEBUFFER:
                 struct multiboot2_tag_framebuffer* fb_tag = (struct multiboot2_tag_framebuffer*)tag;
-                uint8_t* framebuffer = (uint8_t*)(uintptr_t)fb_tag->common.framebuffer_addr;
+                uintptr_t framebuffer = (uintptr_t)fb_tag->common.framebuffer_addr;
 
-                for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
-                    for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
+                if (
+                    fb_tag->common.framebuffer_type == MULTIBOOT2_FRAMEBUFFER_TYPE_RGB &&
+                    fb_tag->common.framebuffer_bpp == 24
+                ) {
+                    // fill the screen with white color
+                    struct color {
+                        uint8_t red;
+                        uint8_t green;
+                        uint8_t blue;
+                    } color = {0xFF, 0xFF, 0xFF}; // default white color
 
-                        size_t bytes_per_pixel = fb_tag->common.framebuffer_bpp / 8;
-                        size_t pixel_offset = i * fb_tag->common.framebuffer_pitch + j * bytes_per_pixel;
-
-                        for (size_t k = 0; k < bytes_per_pixel; k++) {
-                            framebuffer[pixel_offset + k] = 0xFF;
+                    for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
+                        for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
+                            struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
+                            *pixel = color;
                         }
                     }
+                } else {
+                    // other video modes and bit depths are not supported
+                    return 1;
                 }
-
-                // if (fb_tag->common.framebuffer_type == MULTIBOOT2_FRAMEBUFFER_TYPE_RGB) {
-                //     //
-                // } else if (fb_tag->common.framebuffer_type == MULTIBOOT2_FRAMEBUFFER_TYPE_INDEXED)  {
-                //     //
-                // } else {
-                //     // I have no idea what EGA text mode is
-                //     return 1;
-                // }
 
                 break;
         }
