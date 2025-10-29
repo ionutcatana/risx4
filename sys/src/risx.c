@@ -51,26 +51,39 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
                     return 1;
                 }
 
-                // fill the screen with white color
+                // // fill the screen with white color
                 struct color {
                     uint8_t blue;
                     uint8_t green;
                     uint8_t red;
-                } color = {0xFF, 0xFF, 0xFF};
+                };
+                // color = {0xFF, 0xFF, 0xFF};
+
+                // for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
+                //     for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
+                //         struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
+                //         *pixel = color;
+                //     }
+                // }
+
+                // // draw a diagonal line in red color
+                // color = (struct color){.blue = 0x00, .green = 0x00, .red = 0xFF};
+
+                // for (size_t i = 0; i < fb_tag->common.framebuffer_height && i < fb_tag->common.framebuffer_width; i++) {
+                //     struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + i * (fb_tag->common.framebuffer_bpp / 8));
+                //     *pixel = color;
+                // }
 
                 for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
                     for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
+                        struct color color = {
+                            .blue  = (uint8_t)((j * 255) / fb_tag->common.framebuffer_width),
+                            .green = (uint8_t)((i * 255) / fb_tag->common.framebuffer_height),
+                            .red   = (uint8_t)(((i + j) * 255) / (fb_tag->common.framebuffer_width + fb_tag->common.framebuffer_height))
+                        };
                         struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
                         *pixel = color;
                     }
-                }
-
-                // draw a diagonal line in red color
-                color = (struct color){.blue = 0x00, .green = 0x00, .red = 0xFF};
-
-                for (size_t i = 0; i < fb_tag->common.framebuffer_height && i < fb_tag->common.framebuffer_width; i++) {
-                    struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + i * (fb_tag->common.framebuffer_bpp / 8));
-                    *pixel = color;
                 }
 
                 break;
