@@ -69,10 +69,8 @@ int console_putchar(int c) {
     }
 
     font_draw_char(console_x * FONT_WIDTH, console_y * FONT_HEIGHT, ch,
-                //    CONSOLE_FG_R, CONSOLE_FG_G, CONSOLE_FG_B,
-                //    CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
-                0xFf, 0x00, 0x00,
-                0x00, 0x00, 0x00);
+                   CONSOLE_FG_R, CONSOLE_FG_G, CONSOLE_FG_B,
+                   CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
 
     console_x++;
 
