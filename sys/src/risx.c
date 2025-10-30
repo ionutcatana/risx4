@@ -2,6 +2,7 @@
 #include "framebuffer.h"
 #include "libk/kernio.h"
 #include "libk/stdlib.h"
+#include "libk/string.h"
 #include "multiboot2.h"
 #include "psf.h"
 #include <stdbool.h>
@@ -9,7 +10,12 @@
 #include <stdint.h>
 #include <stdnoreturn.h>
 
-uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
+uintptr_t mem_lo;
+uintptr_t mem_hi;
+char bootloader_name[20];
+char commands[200];
+
+uint32_t parse_mbi(uint32_t magic, uintptr_t addr) {
     if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
         return 1;
     }
@@ -26,15 +32,23 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
     while (tag->type != MULTIBOOT2_TAG_TYPE_END) {
         switch (tag->type) {
             case MULTIBOOT2_TAG_TYPE_CMDLINE:
+                struct multiboot2_tag_string* cmdline_tag = (struct multiboot2_tag_string*)tag;
+                strcpy(commands, cmdline_tag->string);
                 break;
 
             case MULTIBOOT2_TAG_TYPE_BOOT_LOADER_NAME:
+                struct multiboot2_tag_string* name_tag = (struct multiboot2_tag_string*)tag;
+                strcpy(bootloader_name, name_tag->string);
                 break;
 
             case MULTIBOOT2_TAG_TYPE_MODULE:
                 break;
 
             case MULTIBOOT2_TAG_TYPE_BASIC_MEMINFO:
+                struct multiboot2_tag_basic_meminfo* basic_meminfo_tag = (struct multiboot2_tag_basic_meminfo*)tag;
+                mem_lo = basic_meminfo_tag->mem_lower;
+                mem_hi = basic_meminfo_tag->mem_upper;
+
                 break;
 
             case MULTIBOOT2_TAG_TYPE_BOOTDEV:
@@ -70,19 +84,28 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
 }
 
 noreturn void risx(uint32_t magic, uintptr_t addr) {
-    if (validate_mbi(magic, addr) != 0) {
+    if (parse_mbi(magic, addr) != 0) {
         abort();
     }
 
     font_init((uintptr_t)&_binary_static_terminus_psf_start);
     console_init();
 
-    kputs("RISX Kernel booted successfully!\n");
-    kputs("Framebuffer console initialized.\n");
-    kprintf("Resolution: %dx%d\n", fb_info.width, fb_info.height);
+    kprintf("RISX booted.\n");
 
-    for (int i = 0; i < 300; i++) {
-        kprintf("Counting: %d\n", i);
+    kprintf("Framebuffer:\n");
+    kprintf("- Resolution: %dx%d\n", fb_info.width, fb_info.height);
+    kprintf("- Pitch: %u\n", fb_info.pitch);
+    kprintf("- Depth: %u\n", fb_info.bpp);
+    kprintf("- Address: 0x%x\n", fb_info.addr);
+    kprintf("Basic memory info:\n");
+    kprintf("- Lo: %d KiB\n- Hi: %d KiB\n", mem_lo, mem_hi);
+    kprintf("Bootloader: %s\n", bootloader_name);
+
+    if (strlen(commands) == 0) {
+        kprintf("No command line arguments provided.\n");
+    } else {
+        kprintf("Command line: %s\n", commands);
     }
 
     while (true);
