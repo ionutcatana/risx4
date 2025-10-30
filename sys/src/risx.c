@@ -80,6 +80,10 @@ noreturn void risx(uint32_t magic, uintptr_t addr) {
     kputs("Framebuffer console initialized.\n");
     kprintf("Resolution: %dx%d\n", fb_info.width, fb_info.height);
 
+    for (int i = 0; i < 300; i++) {
+        kprintf("Counting: %d\n", i);
+    }
+
     while (true);
 }
 
