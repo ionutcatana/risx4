@@ -1,6 +1,10 @@
 #include "console.h"
-#include "vga.h"
 
 int kputs(const char* string) {
-	return kprintf(string); // not efficient, but works for now
+    int count = 0;
+    while (*string) {
+        console_putchar(*string++);
+        count++;
+    }
+    return count;
 }

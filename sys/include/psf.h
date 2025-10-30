@@ -44,4 +44,11 @@ struct psf2_header {
 
 void font_init(uint8_t bitmap[], void* psf_header);
 void access_bitmap();
+
+// Get font dimensions
+uint8_t font_get_width(void);
+uint8_t font_get_height(void);
+
+// Draw a character at position (x, y) with foreground/background colors
+void font_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_r, uint8_t fg_g, uint8_t fg_b, uint8_t bg_r, uint8_t bg_g, uint8_t bg_b);
 #endif

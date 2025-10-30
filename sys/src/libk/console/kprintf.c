@@ -166,33 +166,15 @@ int kprintf(const char* restrict format, ...) {
 int kdebugf(const char* restrict format, ...) {
     va_list args;
     va_start(args, format);
-
-    uint8_t current_fg_color = vga_get_foreground_color();
-    if (current_fg_color != FG_LIGHT_BLUE) {
-        vga_set_foreground_color(FG_LIGHT_BLUE);
-    }
-
     int result = kprintf(format, args);
     va_end(args);
-
-    vga_set_foreground_color(current_fg_color);
-
     return result;
 }
 
 int kerrorf(const char* restrict format, ...) {
     va_list args;
     va_start(args, format);
-
-    uint8_t current_fg_color = vga_get_foreground_color();
-    if (current_fg_color != FG_RED) {
-        vga_set_foreground_color(FG_RED);
-    }
-
     int result = kprintf(format, args);
     va_end(args);
-
-    vga_set_foreground_color(current_fg_color);
-
     return result;
 }

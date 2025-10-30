@@ -4,6 +4,9 @@
 #include <stdnoreturn.h>
 #include "multiboot2.h"
 #include "stdlib.h"
+#include "framebuffer.h"
+#include "psf.h"
+#include "console.h"
 
 uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
     if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
@@ -41,7 +44,6 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
 
             case MULTIBOOT2_TAG_TYPE_FRAMEBUFFER:
                 struct multiboot2_tag_framebuffer* fb_tag = (struct multiboot2_tag_framebuffer*)tag;
-                uintptr_t framebuffer = (uintptr_t)fb_tag->common.framebuffer_addr;
 
                 if (
                     fb_tag->common.framebuffer_type != MULTIBOOT2_FRAMEBUFFER_TYPE_RGB ||
@@ -51,19 +53,8 @@ uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
                     return 1;
                 }
 
-                // fill the screen with light gray
-                struct color {
-                    uint8_t blue;
-                    uint8_t green;
-                    uint8_t red;
-                } color = {0xAA, 0xAA, 0xAA};
-
-                for (size_t i = 0; i < fb_tag->common.framebuffer_height; i++) {
-                    for (size_t j = 0; j < fb_tag->common.framebuffer_width; j++) {
-                        struct color* pixel = (struct color*)(framebuffer + i * fb_tag->common.framebuffer_pitch + j * (fb_tag->common.framebuffer_bpp / 8));
-                        *pixel = color;
-                    }
-                }
+                // Initialize framebuffer
+                fb_init(fb_tag);
 
                 break;
         }
@@ -81,6 +72,20 @@ noreturn void risx(uint32_t magic, uintptr_t addr) {
     if (validate_mbi(magic, addr) != 0) {
         abort();
     }
+
+    // Initialize font from embedded PSF data
+    extern uintptr_t _binary_static_terminus_psf_start;
+    // Allocate font bitmap (256 chars * 16 bytes each for 16-pixel height)
+    uint8_t font_bitmap[256 * 16];
+    font_init(font_bitmap, (void*)&_binary_static_terminus_psf_start);
+
+    // Initialize console
+    console_init();
+
+    // Test printing
+    kputs("RISX Kernel booted successfully!\n");
+    kputs("Framebuffer console initialized.\n");
+    kprintf("Resolution: %dx%d\n", fb_info.width, fb_info.height);
 
     while (true);
 }
