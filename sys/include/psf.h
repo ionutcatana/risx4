@@ -18,7 +18,7 @@
 
 extern uintptr_t _binary_static_terminus_psf_start;
 extern uintptr_t _binary_static_terminus_psf_end;
-extern size_t _binary_static_terminus_psf_size;
+extern uintptr_t _binary_static_terminus_psf_size;
 
 struct psf1_header {
     uint16_t magic;

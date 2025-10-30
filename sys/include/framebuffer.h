@@ -5,11 +5,11 @@
 #include <stddef.h>
 #include "multiboot2.h"
 
-#define SCREEN_WIDTH   1024
-#define SCREEN_HEIGHT  768
-#define SCREEN_BPP     24
-#define FONT_WIDTH     8
-#define FONT_HEIGHT    16
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
+#define SCREEN_BPP 24
+#define FONT_WIDTH 8
+#define FONT_HEIGHT 16
 #define BACK_BUFFER_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * (SCREEN_BPP / 8))
 
 struct framebuffer_info {
