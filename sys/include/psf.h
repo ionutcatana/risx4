@@ -26,6 +26,7 @@ struct psf1_header {
     uint8_t char_size;
 };
 
+// psf.c
 void font_init(uintptr_t psf1_header_addr);
 void font_draw_char(size_t x, size_t y, char c,
                     uint8_t fg_r, uint8_t fg_g, uint8_t fg_b,

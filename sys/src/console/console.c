@@ -8,7 +8,6 @@ uint32_t console_x = 0;
 uint32_t console_y = 0;
 
 void console_init(void) {
-
     fb_clear(CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
     console_x = 0;
     console_y = 0;

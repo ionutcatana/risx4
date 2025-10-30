@@ -15,6 +15,7 @@
 extern uint32_t console_x;
 extern uint32_t console_y;
 
+// console/console.c
 void console_init(void);
 int console_putchar(int c);
 
