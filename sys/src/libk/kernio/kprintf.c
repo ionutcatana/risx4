@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-#include "console.h"
+#include "kernio.h"
 #include "string.h"
 
 static bool kprint(const char* data, size_t length) {

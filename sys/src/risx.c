@@ -6,6 +6,7 @@
 #include "stdlib.h"
 #include "framebuffer.h"
 #include "psf.h"
+#include "kernio.h"
 #include "console.h"
 
 uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {

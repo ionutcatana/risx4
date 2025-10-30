@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define EOF (-1)
-
 #define CONSOLE_WIDTH (SCREEN_WIDTH / FONT_WIDTH)
 #define CONSOLE_HEIGHT (SCREEN_HEIGHT / FONT_HEIGHT)
 #define CONSOLE_FG_R ((uint8_t)0xAA)
@@ -20,10 +18,5 @@ extern uint32_t console_y;
 void console_init(void);
 int console_putchar(int c);
 
-int kprintf(const char* restrict format, ...);
-int kdebugf(const char* restrict format, ...);
-int kerrorf(const char* restrict format, ...);
-int kputchar(int c);
-int kputs(const char* s);
 
 #endif
