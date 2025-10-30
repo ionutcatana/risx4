@@ -1,6 +1,6 @@
 #include "console.h"
-#include "psf.h"
 #include "framebuffer.h"
+#include "psf.h"
 #include <stdint.h>
 
 

@@ -1,6 +1,6 @@
+#include "libk/string.h"
 #include <stdbool.h>
 #include <stddef.h>
-#include "string.h"
 
 int strcmp(const char* a, const char* b) {
 	size_t i = 0;

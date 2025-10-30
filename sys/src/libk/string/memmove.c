@@ -1,5 +1,5 @@
+#include "libk/string.h"
 #include <stddef.h>
-#include "string.h"
 
 void* memmove(void* dstptr, const void* srcptr, size_t n) {
 	unsigned char* dst = (unsigned char*)dstptr;

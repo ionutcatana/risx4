@@ -1,9 +1,9 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include <stdint.h>
-#include <stddef.h>
 #include "multiboot2.h"
+#include <stddef.h>
+#include <stdint.h>
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768

@@ -1,5 +1,5 @@
+#include "libk/string.h"
 #include <stddef.h>
-#include "string.h"
 
 int memcmp(const void* aptr, const void* bptr, size_t n) {
 	const unsigned char* a = (const unsigned char*)aptr;

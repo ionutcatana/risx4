@@ -1,5 +1,5 @@
 #include "console.h"
-#include "kernio.h"
+#include "libk/kernio.h"
 
 int kputs(const char* string) {
     int count = 0;

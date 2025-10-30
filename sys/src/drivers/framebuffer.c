@@ -1,12 +1,10 @@
 #include "framebuffer.h"
+#include "libk/stdlib.h"
+#include "libk/string.h"
 #include "multiboot2.h"
 #include <stdint.h>
-#include <string.h>
 
-// Global framebuffer info
 struct framebuffer_info fb_info;
-
-// Back buffer for double buffering - allocated as global static memory (not on stack)
 uint8_t back_buffer[BACK_BUFFER_SIZE];
 
 void fb_init(struct multiboot2_tag_framebuffer* fb_tag) {
@@ -20,10 +18,9 @@ void fb_init(struct multiboot2_tag_framebuffer* fb_tag) {
 
 void fb_putpixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b) {
     if (x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT) {
-        return; // Out of bounds
+        abort();
     }
 
-    // Calculate offset in back buffer (RGB format)
     uint32_t offset = (y * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
     back_buffer[offset + 0] = b; // Blue
     back_buffer[offset + 1] = g; // Green
@@ -39,6 +36,5 @@ void fb_clear(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void fb_flip(void) {
-    // Copy back buffer to front buffer (framebuffer) using memcpy for speed
     memcpy((void*)fb_info.addr, back_buffer, BACK_BUFFER_SIZE);
 }

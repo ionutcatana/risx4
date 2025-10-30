@@ -1,13 +1,13 @@
+#include "console.h"
+#include "framebuffer.h"
+#include "libk/kernio.h"
+#include "libk/stdlib.h"
+#include "multiboot2.h"
+#include "psf.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdnoreturn.h>
-#include "multiboot2.h"
-#include "stdlib.h"
-#include "framebuffer.h"
-#include "psf.h"
-#include "kernio.h"
-#include "console.h"
 
 uint32_t validate_mbi(uint32_t magic, uintptr_t addr) {
     if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {

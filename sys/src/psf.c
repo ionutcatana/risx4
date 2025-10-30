@@ -1,8 +1,8 @@
+#include "framebuffer.h"
+#include "libk/stdlib.h"
+#include "psf.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "psf.h"
-#include "stdlib.h"
-#include "framebuffer.h"
 
 static uint8_t* font_bitmap = NULL;
 

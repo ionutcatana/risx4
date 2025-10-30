@@ -1,6 +1,6 @@
+#include "libk/string.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "string.h"
 
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t n) {
 	unsigned char* dst = (unsigned char*)dstptr;

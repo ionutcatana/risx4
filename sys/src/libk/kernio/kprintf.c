@@ -1,9 +1,8 @@
+#include "libk/kernio.h"
+#include "libk/string.h"
 #include <limits.h>
-#include <stdbool.h>
 #include <stdarg.h>
-
-#include "kernio.h"
-#include "string.h"
+#include <stdbool.h>
 
 static bool kprint(const char* data, size_t length) {
     const unsigned char* bytes = (const unsigned char*) data;

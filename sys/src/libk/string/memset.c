@@ -1,5 +1,5 @@
+#include "libk/string.h"
 #include <stddef.h>
-#include "string.h"
 
 void* memset(void* bufptr, int value, size_t n) {
 	unsigned char* buf = (unsigned char*)bufptr;
