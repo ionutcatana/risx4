@@ -4,7 +4,6 @@
 #include "libk/stdlib.h"
 #include "libk/string.h"
 #include "multiboot2.h"
-#include "psf.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -88,7 +87,6 @@ noreturn void risx(uint32_t magic, uintptr_t addr) {
         abort();
     }
 
-    font_init((uintptr_t)&_binary_static_terminus_psf_start);
     console_init();
 
     kprintf("RISX booted.\n");
