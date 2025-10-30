@@ -1,8 +1,8 @@
 #include "console.h"
 #include "framebuffer.h"
+#include "libk/string.h"
 #include "psf.h"
 #include <stdint.h>
-
 
 uint32_t console_x = 0;
 uint32_t console_y = 0;
@@ -15,19 +15,16 @@ void console_init(void) {
 }
 
 static void console_scroll(void) {
+    uint32_t bytes_per_pixel = (SCREEN_BPP / 8);
+    uint32_t row_bytes = SCREEN_WIDTH * bytes_per_pixel;
+
+    uint8_t *buf = back_buffer;
 
     for (uint32_t y = FONT_HEIGHT; y < SCREEN_HEIGHT; y++) {
-        for (uint32_t x = 0; x < SCREEN_WIDTH; x++) {
-
-            uint32_t src_offset = (y * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
-            uint32_t dst_offset = ((y - FONT_HEIGHT) * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
-
-            back_buffer[dst_offset + 0] = back_buffer[src_offset + 0]; // B
-            back_buffer[dst_offset + 1] = back_buffer[src_offset + 1]; // G
-            back_buffer[dst_offset + 2] = back_buffer[src_offset + 2]; // R
-        }
+        uint32_t src_offset = y * row_bytes;
+        uint32_t dst_offset = (y - FONT_HEIGHT) * row_bytes;
+        memcpy(&buf[dst_offset], &buf[src_offset], row_bytes);
     }
-
 
     for (uint32_t y = SCREEN_HEIGHT - FONT_HEIGHT; y < SCREEN_HEIGHT; y++) {
         for (uint32_t x = 0; x < SCREEN_WIDTH; x++) {

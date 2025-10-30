@@ -19,5 +19,4 @@ extern uint32_t console_y;
 void console_init(void);
 int console_putchar(int c);
 
-
 #endif

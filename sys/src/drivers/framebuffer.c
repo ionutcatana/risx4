@@ -22,9 +22,9 @@ void fb_putpixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b) {
     }
 
     uint32_t offset = (y * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
-    back_buffer[offset + 0] = b; // Blue
-    back_buffer[offset + 1] = g; // Green
-    back_buffer[offset + 2] = r; // Red
+    back_buffer[offset + 0] = b; // B
+    back_buffer[offset + 1] = g; // G
+    back_buffer[offset + 2] = r; // R
 }
 
 void fb_clear(uint8_t r, uint8_t g, uint8_t b) {

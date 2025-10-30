@@ -24,6 +24,7 @@ struct framebuffer_info {
 extern struct framebuffer_info fb_info;
 extern uint8_t back_buffer[BACK_BUFFER_SIZE];
 
+// drivers/framebuffer.c
 void fb_init(struct multiboot2_tag_framebuffer* fb_tag);
 void fb_putpixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
 void fb_clear(uint8_t r, uint8_t g, uint8_t b);
