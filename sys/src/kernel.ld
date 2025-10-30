@@ -18,8 +18,6 @@ SECTIONS
     .data : {
         . = ALIGN(16);
         KEEP(*(.data))
-        . = ALIGN(16);
-        __font_start = .;
         KEEP(*(font.o))
     }
 
