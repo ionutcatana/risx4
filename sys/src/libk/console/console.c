@@ -12,30 +12,26 @@ void console_init(void) {
     fb_clear(CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
     console_x = 0;
     console_y = 0;
+    fb_flip(); // Flip to show the cleared screen
 }
 
 static void console_scroll(void) {
-    uint8_t char_height = font_get_height();
-
     // Scroll up by one line
-    for (uint32_t y = char_height; y < fb_info.height; y++) {
-        for (uint32_t x = 0; x < fb_info.width; x++) {
+    for (uint32_t y = FONT_HEIGHT; y < SCREEN_HEIGHT; y++) {
+        for (uint32_t x = 0; x < SCREEN_WIDTH; x++) {
             // Copy pixel from next line up
-            uint32_t src_offset = (y * fb_info.pitch) + (x * (fb_info.bpp / 8));
-            uint32_t dst_offset = ((y - char_height) * fb_info.pitch) + (x * (fb_info.bpp / 8));
+            uint32_t src_offset = (y * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
+            uint32_t dst_offset = ((y - FONT_HEIGHT) * SCREEN_WIDTH + x) * (SCREEN_BPP / 8);
 
-            uint8_t* src_pixel = (uint8_t*)(fb_info.addr + src_offset);
-            uint8_t* dst_pixel = (uint8_t*)(fb_info.addr + dst_offset);
-
-            dst_pixel[0] = src_pixel[0]; // B
-            dst_pixel[1] = src_pixel[1]; // G
-            dst_pixel[2] = src_pixel[2]; // R
+            back_buffer[dst_offset + 0] = back_buffer[src_offset + 0]; // B
+            back_buffer[dst_offset + 1] = back_buffer[src_offset + 1]; // G
+            back_buffer[dst_offset + 2] = back_buffer[src_offset + 2]; // R
         }
     }
 
     // Clear the bottom line
-    for (uint32_t y = fb_info.height - char_height; y < fb_info.height; y++) {
-        for (uint32_t x = 0; x < fb_info.width; x++) {
+    for (uint32_t y = SCREEN_HEIGHT - FONT_HEIGHT; y < SCREEN_HEIGHT; y++) {
+        for (uint32_t x = 0; x < SCREEN_WIDTH; x++) {
             fb_putpixel(x, y, CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
         }
     }
@@ -47,8 +43,7 @@ static void console_newline(void) {
     console_x = 0;
     console_y++;
 
-    uint8_t char_height = font_get_height();
-    if (console_y >= (fb_info.height / char_height)) {
+    if (console_y >= CONSOLE_HEIGHT) {
         console_scroll();
     }
 }
@@ -61,6 +56,7 @@ int console_putchar(int c) {
 
     if (ch == '\n') {
         console_newline();
+        fb_flip(); // Flip after newline
         return c;
     }
 
@@ -78,10 +74,7 @@ int console_putchar(int c) {
     }
 
     // Draw the character
-    uint8_t char_width = font_get_width();
-    uint8_t char_height = font_get_height();
-
-    font_draw_char(console_x * char_width, console_y * char_height, ch,
+    font_draw_char(console_x * FONT_WIDTH, console_y * FONT_HEIGHT, ch,
                    CONSOLE_FG_R, CONSOLE_FG_G, CONSOLE_FG_B,
                    CONSOLE_BG_R, CONSOLE_BG_G, CONSOLE_BG_B);
 
@@ -92,5 +85,6 @@ int console_putchar(int c) {
         console_newline();
     }
 
+    fb_flip(); // Flip after each character for immediate display
     return c;
 }

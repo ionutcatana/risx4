@@ -76,7 +76,7 @@ noreturn void risx(uint32_t magic, uintptr_t addr) {
     // Initialize font from embedded PSF data
     extern uintptr_t _binary_static_terminus_psf_start;
     // Allocate font bitmap (256 chars * 16 bytes each for 16-pixel height)
-    uint8_t font_bitmap[256 * 16];
+    uint8_t font_bitmap[256 * FONT_HEIGHT];
     font_init(font_bitmap, (void*)&_binary_static_terminus_psf_start);
 
     // Initialize console

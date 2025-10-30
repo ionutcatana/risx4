@@ -5,26 +5,28 @@
 #include <stddef.h>
 #include "multiboot2.h"
 
-// Framebuffer information structure
+#define SCREEN_WIDTH   1024
+#define SCREEN_HEIGHT  768
+#define SCREEN_BPP     24
+#define FONT_WIDTH     8
+#define FONT_HEIGHT    16
+#define BACK_BUFFER_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT * (SCREEN_BPP / 8))
+
 struct framebuffer_info {
-    uintptr_t addr;      // Framebuffer address
-    uint32_t width;      // Width in pixels
-    uint32_t height;     // Height in pixels
-    uint32_t pitch;      // Bytes per scanline
-    uint8_t bpp;         // Bits per pixel
-    uint8_t type;        // Framebuffer type (RGB, etc.)
+    uintptr_t addr;
+    uint32_t width;
+    uint32_t height;
+    uint32_t pitch;
+    uint8_t bpp;
+    uint8_t type;
 };
 
-// Global framebuffer info (initialized from multiboot)
 extern struct framebuffer_info fb_info;
+extern uint8_t back_buffer[BACK_BUFFER_SIZE];
 
-// Initialize framebuffer from multiboot tag
 void fb_init(struct multiboot2_tag_framebuffer* fb_tag);
-
-// Put a pixel at (x, y) with RGB color
 void fb_putpixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
-
-// Clear the entire framebuffer with a color
 void fb_clear(uint8_t r, uint8_t g, uint8_t b);
+void fb_flip(void);
 
 #endif
