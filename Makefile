@@ -1,8 +1,8 @@
 OBJ_DIR := target
 
 QEMU32 := qemu-system-i386
-QEMUFLAGS := -m 4G -cdrom $(OBJ_DIR)/risx.iso
-QEMUDEBUGFLAGS := -s -S -monitor stdio
+QEMUFLAGS := -machine pc -smp cores=2 -m 4G -cdrom $(OBJ_DIR)/risx.iso
+QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
 
 
 all: sys iso
