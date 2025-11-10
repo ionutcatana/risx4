@@ -334,12 +334,12 @@
       "-Wextra",
       "-c",
       "-o",
-      "/home/ionutc/Licenta/risx-bachelors-project/target/flanterm/flanterm.c.o",
-      "src/flanterm/flanterm.c"
+      "/home/ionutc/Licenta/risx-bachelors-project/target/devices/flanterm/flanterm.c.o",
+      "src/devices/flanterm/flanterm.c"
     ],
     "directory": "/home/ionutc/Licenta/risx-bachelors-project/sys",
-    "file": "/home/ionutc/Licenta/risx-bachelors-project/sys/src/flanterm/flanterm.c",
-    "output": "/home/ionutc/Licenta/risx-bachelors-project/target/flanterm/flanterm.c.o"
+    "file": "/home/ionutc/Licenta/risx-bachelors-project/sys/src/devices/flanterm/flanterm.c",
+    "output": "/home/ionutc/Licenta/risx-bachelors-project/target/devices/flanterm/flanterm.c.o"
   },
   {
     "arguments": [
@@ -372,11 +372,11 @@
       "-Wextra",
       "-c",
       "-o",
-      "/home/ionutc/Licenta/risx-bachelors-project/target/flanterm/fb.c.o",
-      "src/flanterm/fb.c"
+      "/home/ionutc/Licenta/risx-bachelors-project/target/devices/flanterm/fb.c.o",
+      "src/devices/flanterm/fb.c"
     ],
     "directory": "/home/ionutc/Licenta/risx-bachelors-project/sys",
-    "file": "/home/ionutc/Licenta/risx-bachelors-project/sys/src/flanterm/fb.c",
-    "output": "/home/ionutc/Licenta/risx-bachelors-project/target/flanterm/fb.c.o"
+    "file": "/home/ionutc/Licenta/risx-bachelors-project/sys/src/devices/flanterm/fb.c",
+    "output": "/home/ionutc/Licenta/risx-bachelors-project/target/devices/flanterm/fb.c.o"
   }
 ]
