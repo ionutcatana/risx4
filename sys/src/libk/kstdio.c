@@ -1,4 +1,5 @@
 #include <devices/serial.h>
+#include <devices/console.h>
 #include <flanterm.h>
 #include <libk/kstdio.h>
 #include <libk/string.h>
@@ -11,18 +12,18 @@ extern struct flanterm_context* ctx;
 // this is not ideal, but i've spent way too much time on this
 int kputchar(char c) {
     serialputchar((int)c);
-    flanterm_write(ctx, &c, 1);
+    consoleputchar((int)c);
     return (int)c;
 }
 
 int kputs(const char* str) {
     serialputs(str);
-    flanterm_write(ctx, str, strlen(str));
+    consoleputs(str);
     return 0;
 }
 
 void kfflush() {
-    flanterm_flush(ctx);
+    consoleflush();
 }
 
 static bool kprint(const char* data, size_t length) {
