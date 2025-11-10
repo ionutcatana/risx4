@@ -54,7 +54,7 @@ extern "C" {
 
 #ifdef FLANTERM_IN_FLANTERM
 
-#include "flanterm_private.h"
+#include <flanterm_private.h>
 
 #else
 

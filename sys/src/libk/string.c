@@ -1,7 +1,8 @@
+#include <libk/string.h>
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <string.h>
 
 int memcmp(const void* aptr, const void* bptr, size_t n) {
 	const uint8_t* a = (const uint8_t*)aptr;

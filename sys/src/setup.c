@@ -1,8 +1,9 @@
-#include "devices/serial.h"
-#include "flanterm_backends/fb.h"
-#include "flanterm.h"
-#include "kstdlib.h"
-#include "limine.h"
+#include <devices/serial.h>
+#include <flanterm_backends/fb.h>
+#include <flanterm.h>
+#include <libk/kstdlib.h>
+#include <limine.h>
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdnoreturn.h>

@@ -34,11 +34,11 @@
 extern "C" {
 #endif
 
-#include "flanterm.h"
+#include <flanterm.h>
 
 #ifdef FLANTERM_IN_FLANTERM
 
-#include "fb_private.h"
+#include <flanterm_backends/fb_private.h>
 
 #endif
 

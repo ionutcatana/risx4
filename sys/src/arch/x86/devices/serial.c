@@ -1,7 +1,8 @@
 #include <devices/serial.h>
+#include <x86/io.h>
+
 #include <stdbool.h>
 #include <stdint.h>
-#include <x86/io.h>
 
 static bool serial_initialized = false;
 

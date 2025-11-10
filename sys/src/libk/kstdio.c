@@ -1,7 +1,8 @@
-#include "devices/serial.h"
-#include "flanterm.h"
-#include "kstdio.h"
-#include "string.h"
+#include <devices/serial.h>
+#include <flanterm.h>
+#include <libk/kstdio.h>
+#include <libk/string.h>
+
 #include <limits.h>
 #include <stdarg.h>
 
