@@ -71,6 +71,32 @@ static volatile struct limine_rsdp_request rsdp_request = {
 // };
 
 struct flanterm_context* ctx = NULL;
+int initconsole(struct limine_framebuffer* fb) {
+    ctx = flanterm_fb_init(
+        NULL,
+        NULL,
+        (uint32_t*)fb->address,
+        fb->width,
+        fb->height,
+        fb->pitch,
+        fb->red_mask_size,
+        fb->red_mask_shift,
+        fb->green_mask_size,
+        fb->green_mask_shift,
+        fb->blue_mask_size,
+        fb->blue_mask_shift,
+        NULL,
+        NULL, NULL,
+        NULL, NULL,
+        NULL, NULL,
+        NULL, 0, 0, 1,
+        0, 0,
+        0
+    );
+    flanterm_set_autoflush(ctx, false);
+
+    return 0;
+}
 
 noreturn void setup(void) {
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
@@ -79,36 +105,11 @@ noreturn void setup(void) {
 
     initserial();
 
-    struct limine_framebuffer* fb = NULL;
     if (framebuffer_request.response != NULL &&
         framebuffer_request.response->framebuffer_count >= 1) {
-
-        // only one framebuffer will be used. this is fine for the demo
-        fb = framebuffer_request.response->framebuffers[0];
-        ctx = flanterm_fb_init(
-            NULL,
-            NULL,
-            (uint32_t*)fb->address,
-            fb->width,
-            fb->height,
-            fb->pitch,
-            fb->red_mask_size,
-            fb->red_mask_shift,
-            fb->green_mask_size,
-            fb->green_mask_shift,
-            fb->blue_mask_size,
-            fb->blue_mask_shift,
-            NULL,
-            NULL, NULL,
-            NULL, NULL,
-            NULL, NULL,
-            NULL, 0, 0, 1,
-            0, 0,
-            0
-        );
-
-        flanterm_set_autoflush(ctx, false);
+        initconsole(framebuffer_request.response->framebuffers[0]);
     }
 
+    // get the ball rolling
     risx();
 }

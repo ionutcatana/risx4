@@ -7,6 +7,7 @@
 
 extern struct flanterm_context* ctx;
 
+// this is not ideal, but i've spent way too much time on this
 int kputchar(char c) {
     serialputchar((int)c);
     flanterm_write(ctx, &c, 1);
@@ -179,20 +180,4 @@ int kprintf(const char* restrict format, ...) {
 
     va_end(parameters);
     return written;
-}
-
-int kdebugf(const char* restrict format, ...) {
-    va_list args;
-    va_start(args, format);
-    int result = kprintf(format, args);
-    va_end(args);
-    return result;
-}
-
-int kerrorf(const char* restrict format, ...) {
-    va_list args;
-    va_start(args, format);
-    int result = kprintf(format, args);
-    va_end(args);
-    return result;
 }
