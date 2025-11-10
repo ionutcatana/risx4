@@ -5,7 +5,7 @@
 #include <stdnoreturn.h>
 
 noreturn void risx(void) {
-    kprintf("Hello world!");
+    kprintf("Entered RISX. Setup successful.\n");
     kfflush();
     while (true);
 }
