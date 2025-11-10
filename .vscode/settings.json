@@ -1,0 +1,31 @@
+{
+    "editor.rulers": [
+        80
+    ],
+    "[asm-intel-x86-generic]": {
+        "editor.rulers": [
+            8,
+            16,
+            40,
+            80
+        ]
+    },
+    "[perl]": {
+        "editor.rulers": [
+            11,
+            15,
+            19,
+            23,
+            27,
+            47,
+            7,
+            80
+        ]
+    },
+    "files.associations": {
+        "*.{c,h}": "c",
+        "*.{s,S}": "asm-intel-x86-generic",
+        "*.ld": "linkerscript",
+        "*.pl": "perl"
+    }
+}
