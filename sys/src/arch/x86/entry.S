@@ -9,6 +9,4 @@ _start: push    0                       # 64K stack is provided
         rep     stosb
 
         call    setup                   # should never return
-        cli
-
-halt:   jmp     halt
+        call    halt
