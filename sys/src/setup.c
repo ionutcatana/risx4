@@ -1,7 +1,11 @@
-#include <devices/serial.h>
 #include <devices/console.h>
+#include <devices/serial.h>
 #include <libk/kstdlib.h>
 #include <limine.h>
+
+#ifdef __x86_64__
+#include <x86/gdt.h>
+#endif
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -71,7 +75,9 @@ noreturn void setup(void) {
 
     initserial();
     initconsole();
-
+#ifdef __x86_64__
+    // initgdt();
+#endif
     // get the ball rolling
     risx();
 }
