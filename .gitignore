@@ -54,7 +54,8 @@ dkms.conf
 # debug information files
 *.dwo
 
-# excluded directories
+# excluded files
 .cache
+compile_commands.json
 docs
 target
