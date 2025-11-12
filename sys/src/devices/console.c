@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 struct flanterm_context* ctx = NULL;
-static bool serial_initialized = false;
+static bool console_initialized = false;
 
 int initconsole(struct limine_framebuffer* fb) {
     ctx = flanterm_fb_init(
@@ -32,12 +32,12 @@ int initconsole(struct limine_framebuffer* fb) {
     );
     flanterm_set_autoflush(ctx, false);
 
-    serial_initialized = true;
+    console_initialized = true;
     return 0;
 }
 
 void consoleputchar(int c) {
-    if (!serial_initialized) {
+    if (!console_initialized) {
         return;
     }
 
@@ -45,7 +45,7 @@ void consoleputchar(int c) {
 }
 
 void consoleputs(const char* str) {
-    if (!serial_initialized) {
+    if (!console_initialized) {
         return;
     }
 
@@ -53,5 +53,9 @@ void consoleputs(const char* str) {
 }
 
 void consoleflush() {
+    if (!console_initialized) {
+        return;
+    }
+
     flanterm_flush(ctx);
 }

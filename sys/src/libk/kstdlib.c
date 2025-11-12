@@ -3,8 +3,9 @@
 #include <stdbool.h>
 #include <stdnoreturn.h>
 
+noreturn void halt(void);
 noreturn void abort(void) {
-    while (true);
+    halt();
 }
 
 int abs(int j) {
