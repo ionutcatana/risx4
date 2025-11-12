@@ -5,10 +5,24 @@
 
 #include <stdbool.h>
 
+__attribute__((used, section(".limine_requests")))
+static volatile struct limine_framebuffer_request framebuffer_request = {
+    .id = LIMINE_FRAMEBUFFER_REQUEST,
+    .revision = 0
+};
+
 struct flanterm_context* ctx = NULL;
 static bool console_initialized = false;
 
-int initconsole(struct limine_framebuffer* fb) {
+int initconsole() {
+    struct limine_framebuffer* fb = NULL;
+    if (framebuffer_request.response != NULL &&
+        framebuffer_request.response->framebuffer_count >= 1) {
+        fb = framebuffer_request.response->framebuffers[0];
+    } else {
+        return -1;
+    }
+
     ctx = flanterm_fb_init(
         NULL,
         NULL,

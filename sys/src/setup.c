@@ -39,12 +39,6 @@ static volatile struct limine_executable_cmdline_request cmdline_request = {
 //     .revision = 0
 // };
 
-__attribute__((used, section(".limine_requests")))
-static volatile struct limine_framebuffer_request framebuffer_request = {
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0
-};
-
 // __attribute__((used, section(".limine_requests")))
 // static volatile struct limine_mp_request mp_request = {
 //     .id = LIMINE_MP_REQUEST,
@@ -78,11 +72,7 @@ noreturn void setup(void) {
     }
 
     initserial();
-
-    if (framebuffer_request.response != NULL &&
-        framebuffer_request.response->framebuffer_count >= 1) {
-        initconsole(framebuffer_request.response->framebuffers[0]);
-    }
+    initconsole();
 
     // get the ball rolling
     risx();
