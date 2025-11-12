@@ -13,12 +13,7 @@ loadgdt:
         push    rsp
         mov     rbp, rsp
 
-#       lgdt    0
         push    rax
-
-#       lea     rax, [rip + 3]
-#       push    rax
-#       lretq
 
         cli
         lgdt    [_desc]                 # load global descriptor table

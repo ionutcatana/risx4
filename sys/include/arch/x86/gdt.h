@@ -3,7 +3,12 @@
 
 #include <stdint.h>
 
-// used in gdt.S
+#define RISX_CODE_SEG   (uint16_t)0x08
+#define RISX_DATA_SEG   (uint16_t)0x10
+#define USER_CODE_SEG   (uint16_t)0x1b
+#define USER_DATA_SEG   (uint16_t)0x23
+#define TSS_SEGMENT     (uint16_t)0x28
+
 struct gdtr {
     uint16_t limit;
     uintptr_t base;

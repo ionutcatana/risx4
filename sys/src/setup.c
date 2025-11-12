@@ -5,6 +5,8 @@
 
 #ifdef __x86_64__
 #include <x86/gdt.h>
+#include <x86/idt.h>
+#include <x86/isr.h>
 #endif
 
 #include <stdbool.h>
@@ -77,6 +79,8 @@ noreturn void setup(void) {
     initconsole();
 #ifdef __x86_64__
     // initgdt();
+    // initidt();
+    // initisr();
 #endif
     // get the ball rolling
     risx();
