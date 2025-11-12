@@ -14,7 +14,7 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 struct flanterm_context* ctx = NULL;
 static bool console_initialized = false;
 
-int initconsole() {
+int initconsole(void) {
     struct limine_framebuffer* fb = NULL;
     if (framebuffer_request.response != NULL &&
         framebuffer_request.response->framebuffer_count >= 1) {
@@ -66,7 +66,7 @@ void consoleputs(const char* str) {
     flanterm_write(ctx, str, strlen(str));
 }
 
-void consoleflush() {
+void consoleflush(void) {
     if (!console_initialized) {
         return;
     }
