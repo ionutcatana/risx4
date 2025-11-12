@@ -6,7 +6,10 @@ QEMUFLAGS := -machine pc -smp cores=2 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
 ISO_ROOT := $(OBJ_DIR)/iso_root
 
-all: sys
+all: tools sys
+
+tools:
+	$(MAKE) -C tools OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
 sys:
 	$(MAKE) -C sys OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
@@ -33,4 +36,4 @@ qemu: iso
 qemu-debug: iso
 	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom $(ISO)
 
-.PHONY: all sys iso clean qemu qemu-debug
+.PHONY: all tools sys iso clean qemu qemu-debug
