@@ -1,9 +1,9 @@
-#ifndef CONSOLE_H
-#define CONSOLE_H 1
+#ifndef X86_CONSOLE_H
+#define X86_CONSOLE_H 1
 
-int initconsole();
+int initconsole(void);
 void consoleputchar(int c);
 void consoleputs(const char* str);
-void consoleflush();
+void consoleflush(void);
 
 #endif
