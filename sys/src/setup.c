@@ -1,7 +1,10 @@
 #include <devices/console.h>
 #include <devices/serial.h>
+#include <libk/kstdio.h>
 #include <libk/kstdlib.h>
 #include <limine.h>
+#include <mm.h>
+#include <stdint.h>
 
 #ifdef __x86_64__
 #include <x86/gdt.h>
@@ -27,43 +30,6 @@ static volatile LIMINE_REQUESTS_END_MARKER;
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(0);
 
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_bootloader_info_request info_request = {
-//     .id = LIMINE_BOOTLOADER_INFO_REQUEST,
-//     .revision = 0,
-// };
-
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_executable_cmdline_request cmdline_request = {
-//     .id = LIMINE_EXECUTABLE_CMDLINE_REQUEST,
-//     .revision = 0
-// };
-
-// // __attribute__((used, section(".limine_requests")))
-// // static volatile struct limine_mp_request mp_request = {
-// //     .id = LIMINE_MP_REQUEST,
-// //     .revision = 0,
-// //     .flags = 0
-// // };
-
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_memmap_request memmap_request = {
-//     .id = LIMINE_MEMMAP_REQUEST,
-//     .revision = 0
-// };
-
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_rsdp_request rsdp_request = {
-//     .id = LIMINE_RSDP_REQUEST,
-//     .revision = 0
-// };
-
-// // __attribute__((used, section(".limine_requests")))
-// // static volatile struct limine_date_at_boot_request date_at_boot_request = {
-// //     .id = LIMINE_DATE_AT_BOOT_REQUEST,
-// //     .revision = 0
-// // };
-
 noreturn void setup(void) {
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
         abort();
@@ -71,11 +37,24 @@ noreturn void setup(void) {
 
     initserial();
     initconsole();
+
+    initmm();
+    extern struct limine_memmap_entry memmap_entries[];
+    extern uint64_t memmap_entry_count;
+
+    kprintf("Usable memory map entries: %d\n", memmap_entry_count);
+    for (size_t i = 0; i < memmap_entry_count; i++) {
+        kprintf("Base: 0x%x, Length: 0x%x\n",
+                memmap_entries[i].base,
+                memmap_entries[i].length);
+    }
+
 #ifdef __x86_64__
     // initgdt();
     // initidt();
     // initisr();
 #endif
+
     // get the ball rolling
     risx();
 }
