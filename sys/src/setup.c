@@ -40,12 +40,6 @@ static volatile LIMINE_BASE_REVISION(0);
 // };
 
 // // __attribute__((used, section(".limine_requests")))
-// // static volatile struct limine_memory_map_request memory_map_request = {
-// //     .id = LIMINE_MEMORY_MAP_REQUEST,
-// //     .revision = 0
-// // };
-
-// // __attribute__((used, section(".limine_requests")))
 // // static volatile struct limine_mp_request mp_request = {
 // //     .id = LIMINE_MP_REQUEST,
 // //     .revision = 0,
