@@ -29,5 +29,7 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
     idt[vector].reserved = 0;
 }
 
-void idispatch(void);
+void idispatch(void) {
+    return;
+}
 

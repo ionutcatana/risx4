@@ -2,8 +2,8 @@
         .section .text
 
         .global istub
+        .global int0
         .extern idispatch
-        .extern int0
 
 #       push    ss                      # happens automatically
 #       push    rsp
