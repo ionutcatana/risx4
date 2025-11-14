@@ -10,30 +10,28 @@
         .global loadgdt
         .extern _desc
 loadgdt:
-        push    rsp
-        mov     rbp, rsp
-
-        push    rax
+#       push    rsp
+#       mov     rbp, rsp
 
         cli
         lgdt    [_desc]                 # load global descriptor table
 
-#       jmp     RISX_CODE_SEG:L1
-        push    RISX_CODE_SEG           # 64-bit GAS requires this incantation
-        lea     rax, [rip + L1]
-        push    rax
-        lretq                           # update code segment register
-L1:     mov     ax, RISX_DATA_SEG       # update other segment registers
+        mov     ax, RISX_DATA_SEG       # update other segment registers
         mov     ds, ax
         mov     es, ax
         mov     fs, ax
-
-        mov     ax, USER_DATA_SEG       # update user data segment registers
         mov     gs, ax
         mov     ss, ax
+#       mov     ax, USER_DATA_SEG       # update user data segment registers
+#       mov     gs, ax
+#       mov     ss, ax
 
-        pop     rax
+        call    L1
+L1:     pop     rdi
+        push    RISX_CODE_SEG           # 64-bit GAS requires this incantation
+        push    rdi
+        lretq                           # update code segment register
 
-        mov     rsp, rbp
-        pop     rbp
+#       mov     rsp, rbp
+#       pop     rbp
         ret
