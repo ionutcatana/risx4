@@ -6,21 +6,28 @@
 
 static union idt_descriptor idt[IDT_SIZE];
 struct idtr _idtr; // used in idt.S
+// arch/x86/istub.S
+extern uintptr_t int0;
 
 void loadidt(void);
 void initidt(void) {
-    _idtr.limit = sizeof(idt) - 1;
-    _idtr.base = (uintptr_t)&idt;
+    _idtr.limit = (IDT_SIZE) * sizeof(union idt_descriptor) - 1;
+    _idtr.base = (uintptr_t)idt;
+
+    for (size_t i = 0; i < IDT_SIZE; i++) {
+        sethandler(i,int0 + (i * 16), IDT_INTERRUPT_GATE_RING0);
+    }
 }
 
-void sethandler(size_t index, uintptr_t handler,
-                uint8_t ist, uint8_t attributes) {
-    idt[index].base_lower = (uint16_t)(handler & 0xFFFF);
-    idt[index].selector = RISX_CODE_SEG;
-    idt[index].ist = ist;
-    idt[index].attributes = attributes;
-    idt[index].base_middle = (uint16_t)((handler >> 16) & 0xFFFF);
-    idt[index].base_upper = (uint32_t)((handler >> 32) & 0xFFFFFFFF);
-    idt[index].reserved = 0;
+void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
+    idt[vector].base_lower = (uint16_t)(handler & 0xFFFF);
+    idt[vector].selector = RISX_CODE_SEG;
+    idt[vector].ist = 0;
+    idt[vector].attributes = attributes;
+    idt[vector].base_middle = (uint16_t)((handler >> 16) & 0xFFFF);
+    idt[vector].base_upper = (uint32_t)((handler >> 32) & 0xFFFFFFFF);
+    idt[vector].reserved = 0;
 }
+
+void idispatch(void);
 

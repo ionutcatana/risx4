@@ -51,7 +51,7 @@ noreturn void setup(void) {
 
 #ifdef __x86_64__
     initgdt();
-    // initidt();
+    initidt();
     // initisr();
 #endif
 
