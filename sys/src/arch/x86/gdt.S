@@ -4,7 +4,6 @@
         .equ    RISX_DATA_SEG, 0x10
         .equ    USER_CODE_SEG, 0x1b
         .equ    USER_DATA_SEG, 0x23
-        .equ    TSS_SEGMENT, 0x28
 
         .section .text
         .global loadgdt
@@ -23,8 +22,6 @@ loadgdt:
         mov     gs, ax
         mov     ss, ax
 #       mov     ax, USER_DATA_SEG       # update user data segment registers
-#       mov     gs, ax
-#       mov     ss, ax
 
         call    L1
 L1:     pop     rdi
