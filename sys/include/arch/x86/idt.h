@@ -32,7 +32,10 @@ union idt_descriptor {
         uint32_t base_upper;
         uint32_t reserved;
     };
-    uint64_t value;
+    struct {
+        uint64_t lo;
+        uint64_t hi;
+    };
 } __attribute__((packed));
 
 
