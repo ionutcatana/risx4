@@ -6,8 +6,7 @@
 
 static union idt_descriptor idt[IDT_SIZE];
 struct idtr _idtr; // used in idt.S
-// arch/x86/istub.S
-extern uintptr_t int0;
+extern uintptr_t vectors[]; // arch/x86/vectors.S
 
 void loadidt(void);
 void initidt(void) {
@@ -15,7 +14,7 @@ void initidt(void) {
     _idtr.base = (uintptr_t)idt;
 
     for (size_t i = 0; i < IDT_SIZE; i++) {
-        sethandler(i,int0 + (i * 16), IDT_INTERRUPT_GATE_RING0);
+        sethandler(i,vectors[i], IDT_INTERRUPT_GATE_RING0);
     }
 }
 
