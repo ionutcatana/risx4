@@ -2,7 +2,6 @@
         .section .text
 
         .global istub
-        .global int0
         .extern idispatch
 
 #       push    ss                      # happens automatically
@@ -55,11 +54,3 @@ istub:  push    rax                     # save the general purpose registers
 #       pop     rsp
 #       pop     ss
 
-        .align  16
-int0:   push    0
-        push    0
-        jmp     istub
-        .align  16
-int255: push    0
-        push    255
-        jmp     istub
