@@ -29,6 +29,7 @@ iso: sys
 clean:
 	@rm -rf $(OBJ_DIR)
 	@rm -rf $(ISO_ROOT)
+	$(MAKE) -C sys clean OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
 qemu: iso
 	$(QEMU64) $(QEMUFLAGS) -cdrom $(ISO)
