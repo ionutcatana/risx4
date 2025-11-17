@@ -1,40 +1,41 @@
 OBJ_DIR := target
-ISO := target/risx.iso
-KERNEL := target/risx.elf
+
 QEMU64 := qemu-system-x86_64
 QEMUFLAGS := -machine pc -smp cores=2 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
-ISO_ROOT := $(OBJ_DIR)/iso_root
 
-all: tools sys
+PERL := perl
+
+all: prepare tools sys
+
+prepare:
+	$(PERL) sys/src/arch/x86/vectors.pl > sys/src/arch/x86/vectors.S
 
 tools:
 	$(MAKE) -C tools OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
-sys:
+sys: prepare
 	$(MAKE) -C sys OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
 iso: sys
-	@mkdir -p $(ISO_ROOT)
-	@cp -r ./boot $(ISO_ROOT)
-	@cp $(KERNEL) $(ISO_ROOT)
+	@mkdir -p $(OBJ_DIR)/iso_root
+	@cp -r ./boot $(OBJ_DIR)/iso_root
+	@cp target/risx.elf $(OBJ_DIR)/iso_root
 	@xorriso -as mkisofs				\
 		-b boot/limine/limine-bios-cd.bin	\
 		-no-emul-boot				\
 		-boot-load-size 4			\
 		-boot-info-table			\
-		$(ISO_ROOT) -o $(ISO)
-	@limine bios-install $(ISO)
+		$(OBJ_DIR)/iso_root -o target/risx.iso
+	@limine bios-install target/risx.iso
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@rm -rf $(ISO_ROOT)
-	$(MAKE) -C sys clean OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
 qemu: iso
-	$(QEMU64) $(QEMUFLAGS) -cdrom $(ISO)
+	$(QEMU64) $(QEMUFLAGS) -cdrom target/risx.iso
 
 qemu-debug: iso
-	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom $(ISO)
+	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom target/risx.iso
 
-.PHONY: all tools sys iso clean qemu qemu-debug
+.PHONY: all prepare tools sys iso clean qemu qemu-debug

@@ -28,14 +28,12 @@ CFLAGS := 			\
 	-Wextra
 LDFLAGS := -T src/kernel.ld -nostdlib -lgcc
 
-SRCS := $(shell find src -type f -name '*.S' -o -name '*.c' | grep -v "src/arch/x86/vectors.S")
+SRCS := $(shell find src -type f -name '*.S' -o -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
 	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter %.c,$(SRCS)))
-OBJS += $(OBJ_DIR)/arch/x86/vectors.S.o
-
-PERL := perl
 
 all: $(OBJ_DIR)/risx.elf
+
 
 $(OBJ_DIR)/risx.elf: $(OBJS) src/kernel.ld
 	@mkdir -p $(dir $@)
@@ -49,14 +47,4 @@ $(OBJ_DIR)/%.c.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-$(OBJ_DIR)/arch/x86/vectors.S.o: src/arch/x86/vectors.S
-	@mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
-
-src/arch/x86/vectors.S: src/arch/x86/vectors.pl
-	$(PERL) $< > $@
-
-clean:
-	rm -rf src/arch/x86/vectors.S $(OBJ_DIR)
-
-.PHONY: all clean
+.PHONY: all
