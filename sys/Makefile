@@ -32,7 +32,13 @@ SRCS := $(shell find src -name '*.S' -o -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
 	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter %.c,$(SRCS)))
 
-all: $(OBJ_DIR)/risx.elf
+PERL := perl
+
+all: preparation $(OBJ_DIR)/risx.elf
+
+
+preparation:
+	$(PERL) --version
 
 $(OBJ_DIR)/risx.elf: $(OBJS) src/kernel.ld
 	@mkdir -p $(dir $@)
@@ -46,4 +52,4 @@ $(OBJ_DIR)/%.c.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-.PHONY: all
+.PHONY: all preparation
