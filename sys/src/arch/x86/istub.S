@@ -47,7 +47,7 @@ istub:  push    rax                     # save the general purpose registers
 
         add     rsp, 16                 # remove the vector number & error code
 
-        iret
+        iretq
 #       pop     rip                     # happens automatically
 #       pop     cs
 #       pop     rflags
