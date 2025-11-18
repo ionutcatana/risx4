@@ -24,7 +24,7 @@ static volatile LIMINE_REQUESTS_END_MARKER;
 
 // requests
 __attribute__((used, section(".limine_requests")))
-static volatile LIMINE_BASE_REVISION(0);
+static volatile LIMINE_BASE_REVISION(4);
 
 void setup(void) {
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
