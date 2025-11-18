@@ -1,5 +1,6 @@
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
+#include <libk/kstdio.h>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -28,7 +29,8 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
     idt[vector].reserved = 0;
 }
 
-void idispatch(void) {
+void idispatch(struct trapframe* tf) {
+    kprintf("Interrupt: %d; Error: %d", tf->vector, tf->error);
     return;
 }
 

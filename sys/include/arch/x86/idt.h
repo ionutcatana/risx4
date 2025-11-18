@@ -1,6 +1,8 @@
 #ifndef X86_IDT_H
 #define X86_IDT_H 1
 
+#include <arch/x86/trapframe.h>
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -44,7 +46,7 @@ void loadidt(void);
 // arch/x86/idt.c
 void initidt(void);
 void sethandler(size_t vector, uintptr_t handler, uint8_t attributes);
-void idispatch(void);
+void idispatch(struct trapframe* tf);
 // arch/x86/istub.S
 void istub(void);
 

@@ -60,6 +60,8 @@ noreturn void risx(void) {
     setup();
     kprintf("Entered RISX\nSetup successful\n");
 
+    __asm__ volatile ("int3");
+
     panic("Unexpected return from scheduler");
 }
 

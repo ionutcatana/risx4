@@ -26,6 +26,7 @@ istub:  push    rax                     # save the general purpose registers
         push    r14
         push    r15
 
+        mov     rdi, rsp                # move trapframe into first argument
         call    idispatch
 
         pop     r15

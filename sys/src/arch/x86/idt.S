@@ -1,6 +1,6 @@
         .intel_syntax noprefix
         .section .text
         .global loadidt
-loaditd:
+loadidt:
         lidt    [_idtr]
         ret
