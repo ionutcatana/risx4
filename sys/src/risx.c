@@ -1,8 +1,8 @@
-#include <devices/serial.h>
 #include <libk/kstdio.h>
 #include <libk/kstdlib.h>
 #include <limine.h>
 #include <mm.h>
+#include <serial.h>
 
 #ifdef __x86_64__
 #include <arch/x86/gdt.h>
@@ -31,13 +31,13 @@ void setup(void) {
         abort();
     }
 
+    initserial();
+
 #ifdef __x86_64__
     initgdt();
     initidt();
     // initisr();
 #endif
-
-    initserial();
 
     // initmm();
     // extern struct limine_memmap_entry memmap_entries[];

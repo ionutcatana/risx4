@@ -1,5 +1,7 @@
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
+#include <arch/x86/interrupts.h>
+#include <arch/x86/registers.h>
 #include <libk/kstdio.h>
 
 #include <stdint.h>
@@ -33,6 +35,50 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
 
 void idispatch(struct trapframe* tf) {
     kprintf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
+
+    // handle the interrupt after it has been announced on the serial port
+    switch (tf->vector) {
+    case X86_INTERRUPT_DE:
+        break;
+    case X86_INTERRUPT_DB:
+        break;
+    case X86_INTERRUPT_NMI:
+        break;
+    case X86_INTERRUPT_BP:
+        break;
+    case X86_INTERRUPT_OF:
+        break;
+    case X86_INTERRUPT_BR:
+        break;
+    case X86_INTERRUPT_UD:
+        break;
+    case X86_INTERRUPT_NM:
+        break;
+    case X86_INTERRUPT_DF:
+        break;
+    case X86_INTERRUPT_TS:
+        break;
+    case X86_INTERRUPT_NP:
+        break;
+    case X86_INTERRUPT_SS:
+        break;
+    case X86_INTERRUPT_GP:
+        break;
+    case X86_INTERRUPT_PF:
+        kprintf("virtaddr: 0x%x", readcr2());
+        break;
+    case X86_INTERRUPT_MF:
+        break;
+    case X86_INTERRUPT_AC:
+        break;
+    case X86_INTERRUPT_MC:
+        break;
+    case X86_INTERRUPT_XF:
+        break;
+    default:
+        break;
+    }
+
     return;
 }
 
