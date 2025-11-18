@@ -8,5 +8,5 @@ _start: push    0                       # 64K stack is provided
         xor     rax, rax
         rep     stosb
 
-        call    setup                   # should never return
+        call    risx                    # should never return
         call    halt

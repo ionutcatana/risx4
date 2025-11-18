@@ -1,5 +1,5 @@
-#include <x86/gdt.h>
-#include <x86/idt.h>
+#include <arch/x86/gdt.h>
+#include <arch/x86/idt.h>
 
 #include <stdint.h>
 #include <stddef.h>

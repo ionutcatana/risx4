@@ -7,6 +7,5 @@
 int kprintf(const char* restrict format, ...);
 int kputchar(char c);
 int kputs(const char* s);
-void kfflush(void);
 
 #endif

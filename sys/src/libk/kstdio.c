@@ -1,29 +1,20 @@
 #include <devices/serial.h>
 #include <devices/console.h>
-#include <flanterm.h>
 #include <libk/kstdio.h>
 #include <libk/string.h>
 
 #include <limits.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
-extern struct flanterm_context* ctx;
-
-// this is not ideal, but i've spent way too much time on this
 int kputchar(char c) {
     serialputchar((int)c);
-    consoleputchar((int)c);
     return (int)c;
 }
 
 int kputs(const char* str) {
     serialputs(str);
-    consoleputs(str);
     return 0;
-}
-
-void kfflush() {
-    consoleflush();
 }
 
 static bool kprint(const char* data, size_t length) {

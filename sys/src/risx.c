@@ -1,5 +1,6 @@
 #include <libk/kstdio.h>
 #include <libk/kstdlib.h>
+#include <risx.h>
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -12,6 +13,8 @@ noreturn void panic(const char* message) {
 }
 
 noreturn void risx(void) {
+    setup();
+
     kprintf("Entered RISX\nSetup successful\n");
     kfflush();
 
