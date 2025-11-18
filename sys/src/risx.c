@@ -32,9 +32,9 @@ void setup(void) {
     }
 
 #ifdef __x86_64__
-    // initgdt();
-    // initidt();
-    // initisr();
+    initgdt();
+    initidt();
+    initisr();
 #endif
 
     initserial();
