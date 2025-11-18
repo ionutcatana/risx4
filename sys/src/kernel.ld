@@ -1,4 +1,3 @@
-OUTPUT_ARCH(i386:x86-64)
 OUTPUT_FORMAT(elf64-x86-64)
 ENTRY(_start)
 
@@ -59,15 +58,15 @@ SECTIONS
     . = ALIGN(CONSTANT(MAXPAGESIZE));
     .bss : {
         /* . = ALIGN(16); */
-        __bss_start = .;
+        /* __bss_start = .; */
         KEEP(*(.bss))
         KEEP(*(.bss*))
         KEEP(*(COMMON))
-        __bss_end = .;
+        /* __bss_end = .; */
         __data_end = .;
     } :data
 
-    __bss_size = __bss_end - __bss_start;
+    /* __bss_size = __bss_end - __bss_start; */
 
     /* these segments can cause issues */
     /DISCARD/ : {
