@@ -17,6 +17,8 @@ void initidt(void) {
     for (size_t i = 0; i < IDT_SIZE; i++) {
         sethandler(i,vectors[i], IDT_INTERRUPT_GATE_RING0);
     }
+
+    loadidt();
 }
 
 void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
@@ -30,7 +32,7 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
 }
 
 void idispatch(struct trapframe* tf) {
-    kprintf("Interrupt: %d; Error: %d", tf->vector, tf->error);
+    kprintf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
     return;
 }
 

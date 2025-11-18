@@ -34,7 +34,7 @@ void setup(void) {
 #ifdef __x86_64__
     initgdt();
     initidt();
-    initisr();
+    // initisr();
 #endif
 
     initserial();
@@ -60,7 +60,20 @@ noreturn void risx(void) {
     setup();
     kprintf("Entered RISX\nSetup successful\n");
 
-    __asm__ volatile ("int3");
+    for(size_t i = 0; i < 10; i++) {
+        __asm__ volatile ("int3");
+    }
+    kprintf("^ handled some interrupts\n");
+
+    for(size_t i = 0; i < 10; i++) {
+        __asm__ volatile ("int3");
+    }
+    kprintf("^ handled some interrupts\n");
+
+    for(size_t i = 0; i < 10; i++) {
+        __asm__ volatile ("int3");
+    }
+    kprintf("^ handled some interrupts\n");
 
     panic("Unexpected return from scheduler");
 }

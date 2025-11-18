@@ -2,11 +2,12 @@
 
         .equ    RISX_CODE_SEG, 0x08
         .equ    RISX_DATA_SEG, 0x10
-        .equ    USER_CODE_SEG, 0x1b
-        .equ    USER_DATA_SEG, 0x23
+        .equ    USER_DATA_SEG, 0x1b
+        .equ    USER_CODE_SEG, 0x23
 
         .section .text
         .global loadgdt
+        .global loadtr
         .extern _desc
 loadgdt:
 #       push    rsp
@@ -31,4 +32,8 @@ L1:     pop     rdi
 
 #       mov     rsp, rbp
 #       pop     rbp
+        ret
+
+loadtr:
+        ltr     di
         ret
