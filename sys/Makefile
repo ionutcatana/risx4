@@ -2,7 +2,7 @@ OBJ_DIR ?= target
 ARCH ?= x86_64
 
 CC := $(ARCH)-elf-gcc
-CPPFLAGS := -Iinclude
+CPPFLAGS := -I/usr/local/include -Iinclude
 CFLAGS := 			\
 	-fdata-sections		\
 	-ffreestanding		\
