@@ -1,10 +1,10 @@
-#include <devices/serial.h>
 #include <arch/x86/io.h>
+#include <serial.h>
 
 #include <stdbool.h>
 #include <stdint.h>
 
-static bool serial_initialized = false;
+static bool initialized = false;
 
 int initserial(void) {
     outs(X86_SERIAL_PORT + 1, 0x00);    // disable all interrupts
@@ -26,12 +26,12 @@ int initserial(void) {
     // not-loopback with irqs enabled and out#1 and out#2 bits enabled
     outs(X86_SERIAL_PORT + 4, 0x0f);
 
-    serial_initialized = true;
+    initialized = true;
     return 0;
 }
 
 void serialputchar(int c) {
-    if (!serial_initialized) {
+    if (!initialized) {
         return;
     }
 
@@ -46,7 +46,7 @@ void serialputchar(int c) {
 
 void serialputs(const char* str) {
     // worth testing for performance?
-    if (!serial_initialized) {
+    if (!initialized) {
         return;
     }
 

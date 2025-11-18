@@ -1,7 +1,6 @@
-#include <devices/serial.h>
-#include <devices/console.h>
 #include <libk/kstdio.h>
 #include <libk/string.h>
+#include <serial.h>
 
 #include <limits.h>
 #include <stdarg.h>
