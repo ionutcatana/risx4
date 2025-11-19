@@ -17,14 +17,12 @@
 #include <stdint.h>
 #include <stdnoreturn.h>
 
-// markers
 __attribute__((used, section(".limine_requests_start")))
 static volatile LIMINE_REQUESTS_START_MARKER;
 
 __attribute__((used, section(".limine_requests_end")))
 static volatile LIMINE_REQUESTS_END_MARKER;
 
-// requests
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4);
 
@@ -68,22 +66,6 @@ void setup(void) {
 noreturn void risx(void) {
     setup();
     kprintf("Entered RISX\n");
-
-    // for(size_t i = 0; i < 10; i++) {
-    //     __asm__ volatile ("int3");
-    // }
-    // kprintf("^ handled some interrupts\n");
-
-    // for(size_t i = 0; i < 10; i++) {
-    //     __asm__ volatile ("int3");
-    // }
-    // kprintf("^ handled some interrupts\n");
-
-    // for(size_t i = 0; i < 10; i++) {
-    //     __asm__ volatile ("int3");
-    // }
-    // kprintf("^ handled some interrupts\n");
-
     panic("Unexpected return from scheduler");
 }
 
