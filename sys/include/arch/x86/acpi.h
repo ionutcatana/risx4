@@ -26,6 +26,28 @@ struct xsdp {
     uint8_t reserved[8];
 } __attribute__((packed));
 
+struct sdp_header {
+    char signature[4];
+    uint32_t length;
+    uint8_t revision;
+    uint8_t checksum;
+    char oemid[6];
+    char oemtableid[8];
+    uint32_t oemrevision;
+    uint32_t creatorid;
+    uint32_t creatorrevision;
+};
+
+struct rsdt {
+    struct sdp_header header;
+    uint32_t sdtaddr[];
+};
+
+struct xsdt {
+    struct sdp_header header;
+    uint64_t sdtaddr[];
+};
+
 // arch/x86/acpi.c
 void initacpi(void);
 int acpiversion(void);
