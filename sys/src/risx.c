@@ -8,6 +8,7 @@
 #include <arch/x86/acpi.h>
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
+#include <arch/x86/interrupts.h>
 #include <arch/x86/isr.h>
 #endif
 
@@ -34,7 +35,7 @@ void setup(void) {
     initidt();
     // initisr();
 
-    // initacpi();
+    initacpi();
     // extern struct rsdp* rsdp;
     // extern struct xsdp* xsdp;
     // switch (acpiversion()) {
@@ -47,6 +48,8 @@ void setup(void) {
     //     kprintf("XSDT addr: 0x%x\n", xsdp->xsdtaddr);
     //     break;
     // }
+
+    enableinterrupts();
 #endif
 
     initmm();
@@ -66,6 +69,9 @@ void setup(void) {
 noreturn void risx(void) {
     setup();
     kprintf("Entered RISX\n");
+
+    while(true);
+
     panic("Unexpected return from scheduler");
 }
 

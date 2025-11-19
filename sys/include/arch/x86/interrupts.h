@@ -20,4 +20,8 @@
 #define X86_INTERRUPT_MC    18  // machine check                // no
 #define X86_INTERRUPT_XF    19  // simd error                   // no
 
+// arch/x86/interrupts.S
+void enableinterrupts(void);
+void disableinterrupts(void);
+
 #endif
