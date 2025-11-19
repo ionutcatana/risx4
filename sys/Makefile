@@ -26,7 +26,7 @@ CFLAGS := 			\
 	-std=c17		\
 	-Wall			\
 	-Wextra
-LDFLAGS := -T src/kernel.ld -nostdlib -lgcc
+LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc
 
 SRCS := $(shell find src -type f -name '*.S' -o -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
@@ -35,7 +35,7 @@ OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
 all: $(OBJ_DIR)/risx.elf
 
 
-$(OBJ_DIR)/risx.elf: $(OBJS) src/kernel.ld
+$(OBJ_DIR)/risx.elf: $(OBJS) src/kernel_x86.ld
 	@mkdir -p $(dir $@)
 	$(CC) $(OBJS) $(LDFLAGS) -o $@
 
