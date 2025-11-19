@@ -1,22 +1,21 @@
 #include <libk/kstdlib.h>
 #include <libk/string.h>
-#include <limine.h>
 #include <mm.h>
 
-
+#include <limine.h>
 #include <stddef.h>
 #include <stdint.h>
 
 // __attribute__((used, section(".limine_requests")))
 // static volatile struct limine_hhdm_request limine_hhdm_request = {
 //     .id = LIMINE_HHDM_REQUEST,
-//     .revision = 0
+//     .revision = 4
 // };
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_memmap_request limine_memmap_request = {
     .id = LIMINE_MEMMAP_REQUEST,
-    .revision = 0
+    .revision = 4
 };
 
 struct limine_memmap_entry memmap_entries[128];
