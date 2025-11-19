@@ -9,5 +9,10 @@
 extern uint8_t ins(uint32_t port);
 extern void outs(uint32_t port, uint8_t data);
 
+extern uint16_t inw(uint32_t port);
+extern void outw(uint32_t port, uint16_t data);
+
+extern uint32_t inl(uint32_t port);
+extern void outl(uint32_t port, uint32_t data);
 
 #endif
