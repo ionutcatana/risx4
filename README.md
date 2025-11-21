@@ -1,2 +1,2 @@
 # risx-bachelors-project
-Work-in-progress operating system for 64-bit computers, written in modern C.
+- (21/11/2025) Just a toy kernel for now
