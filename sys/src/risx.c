@@ -12,9 +12,7 @@
 #include <arch/x86/isr.h>
 #endif
 
-#define LIMINE_API_REVISION 3
 #include <limine.h>
-
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -32,7 +30,7 @@ static volatile LIMINE_BASE_REVISION(4);
 void setup(void) {
     initserial();
 
-#ifdef __x86_64__
+#if defined (__x86_64__)
     initgdt();
     initidt();
     // initisr();
@@ -97,7 +95,7 @@ void setup(void) {
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
-        case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
+        case LIMINE_MEMMAP_KERNEL_AND_MODULES:
             kprintf("Area `executable and modules`: ");
             kprintf("Base: 0x%x, Length: 0x%x\n",
                 memmap_entries[i].base,
