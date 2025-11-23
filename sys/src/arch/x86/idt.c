@@ -37,6 +37,7 @@ void idispatch(struct trapframe* tf) {
     kprintf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
 
     // handle the interrupt after it has been announced on the serial port
+    // exceptions 9 & 15 not defined yet
     switch (tf->vector) {
     case X86_INTERRUPT_DE:
         break;
