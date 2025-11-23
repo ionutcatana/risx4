@@ -28,15 +28,25 @@ void initmm(void) {
     }
 
     for (uint64_t i = 0; i < limine_memmap_request.response->entry_count; i++) {
-        if (limine_memmap_request.response->entries[i]->type == LIMINE_MEMMAP_USABLE) {
-            memcpy(&memmap_entries[memmap_entry_count],
-                   limine_memmap_request.response->entries[i],
-                   sizeof(struct limine_memmap_entry));
-            memmap_entry_count++;
+        // if (limine_memmap_request.response->entries[i]->type == LIMINE_MEMMAP_USABLE) {
+        //     memcpy(&memmap_entries[memmap_entry_count],
+        //            limine_memmap_request.response->entries[i],
+        //            sizeof(struct limine_memmap_entry));
+        //     memmap_entry_count++;
 
-            if (memmap_entry_count >= 128) {
-                break;
-            }
+        //     if (memmap_entry_count >= 128) {
+        //         break;
+        //     }
+        // }
+
+        memcpy(&memmap_entries[i],
+               limine_memmap_request.response->entries[i],
+               sizeof(struct limine_memmap_entry));
+
+        if (memmap_entry_count >= 128) {
+            break;
         }
     }
+
+    memmap_entry_count = limine_memmap_request.response->entry_count;
 }
