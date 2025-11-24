@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define RFLAGS_IF   0b0000000000000000000000000000000000000000000000000000000000000000
+
 // arch/x86/registers.S
 uint64_t readcr0(void);
 uint64_t readcr2(void);
