@@ -96,7 +96,7 @@ void setup(void) {
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_KERNEL_AND_MODULES:
-            kprintf("Area `executable and modules`: ");
+            kprintf("Area `kernel and modules`: ");
             kprintf("Base: 0x%x, Length: 0x%x\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
