@@ -1,3 +1,4 @@
+#include <interrupts.h>
 #include <libk/kstdio.h>
 #include <libk/kstdlib.h>
 #include <mm.h>
@@ -8,7 +9,6 @@
 #include <arch/x86/acpi.h>
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
-#include <arch/x86/interrupts.h>
 #include <arch/x86/isr.h>
 #endif
 

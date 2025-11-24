@@ -7,11 +7,14 @@
 #define LOCKHELD    (1)
 #define LOCKFREE    (0)
 
+// TODO: stack trace; it requires a getter for the caller's PC/IP
+
 struct spinlock {
-    uint64_t locked; // not `bool` because i want it to be register width
+    uint64_t locked;    // not `bool` because i want a register width value
 
 #if defined(RISXDEBUG)
     const char* name;
+//  uintptr_t pcs[8];   // stack trace
 #endif
 };
 
