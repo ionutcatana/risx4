@@ -1,4 +1,5 @@
 PROFILE ?= DEBUG
+VERSION ?= 0.0.4
 OBJ_DIR ?= target
 ARCH ?= x86_64
 
@@ -38,7 +39,9 @@ CFLAGS +=			\
 endif
 
 ifeq ($(PROFILE), RELEASE)
-CFALGS += -O2
+CFALGS +=
+	-O2			\
+	-DVERSION
 endif
 
 LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc

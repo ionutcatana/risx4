@@ -121,7 +121,11 @@ void setup(void) {
 
 noreturn void risx(void) {
     setup();
-    kprintf("Entered RISX\n");
+#if defined (RISXDEBUG)
+    kprintf("Entered RISX (debug profile)\n");
+#else
+    kprintf("Entered RISX (release profile)\n");
+#endif
 
     while(true);
 
