@@ -1,4 +1,4 @@
-#include "arch/x86/atomic.h"
+#include <arch/x86/atomic.h>
 #include <spinlock.h>
 
 #include <stdbool.h>
