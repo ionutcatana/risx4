@@ -13,9 +13,9 @@ CFLAGS := 			\
 	-fno-stack-check	\
 	-fno-stack-protector	\
 	-pipe			\
-	-std=c17		\
+	-std=c17
 
-ifeq ($(ARCH), "x86_64")
+ifeq ($(ARCH), x86_64)
 CFLAGS +=			\
 	-m64			\
 	-mabi=sysv		\
@@ -25,21 +25,20 @@ CFLAGS +=			\
 	-mno-mmx		\
 	-mno-red-zone		\
 	-mno-sse		\
-	-mno-sse2		\
+	-mno-sse2
 endif
 
-ifeq ($(PROFILE), "DEBUG")
+ifeq ($(PROFILE), DEBUG)
 CFLAGS +=			\
 	-g			\
 	-O0			\
 	-Wall			\
-	-Wextra
+	-Wextra			\
 	-DRISXDEBUG
 endif
 
-ifeq ($(PROFILE), "RELEASE")
-CFALGS +=			\
-	-O2			\
+ifeq ($(PROFILE), RELEASE)
+CFALGS += -O2
 endif
 
 LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc
