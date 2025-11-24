@@ -5,7 +5,7 @@
 #include <risx.h>
 #include <serial.h>
 
-#ifdef __x86_64__
+#if defined(__x86_64__)
 #include <arch/x86/acpi.h>
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
