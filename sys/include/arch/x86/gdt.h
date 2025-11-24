@@ -3,13 +3,13 @@
 
 #include <stdint.h>
 
-#define GDT_SIZE 7
+#define GDT_SIZE        (7)
 
-#define RISX_CODE_SEG   (uint16_t)0x08
-#define RISX_DATA_SEG   (uint16_t)0x10
-#define USER_DATA_SEG   (uint16_t)0x1b
-#define USER_CODE_SEG   (uint16_t)0x23
-#define TSS_SEG         (uint16_t)0x28
+#define RISX_CODE_SEG   ((uint16_t)0x08)
+#define RISX_DATA_SEG   ((uint16_t)0x10)
+#define USER_DATA_SEG   ((uint16_t)0x1b)
+#define USER_CODE_SEG   ((uint16_t)0x23)
+#define TSS_SEG         ((uint16_t)0x28)
 
 struct gdtr {
     uint16_t limit;

@@ -3,11 +3,15 @@
 
 #include <stdint.h>
 
-#define RFLAGS_IF   (uint64_t)0x0000000000000200
-#define CR0_PE      (uint64_t)0x0000000000000001
-#define CR0_WP      (uint64_t)0x0000000000010000
-#define CR0_PG      (uint64_t)0x0000000080000000
-#define CR4_PSE     (uint64_t)0x0000000000000010
+#define RFLAGS_IF       (1 << 8)
+#define CR0_PE          (1)
+#define CR0_WP          (1 << 15)
+#define CR0_PG          (1 << 30)
+#define CR4_PSE         (1 << 3)
+#define CR4_PAE         (1 << 4)
+#define EFER_SYSCALL    (1)
+#define EFER_LME        (1 << 7)
+#define EFER_NX         (1 << 10)
 
 // arch/x86/registers.S
 uint64_t readcr0(void);

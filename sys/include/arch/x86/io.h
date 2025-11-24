@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define X86_SERIAL_PORT 0x3f8
+#define X86_SERIAL_PORT (0x3f8)
 
 // arch/x86/io.S
 extern uint8_t ins(uint32_t port);

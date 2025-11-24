@@ -6,18 +6,19 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define IDT_SIZE 256
-//                 bits:  76543210
-#define INTERRUPT_GATE  0b00001110
-#define TRAP_GATE       0b00001111
-#define RING0           0b00000000
-#define RING3           0b01100000
-#define PRESENT         0b10000000
+//                  bits:  76543210
+#define INTERRUPT_GATE  (0b00001110)
+#define TRAP_GATE       (0b00001111)
+#define RING0           (0b00000000)
+#define RING3           (0b01100000)
+#define PRESENT         (0b10000000)
 
 #define IDT_INTERRUPT_GATE_RING0 ((INTERRUPT_GATE) | (RING0) | (PRESENT))
 #define IDT_INTERRUPT_GATE_RING3 ((INTERRUPT_GATE) | (RING3) | (PRESENT))
 #define IDT_TRAP_GATE_RING0      ((TRAP_GATE)      | (RING0) | (PRESENT))
 #define IDT_TRAP_GATE_RING3      ((TRAP_GATE)      | (RING3) | (PRESENT))
+
+#define IDT_SIZE        (256)
 
 struct idtr {
     uint16_t limit;

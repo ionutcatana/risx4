@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define LOCKHELD 1
-#define LOCKFREE 0
+#define LOCKHELD    (1)
+#define LOCKFREE    (0)
 
 struct spinlock {
     uint64_t locked; // not `bool` because i want it to be register width
