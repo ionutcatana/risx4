@@ -36,18 +36,18 @@ void setup(void) {
     // initisr();
 
     initacpi();
-    // extern struct rsdp* rsdp;
-    // extern struct xsdp* xsdp;
-    // switch (acpiversion()) {
-    // case ACPI_VERSION_1:
-    //     kprintf("ACPI 1.0\n");
-    //     kprintf("RSDT addr: 0x%x\n", rsdp->rsdpaddr);
-    //     break;
-    // case ACPI_VERSION_SUBSEQUENT:
-    //     kprintf("ACPI >= 2.0\n");
-    //     kprintf("XSDT addr: 0x%x\n", xsdp->xsdtaddr);
-    //     break;
-    // }
+    extern struct rsdp* rsdp;
+    extern struct xsdp* xsdp;
+    switch (acpiversion()) {
+    case ACPI_VERSION_1:
+        kprintf("ACPI 1.0\n");
+        kprintf("RSDT addr: 0x%x\n", rsdp->rsdpaddr);
+        break;
+    case ACPI_VERSION_SUBSEQUENT:
+        kprintf("ACPI >= 2.0\n");
+        kprintf("XSDT addr: 0x%x\n", xsdp->xsdtaddr);
+        break;
+    }
 
     enableinterrupts();
 #endif

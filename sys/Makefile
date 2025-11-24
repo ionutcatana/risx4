@@ -1,3 +1,4 @@
+PROFILE ?= DEBUG
 OBJ_DIR ?= target
 ARCH ?= x86_64
 
@@ -11,7 +12,11 @@ CFLAGS := 			\
 	-fno-PIC		\
 	-fno-stack-check	\
 	-fno-stack-protector	\
-	-g			\
+	-pipe			\
+	-std=c17		\
+
+ifeq ($(ARCH), "x86_64")
+CFLAGS +=			\
 	-m64			\
 	-mabi=sysv		\
 	-mcmodel=kernel		\
@@ -21,11 +26,22 @@ CFLAGS := 			\
 	-mno-red-zone		\
 	-mno-sse		\
 	-mno-sse2		\
-	-O2			\
-	-pipe			\
-	-std=c17		\
+endif
+
+ifeq ($(PROFILE), "DEBUG")
+CFLAGS +=			\
+	-g			\
+	-O0			\
 	-Wall			\
 	-Wextra
+	-DRISXDEBUG
+endif
+
+ifeq ($(PROFILE), "RELEASE")
+CFALGS +=			\
+	-O2			\
+endif
+
 LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc
 
 SRCS := $(shell find src -type f -name '*.S' -o -name '*.c')
