@@ -19,7 +19,7 @@ static int version = ACPI_VERSION_1;
 void initacpi(void) {
     if (limine_rsdp_request.response == NULL ||
         limine_rsdp_request.response->address == NULL) {
-        panic("ACPI is not supported");
+        panic("ACPI is not supported.");
     }
 
     rsdp = limine_rsdp_request.response->address;

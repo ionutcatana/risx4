@@ -129,7 +129,7 @@ noreturn void risx(void) {
 
     while(true);
 
-    panic("Unexpected return from scheduler");
+    panic("Unexpected return from scheduler.");
 }
 
 
