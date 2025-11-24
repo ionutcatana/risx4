@@ -1,5 +1,5 @@
 #ifndef X86_ATOMIC_H
-#define X86_ATOMIC_H
+#define X86_ATOMIC_H 1
 
 #include <stdint.h>
 

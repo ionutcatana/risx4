@@ -1,0 +1,3 @@
+#ifndef RISCV_INTERRUPTS_H
+#define RISCV_INTERRUPTS_H 1
+#endif
