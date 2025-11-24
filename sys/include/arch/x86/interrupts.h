@@ -20,4 +20,6 @@
 #define X86_INTERRUPT_MC    (18)    // machine check                // no
 #define X86_INTERRUPT_XF    (19)    // simd error                   // no
 
+#include <interrupts.h>
+
 #endif
