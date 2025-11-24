@@ -33,7 +33,7 @@ void setup(void) {
 #if defined (__x86_64__)
     initgdt();
     initidt();
-    // initisr();
+//  initisr();
 
     initacpi();
     extern struct rsdp* rsdp;
