@@ -68,7 +68,7 @@ void idispatch(struct trapframe* tf) {
     case X86_INTERRUPT_GP:
         break;
     case X86_INTERRUPT_PF:
-        kprintf("virtaddr: 0x%x", readcr2());
+        kprintf("virtaddr: 0x%x\n", readcr2());
         panic("unresolved page fault");
         break;
     case X86_INTERRUPT_MF:
