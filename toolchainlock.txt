@@ -1,0 +1,3 @@
+limine @ 10.2.1-binary <https://codeberg.org/Limine/Limine/releases/tag/v10.2.1-binary>
+binutils @ 2.44 <https://mirrors.nav.ro/gnu/binutils/binutils-2.44.tar.xz>
+gcc @ 14.2.0 <https://mirrors.nav.ro/gnu/gcc/gcc-14.2.0/gcc-14.2.0.tar.xz>
