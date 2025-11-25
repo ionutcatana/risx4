@@ -7,7 +7,7 @@
 static int64_t ninterrupts = 0;
 static uint64_t intenabled = 1;
 
-void pushinterrupts() {
+void pushinterrupts(void) {
     uint64_t rflags = readrflags();
     disableinterrupts();
 
@@ -17,7 +17,7 @@ void pushinterrupts() {
     }
 }
 
-void popinterrupts() {
+void popinterrupts(void) {
     ninterrupts--;
     if (ninterrupts < 0) {
         panic("decremented ninterrupts past 0.");

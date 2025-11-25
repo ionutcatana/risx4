@@ -24,7 +24,7 @@ void initgdt(void) {
 }
 
 void loadtr(uint16_t selector);
-void inittss() {
+void inittss(void) {
     memset(&tss, 0, sizeof(struct tss));
     tss.iomap_base = sizeof(struct tss);
 

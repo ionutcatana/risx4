@@ -6,7 +6,7 @@ void enableinterrupts(void);
 void disableinterrupts(void);
 
 // arch/x86/interrupts.c
-void pushinterrupts();
-void popinterrupts();
+void pushinterrupts(void);
+void popinterrupts(void);
 
 #endif
