@@ -50,3 +50,7 @@ void initmm(void) {
 
     memmap_entry_count = limine_memmap_request.response->entry_count;
 }
+
+void initpmm(void) {
+    initmm();
+}
