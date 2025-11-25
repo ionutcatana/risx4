@@ -127,6 +127,10 @@ noreturn void risx(void) {
     kprintf("Entered RISX (release profile)\n");
 #endif
 
+    // test a page fault
+    uintptr_t ptr = 0xdeadbeef;
+    *((uint64_t*)ptr) = 42;
+
     while(true);
 
     panic("Unexpected return from scheduler.");
