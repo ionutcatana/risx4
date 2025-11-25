@@ -3,6 +3,8 @@
 #include <arch/x86/interrupts.h>
 #include <arch/x86/registers.h>
 #include <libk/kstdio.h>
+#include <libk/kstdlib.h>
+#include <risx.h>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -67,6 +69,7 @@ void idispatch(struct trapframe* tf) {
         break;
     case X86_INTERRUPT_PF:
         kprintf("virtaddr: 0x%x", readcr2());
+        panic("unresolved page fault");
         break;
     case X86_INTERRUPT_MF:
         break;
