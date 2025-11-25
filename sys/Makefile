@@ -13,6 +13,7 @@ CFLAGS := 			\
 	-fno-PIC		\
 	-fno-stack-check	\
 	-fno-stack-protector	\
+	-mno-ms-bitfields	\
 	-pipe			\
 	-std=c17
 
