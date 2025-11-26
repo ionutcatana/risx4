@@ -7,6 +7,7 @@
 #define NANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS 0
 
 #include <nanoprintf.h>
+#include <console.h>
 #include <serial.h>
 
 #include <stdarg.h>
@@ -14,6 +15,7 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static void serial_npf_putc(int c, void *ctx) {
     serialputchar(c);
+    consoleputchar(c);
 }
 
 int snprintf( char* restrict buffer, size_t bufsz, const char* restrict format, ... ) {
