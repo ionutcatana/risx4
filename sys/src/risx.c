@@ -1,5 +1,5 @@
+#include <core.h>
 #include <interrupts.h>
-#include <libk/kstdio.h>
 #include <mm.h>
 #include <risx.h>
 #include <serial.h>
@@ -39,12 +39,12 @@ void setup(void) {
     extern struct xsdp_t* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
-        kprintf("ACPI 1.0\n");
-        kprintf("RSDT addr: 0x%u\n", rsdp->rsdpaddr);
+        printf("ACPI 1.0\n");
+        printf("RSDT addr: 0x%016lx\n", rsdp->rsdpaddr);
         break;
     case ACPI_VERSION_SUBSEQUENT:
-        kprintf("ACPI >= 2.0\n");
-        kprintf("XSDT addr: 0x%u\n", xsdp->xsdtaddr);
+        printf("ACPI >= 2.0\n");
+        printf("XSDT addr: 0x%016lx\n", xsdp->xsdtaddr);
         break;
     }
 
@@ -52,83 +52,18 @@ void setup(void) {
 #endif
 
     initmm();
-    extern struct limine_memmap_entry memmap_entries[];
-    extern uint64_t memmap_entry_count;
-    extern uint64_t hhdm_offset;
-
-    kprintf("HHDM offset: %u\n", hhdm_offset);
-    kprintf("Usable memory map entries: %u\n", memmap_entry_count);
-    for (size_t i = 0; i < memmap_entry_count; i++) {
-        switch (memmap_entries[i].type) {
-        case LIMINE_MEMMAP_USABLE:
-            kprintf("Area `usable`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_RESERVED:
-            kprintf("Area `reserved`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_ACPI_RECLAIMABLE:
-            kprintf("Area `acpi reclaimable`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_ACPI_NVS:
-            kprintf("Area `acpi nvs`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_BAD_MEMORY:
-            kprintf("Area `bad memory`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
-            kprintf("Area `bootloader reclaimable`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
-            kprintf("Area `kernel and modules`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_FRAMEBUFFER:
-            kprintf("Area `framebuffer`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        case LIMINE_MEMMAP_ACPI_TABLES:
-            kprintf("Area `acpi tables`: ");
-            kprintf("Base: 0x%u, Length: 0x%u\n",
-                memmap_entries[i].base,
-                memmap_entries[i].length);
-            break;
-        }
-    }
-
-    kprintf("Setup successful\n");
+    printf("Setup successful\n");
 }
 
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
-    kprintf("Entered RISX (debug profile)\n");
+    printf("Entered RISX (debug profile)\n");
 #else
-    kprintf("Entered RISX (release profile)\n");
+    printf("Entered RISX (release profile)\n");
 #endif
     // stop warning
-    kprintf("stack top: 0x%p", stacktop);
+    printf("stack top: 0x%016lx\n", stacktop);
 
     // test a page fault
     uintptr_t ptr = 0xdeadbeef;
@@ -136,7 +71,7 @@ noreturn void risx(uintptr_t stacktop) {
 
     while(true);
 
-    panic("Unexpected return from scheduler.");
+    panic("Unexpected return from scheduler.\n");
 }
 
 
