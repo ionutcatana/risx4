@@ -1,4 +1,4 @@
-#include <libk/string.h>
+#include <core.h>
 
 #include <stdbool.h>
 #include <stddef.h>

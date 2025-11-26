@@ -1,5 +1,4 @@
 #include <arch/x86/acpi.h>
-#include <libk/kstdlib.h>
 #include <risx.h>
 
 #include <limine.h>

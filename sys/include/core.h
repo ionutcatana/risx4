@@ -1,10 +1,10 @@
-#ifndef _STRING_H
-#define _STRING_H 1
+#ifndef CORE_H
+#define CORE_H 1
 
 #include <stddef.h>
 
 // compiler needs these built-in functions
-// libk/string.c
+// string.c
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t n);
 void* memmove(void* dstptr, const void* srcptr, size_t n);
 int memcmp(const void* aptr, const void* bptr, size_t n);

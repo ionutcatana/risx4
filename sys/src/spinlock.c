@@ -1,7 +1,7 @@
-#include <risx.h>
 #include <atomic.h>
+#include <core.h>
 #include <interrupts.h>
-#include <libk/string.h>
+#include <risx.h>
 #include <spinlock.h>
 
 #include <stdbool.h>

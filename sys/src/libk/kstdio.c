@@ -1,5 +1,5 @@
+#include <core.h>
 #include <libk/kstdio.h>
-#include <libk/string.h>
 #include <serial.h>
 
 #include <limits.h>

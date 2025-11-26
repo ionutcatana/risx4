@@ -1,5 +1,4 @@
-#include <libk/kstdlib.h>
-#include <libk/string.h>
+#include <core.h>
 #include <mm.h>
 #include <risx.h>
 

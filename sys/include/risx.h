@@ -4,6 +4,7 @@
 #include <risx/config.h>
 #include <stdnoreturn.h>
 
+noreturn void abort(void);
 noreturn void panic(const char* message);
 
 #endif

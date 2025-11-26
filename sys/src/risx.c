@@ -1,6 +1,5 @@
 #include <interrupts.h>
 #include <libk/kstdio.h>
-#include <libk/kstdlib.h>
 #include <mm.h>
 #include <risx.h>
 #include <serial.h>
@@ -41,11 +40,11 @@ void setup(void) {
     switch (acpiversion()) {
     case ACPI_VERSION_1:
         kprintf("ACPI 1.0\n");
-        kprintf("RSDT addr: 0x%x\n", rsdp->rsdpaddr);
+        kprintf("RSDT addr: 0x%u\n", rsdp->rsdpaddr);
         break;
     case ACPI_VERSION_SUBSEQUENT:
         kprintf("ACPI >= 2.0\n");
-        kprintf("XSDT addr: 0x%x\n", xsdp->xsdtaddr);
+        kprintf("XSDT addr: 0x%u\n", xsdp->xsdtaddr);
         break;
     }
 
@@ -57,61 +56,61 @@ void setup(void) {
     extern uint64_t memmap_entry_count;
     extern uint64_t hhdm_offset;
 
-    kprintf("HHDM offset: %x\n", hhdm_offset);
-    kprintf("Usable memory map entries: %d\n", memmap_entry_count);
+    kprintf("HHDM offset: %u\n", hhdm_offset);
+    kprintf("Usable memory map entries: %u\n", memmap_entry_count);
     for (size_t i = 0; i < memmap_entry_count; i++) {
         switch (memmap_entries[i].type) {
         case LIMINE_MEMMAP_USABLE:
             kprintf("Area `usable`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_RESERVED:
             kprintf("Area `reserved`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_ACPI_RECLAIMABLE:
             kprintf("Area `acpi reclaimable`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_ACPI_NVS:
             kprintf("Area `acpi nvs`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_BAD_MEMORY:
             kprintf("Area `bad memory`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE:
             kprintf("Area `bootloader reclaimable`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_EXECUTABLE_AND_MODULES:
             kprintf("Area `kernel and modules`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_FRAMEBUFFER:
             kprintf("Area `framebuffer`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
         case LIMINE_MEMMAP_ACPI_TABLES:
             kprintf("Area `acpi tables`: ");
-            kprintf("Base: 0x%x, Length: 0x%x\n",
+            kprintf("Base: 0x%u, Length: 0x%u\n",
                 memmap_entries[i].base,
                 memmap_entries[i].length);
             break;
