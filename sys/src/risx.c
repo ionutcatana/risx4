@@ -1,7 +1,12 @@
-#include <interrupts.h>
-#include <limine.h>
-#include <mm.h>
 #include <risx.h>
+
+#include <interrupts.h>
+#include <mm.h>
+
+#include <limine.h>
+
+// I/O
+#include <console.h>
 #include <serial.h>
 
 #if defined(__x86_64__)
@@ -27,6 +32,7 @@ static volatile LIMINE_BASE_REVISION(4);
 
 void setup(void) {
     initserial();
+    initconsole();
 
 #if defined (__x86_64__)
     initgdt();
