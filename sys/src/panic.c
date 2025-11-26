@@ -1,4 +1,3 @@
-#include <core.h>
 #include <risx.h>
 
 noreturn void halt(void);

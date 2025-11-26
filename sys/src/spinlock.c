@@ -1,5 +1,4 @@
 #include <atomic.h>
-#include <core.h>
 #include <interrupts.h>
 #include <risx.h>
 #include <spinlock.h>

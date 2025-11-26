@@ -8,6 +8,7 @@
 
 #include <nanoprintf.h>
 #include <serial.h>
+
 #include <stdarg.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"

@@ -2,7 +2,6 @@
 #include <arch/x86/idt.h>
 #include <arch/x86/interrupts.h>
 #include <arch/x86/registers.h>
-#include <core.h>
 #include <risx.h>
 
 #include <stdint.h>

@@ -1,7 +1,7 @@
 #include <arch/x86/acpi.h>
+#include <limine.h>
 #include <risx.h>
 
-#include <limine.h>
 #include <stddef.h>
 #include <stdnoreturn.h>
 

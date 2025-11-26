@@ -1,5 +1,5 @@
 #include <arch/x86/gdt.h>
-#include <core.h>
+#include <risx.h>
 
 #include <stdint.h>
 

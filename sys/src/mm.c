@@ -1,8 +1,7 @@
-#include <core.h>
+#include <limine.h>
 #include <mm.h>
 #include <risx.h>
 
-#include <limine.h>
 #include <stddef.h>
 #include <stdint.h>
 

@@ -2,6 +2,8 @@
 #define RISX_H 1
 
 #include <risx/config.h>
+#include <risx/core.h>
+
 #include <stdnoreturn.h>
 
 noreturn void abort(void);

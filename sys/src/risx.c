@@ -1,5 +1,5 @@
-#include <core.h>
 #include <interrupts.h>
+#include <limine.h>
 #include <mm.h>
 #include <risx.h>
 #include <serial.h>
@@ -11,7 +11,6 @@
 #include <arch/x86/isr.h>
 #endif
 
-#include <limine.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
