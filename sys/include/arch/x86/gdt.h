@@ -11,12 +11,12 @@
 #define USER_CODE_SEG   ((uint16_t)0x23)
 #define TSS_SEG         ((uint16_t)0x28)
 
-struct gdtr {
+struct gdtr_t {
     uint16_t limit;
     uintptr_t base;
 } __attribute__((packed));
 
-union gdt_segment {
+union gdtsegdesc_t {
     struct {
         uint16_t limit;
         uint16_t base_lower;
@@ -28,7 +28,7 @@ union gdt_segment {
     uint64_t value;
 };
 
-struct tss {
+struct tss_t {
     uint32_t reserved0;
     uint64_t rsp0;
     uint64_t rsp1;

@@ -9,13 +9,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
-static union idt_descriptor idt[IDT_SIZE];
-struct idtr _idtr; // used in idt.S
+static union idtsegdesc_t idt[IDT_SIZE];
+struct idtr_t _idtr; // used in idt.S
 extern uintptr_t vectors[]; // arch/x86/vectors.S
 
 void loadidt(void);
 void initidt(void) {
-    _idtr.limit = (IDT_SIZE) * sizeof(union idt_descriptor) - 1;
+    _idtr.limit = (IDT_SIZE) * sizeof(union idtsegdesc_t) - 1;
     _idtr.base = (uintptr_t)idt;
 
     for (size_t i = 0; i < IDT_SIZE; i++) {
@@ -35,7 +35,7 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
     idt[vector].reserved = 0;
 }
 
-void idispatch(struct trapframe* tf) {
+void idispatch(struct trapframe_t* tf) {
     kprintf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
 
     // handle the interrupt after it has been announced on the serial port

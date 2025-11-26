@@ -45,7 +45,7 @@ union virtaddr_t {
     uintptr_t value;
 };
 
-union pagetable_entry_t {
+union ptentry_t {
     struct {
         union {
             struct {
@@ -70,7 +70,7 @@ union pagetable_entry_t {
 };
 
 struct pagetable_t {
-    union pagetable_entry_t entries[512];
+    union ptentry_t entries[512];
 } __attribute__((aligned(4096)));
 
 #endif

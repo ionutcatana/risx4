@@ -6,7 +6,7 @@
 #define ACPI_VERSION_1 0            // 1.0
 #define ACPI_VERSION_SUBSEQUENT 2   // 2.0-6.1
 
-struct rsdp {
+struct rsdp_t {
     char signature[8];
     uint8_t checksum;
     char oemid[6];
@@ -14,7 +14,7 @@ struct rsdp {
     uint32_t rsdpaddr;
 } __attribute__((packed));
 
-struct xsdp {
+struct xsdp_t {
     char signature[8];
     uint8_t checksum;
     char oemid[6];
@@ -26,7 +26,7 @@ struct xsdp {
     uint8_t reserved[8];
 } __attribute__((packed));
 
-struct sdp_header {
+struct sdpheader_t {
     char signature[4];
     uint32_t length;
     uint8_t revision;
@@ -39,12 +39,12 @@ struct sdp_header {
 };
 
 struct rsdt {
-    struct sdp_header header;
+    struct sdpheader_t header;
     uint32_t sdtaddr[];
 };
 
 struct xsdt {
-    struct sdp_header header;
+    struct sdpheader_t header;
     uint64_t sdtaddr[];
 };
 

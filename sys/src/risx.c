@@ -36,8 +36,8 @@ void setup(void) {
 //  initisr();
 
     initacpi();
-    extern struct rsdp* rsdp;
-    extern struct xsdp* xsdp;
+    extern struct rsdp_t* rsdp;
+    extern struct xsdp_t* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
         kprintf("ACPI 1.0\n");

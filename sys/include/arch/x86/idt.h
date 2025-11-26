@@ -20,12 +20,12 @@
 
 #define IDT_SIZE        (256)
 
-struct idtr {
+struct idtr_t {
     uint16_t limit;
     uint64_t base;
 } __attribute__((packed));
 
-union idt_descriptor {
+union idtsegdesc_t {
     struct {
         uint16_t base_lower;
         uint16_t selector;
@@ -47,7 +47,7 @@ void loadidt(void);
 // arch/x86/idt.c
 void initidt(void);
 void sethandler(size_t vector, uintptr_t handler, uint8_t attributes);
-void idispatch(struct trapframe* tf);
+void idispatch(struct trapframe_t* tf);
 // arch/x86/istub.S
 void istub(void);
 

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-struct trapframe {
+struct trapframe_t {
     uint64_t r15;
     uint64_t r14;
     uint64_t r13;
