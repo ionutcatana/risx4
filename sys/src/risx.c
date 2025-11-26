@@ -55,7 +55,9 @@ void setup(void) {
     initmm();
     extern struct limine_memmap_entry memmap_entries[];
     extern uint64_t memmap_entry_count;
+    extern uint64_t hhdm_offset;
 
+    kprintf("HHDM offset: %x\n", hhdm_offset);
     kprintf("Usable memory map entries: %d\n", memmap_entry_count);
     for (size_t i = 0; i < memmap_entry_count; i++) {
         switch (memmap_entries[i].type) {
