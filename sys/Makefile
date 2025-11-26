@@ -4,7 +4,7 @@ OBJ_DIR ?= target
 ARCH ?= x86_64
 
 CC := $(ARCH)-elf-gcc
-CPPFLAGS := -I/usr/local/include -Iinclude
+CPPFLAGS := -Iinclude -Ivendors
 CFLAGS := 			\
 	-DLIMINE_API_REVISION=4	\
 	-fdata-sections		\
