@@ -50,6 +50,7 @@ endif
 LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc
 
 SRCS := $(shell find src -type f -name '*.S' -o -name '*.c')
+SRCS += $(shell find src -type f -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
 	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter %.c,$(SRCS)))
 
