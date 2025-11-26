@@ -3,7 +3,6 @@
 #include <arch/x86/interrupts.h>
 #include <arch/x86/registers.h>
 #include <core.h>
-#include <libk/kstdio.h>
 #include <risx.h>
 
 #include <stdint.h>
@@ -36,7 +35,7 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
 }
 
 void idispatch(struct trapframe_t* tf) {
-    kprintf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
+    printf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
 
     // handle the interrupt after it has been announced on the serial port
     // exceptions 9 & 15 not defined yet
@@ -68,7 +67,7 @@ void idispatch(struct trapframe_t* tf) {
     case X86_INTERRUPT_GP:
         break;
     case X86_INTERRUPT_PF:
-        kprintf("virtaddr: 0x%x\n", readcr2());
+        printf("virtaddr: 0x%016lx\n", readcr2());
         panic("unresolved page fault");
         break;
     case X86_INTERRUPT_MF:

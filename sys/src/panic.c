@@ -1,4 +1,4 @@
-#include <libk/kstdio.h>
+#include <core.h>
 #include <risx.h>
 
 noreturn void halt(void);
@@ -7,6 +7,6 @@ noreturn void abort(void) {
 }
 
 noreturn void panic(const char* message) {
-    kprintf("PANIC: %s\n", message);
+    printf("PANIC: %s\n", message);
     abort();
 }
