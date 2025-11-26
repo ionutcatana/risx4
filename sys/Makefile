@@ -6,6 +6,7 @@ ARCH ?= x86_64
 CC := $(ARCH)-elf-gcc
 CPPFLAGS := -I/usr/local/include -Iinclude
 CFLAGS := 			\
+	-DLIMINE_API_REVISION=4	\
 	-fdata-sections		\
 	-ffreestanding		\
 	-ffunction-sections	\
