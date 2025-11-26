@@ -37,6 +37,7 @@ CFLAGS +=			\
 	-O0			\
 	-Wall			\
 	-Wextra			\
+	-Werror			\
 	-DRISXDEBUG
 endif
 
