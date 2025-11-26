@@ -121,13 +121,15 @@ void setup(void) {
     kprintf("Setup successful\n");
 }
 
-noreturn void risx(void) {
+noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
     kprintf("Entered RISX (debug profile)\n");
 #else
     kprintf("Entered RISX (release profile)\n");
 #endif
+    // stop warning
+    kprintf("stack top: 0x%p", stacktop);
 
     // test a page fault
     uintptr_t ptr = 0xdeadbeef;
