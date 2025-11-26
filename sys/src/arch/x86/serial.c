@@ -44,14 +44,3 @@ void serialputchar(int c) {
     }
 }
 
-void serialputs(const char* str) {
-    // worth testing for performance?
-    if (!initialized) {
-        return;
-    }
-
-    while(*str) {
-        serialputchar((int)(*str));
-        str++;
-    }
-}
