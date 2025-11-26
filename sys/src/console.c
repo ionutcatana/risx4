@@ -24,10 +24,11 @@ int initconsole(void) {
     struct limine_framebuffer fb;
     memcpy(
         &fb,
-        &limine_framebuffer_request.response->framebuffers[0],
+        // only one framebuffer supported for now
+        limine_framebuffer_request.response->framebuffers[0],
         sizeof(struct limine_framebuffer));
 
-    flanterm_fb_init(
+    ft_ctx = flanterm_fb_init(
         NULL,
         NULL,
         fb.address, fb.width, fb.height, fb.pitch,
@@ -42,6 +43,8 @@ int initconsole(void) {
         0, 0,
         0
     );
+
+    flanterm_set_autoflush(ft_ctx, true);
 
     return 0;
 }

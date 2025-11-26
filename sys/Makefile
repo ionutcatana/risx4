@@ -49,10 +49,11 @@ endif
 
 LDFLAGS := -T src/kernel_x86.ld -nostdlib -lgcc
 
-SRCS := $(shell find src -type f -name '*.S' -o -name '*.c')
-SRCS += $(shell find src -type f -name '*.c')
-OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter %.S,$(SRCS))) \
-	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter %.c,$(SRCS)))
+SRCS := $(shell find src vendors -type f -name '*.S' -o -name '*.c')
+OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter src/%.S,$(SRCS))) \
+	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter src/%.c,$(SRCS)))
+OBJS += $(patsubst vendors/%.S,$(OBJ_DIR)/vendors/%.S.o,$(filter vendors/%.S,$(SRCS))) \
+	$(patsubst vendors/%.c,$(OBJ_DIR)/vendors/%.c.o,$(filter vendors/%.c,$(SRCS)))
 
 all: $(OBJ_DIR)/risx.elf
 
@@ -66,6 +67,14 @@ $(OBJ_DIR)/%.S.o: src/%.S
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.c.o: src/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/vendors/%.S.o: vendors/%.S
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(OBJ_DIR)/vendors/%.c.o: vendors/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 

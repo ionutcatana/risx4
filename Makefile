@@ -1,7 +1,7 @@
 OBJ_DIR := target
 
 QEMU64 := qemu-system-x86_64
-QEMUFLAGS := -machine pc -smp cores=2 -m 4G -nographic
+QEMUFLAGS := -machine pc -smp cores=2 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
 
 PERL := perl
@@ -34,6 +34,9 @@ clean:
 
 qemu: iso
 	$(QEMU64) $(QEMUFLAGS) -cdrom target/risx.iso
+
+qemu-serial: iso
+	$(QEMU64) $(QEMUFLAGS) -cdrom target/risx.iso -nographic
 
 qemu-debug: iso
 	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom target/risx.iso
