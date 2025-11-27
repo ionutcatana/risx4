@@ -13,7 +13,7 @@
 #include <stdarg.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-static void serial_npf_putc(int c, void *ctx) {
+static void wrapper_npf_putc(int c, void *ctx) {
     serialputchar(c);
     consoleputchar(c);
 }
@@ -34,7 +34,7 @@ int vsnprintf( char* restrict buffer, size_t bufsz, const char* restrict format,
 int printf( const char* restrict format, ... ) {
     va_list val;
     va_start(val, format);
-    int const rv = npf_vpprintf(serial_npf_putc, NULL, format, val);
+    int const rv = npf_vpprintf(wrapper_npf_putc, NULL, format, val);
     va_end(val);
     return rv;
 }
