@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 __attribute__((used, section(".limine_requests")))
-static volatile struct limine_framebuffer_request limine_framebuffer_request = {
+static volatile struct limine_framebuffer_request fbreq = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 4
 };
@@ -16,8 +16,8 @@ static volatile struct limine_framebuffer_request limine_framebuffer_request = {
 struct flanterm_context* ft_ctx = NULL;
 
 int initconsole(void) {
-    if (limine_framebuffer_request.response == NULL ||
-        limine_framebuffer_request.response->framebuffer_count == 0) {
+    if (fbreq.response == NULL ||
+        fbreq.response->framebuffer_count == 0) {
         panic("invalid framebuffer response.");
     }
 
@@ -25,7 +25,7 @@ int initconsole(void) {
     memcpy(
         &fb,
         // only one framebuffer supported for now
-        limine_framebuffer_request.response->framebuffers[0],
+        fbreq.response->framebuffers[0],
         sizeof(struct limine_framebuffer));
 
     ft_ctx = flanterm_fb_init(
