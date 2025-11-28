@@ -6,7 +6,7 @@
 #include <stdnoreturn.h>
 
 __attribute__((used, section(".limine_requests")))
-static volatile struct limine_rsdp_request limine_rsdp_request = {
+static volatile struct limine_rsdp_request rsdpreq = {
     .id = LIMINE_RSDP_REQUEST,
     .revision = 4
 };
@@ -16,15 +16,15 @@ struct xsdp_t* xsdp = NULL;
 static int version = ACPI_VERSION_1;
 
 void initacpi(void) {
-    if (limine_rsdp_request.response == NULL ||
-        limine_rsdp_request.response->address == NULL) {
+    if (rsdpreq.response == NULL ||
+        rsdpreq.response->address == NULL) {
         panic("ACPI is not supported.");
     }
 
-    rsdp = limine_rsdp_request.response->address;
+    rsdp = rsdpreq.response->address;
     if (rsdp->revision > 0) {
         version = ACPI_VERSION_SUBSEQUENT;
-        xsdp = limine_rsdp_request.response->address;
+        xsdp = rsdpreq.response->address;
         rsdp = NULL;
     }
 }
