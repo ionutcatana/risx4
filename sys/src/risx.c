@@ -30,6 +30,7 @@ static volatile LIMINE_REQUESTS_END_MARKER;
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4);
 
+#pragma GCC diagnostic ignored "-Wunused-variable"
 void setup(void) {
     initserial();
     initconsole();
@@ -44,12 +45,12 @@ void setup(void) {
     extern struct xsdp_t* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
-        printf("ACPI 1.0\n");
-        printf("RSDT addr: 0x%016lx\n", rsdp->rsdpaddr);
+//      printf("ACPI 1.0\n");
+//      printf("RSDT addr: 0x%016lx\n", rsdp->rsdpaddr);
         break;
     case ACPI_VERSION_SUBSEQUENT:
-        printf("ACPI >= 2.0\n");
-        printf("XSDT addr: 0x%016lx\n", xsdp->xsdtaddr);
+//      printf("ACPI >= 2.0\n");
+//      printf("XSDT addr: 0x%016lx\n", xsdp->xsdtaddr);
         break;
     }
 
@@ -60,6 +61,7 @@ void setup(void) {
     printf("Setup successful\n");
 }
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
@@ -67,8 +69,8 @@ noreturn void risx(uintptr_t stacktop) {
 #else
     printf("Entered RISX (release profile)\n");
 #endif
-    // stop warning
-    printf("stack top: 0x%016lx\n", stacktop);
+
+//  printf("stack top: 0x%016lx\n", stacktop);
 
     // test a page fault
     uintptr_t ptr = 0xdeadbeef;
