@@ -1,6 +1,6 @@
         .intel_syntax noprefix
         .section .text
-        .global halt
-halt:   cli
+        .global abort
+abort:  cli
 .L1:    hlt
         jmp     .L1
