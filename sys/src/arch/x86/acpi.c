@@ -11,8 +11,8 @@ static volatile struct limine_rsdp_request rsdpreq = {
     .revision = 4
 };
 
-struct rsdp_t* rsdp = NULL;
-struct xsdp_t* xsdp = NULL;
+rsdp_t* rsdp = NULL;
+xsdp_t* xsdp = NULL;
 static int version = ACPI_VERSION_1;
 
 void initacpi(void) {

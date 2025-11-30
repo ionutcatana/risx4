@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-static union gdtsegdesc_t gdt[GDT_SIZE];
-struct gdtr_t _desc; // used in gdt.S
-struct tss_t tss;
+static gdtsegdesc_t gdt[GDT_SIZE];
+gdtr_t _desc; // used in gdt.S
+tss_t tss;
 
 void loadgdt(void);
 void initgdt(void) {
@@ -15,7 +15,7 @@ void initgdt(void) {
     gdt[3].value = 0x00C0F2000000FFFF;
     gdt[4].value = 0x00A0FA000000FFFF;
 
-    _desc.limit = (GDT_SIZE) * sizeof(union gdtsegdesc_t) - 1;
+    _desc.limit = (GDT_SIZE) * sizeof(gdtsegdesc_t) - 1;
     _desc.base = (uintptr_t)gdt;
 
     inittss();
@@ -25,11 +25,11 @@ void initgdt(void) {
 
 void loadtr(uint16_t selector);
 void inittss(void) {
-    memset(&tss, 0, sizeof(struct tss_t));
-    tss.iomap_base = sizeof(struct tss_t);
+    memset(&tss, 0, sizeof(tss_t));
+    tss.iomap_base = sizeof(tss_t);
 
     uintptr_t base = (uintptr_t)&tss;
-    uint32_t limit = sizeof(struct tss_t) - 1;
+    uint32_t limit = sizeof(tss_t) - 1;
 
     gdt[5].limit       = limit & 0xFFFF;
     gdt[5].base_lower  = base & 0xFFFF;

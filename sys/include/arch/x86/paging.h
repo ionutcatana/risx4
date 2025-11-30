@@ -33,7 +33,7 @@
 #define PTE_GET_ADDR(entry)     ((entry).value & PTE_PHYS_ADDR_MASK)
 #define PTE_GET_FLAGS(entry)    ((entry).value & ~PTE_PHYS_ADDR_MASK)
 
-union virtaddr_t {
+typedef union {
     struct {
         uintptr_t offset : 12;
         uintptr_t l1i : 9;
@@ -43,9 +43,9 @@ union virtaddr_t {
         uintptr_t sign_ext : 16;
     } __attribute__((packed));
     uintptr_t value;
-};
+} virtaddr_t;
 
-union ptentry_t {
+typedef union {
     struct {
         union {
             struct {
@@ -67,10 +67,10 @@ union ptentry_t {
         uint64_t no_execute : 1;
     };
     uint64_t value;
-};
+} ptentry_t;
 
-struct pagetable_t {
-    union ptentry_t entries[512];
-} __attribute__((aligned(4096)));
+typedef struct {
+    ptentry_t entries[512];
+} __attribute__((aligned(4096))) pagetable_t;
 
 #endif
