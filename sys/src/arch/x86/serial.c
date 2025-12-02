@@ -18,9 +18,7 @@ int initserial(void) {
 
     // send test byte and check if serial is faulty
     outs(X86_SERIAL_PORT + 0, 0xae);
-    if(ins(X86_SERIAL_PORT + 0) != 0xae) {
-        return 1;
-    }
+    if(ins(X86_SERIAL_PORT + 0) != 0xae) return 1;
 
     // if serial is not faulty set it in normal operation mode:
     // not-loopback with irqs enabled and out#1 and out#2 bits enabled
@@ -31,16 +29,14 @@ int initserial(void) {
 }
 
 void serialputchar(int c) {
-    if (!initialized) {
-        return;
-    }
-
-    while((ins(X86_SERIAL_PORT + 5) & 0x20) == 0);
-    if(c == '\n') {
-        outs(X86_SERIAL_PORT, (uint8_t)'\r');
-        outs(X86_SERIAL_PORT, (uint8_t)'\n');
-    } else {
-        outs(X86_SERIAL_PORT, (uint8_t)c);
+    if (initialized) {
+        while((ins(X86_SERIAL_PORT + 5) & 0x20) == 0);
+        if(c == '\n') {
+            outs(X86_SERIAL_PORT, (uint8_t)'\r');
+            outs(X86_SERIAL_PORT, (uint8_t)'\n');
+        } else {
+            outs(X86_SERIAL_PORT, (uint8_t)c);
+        }
     }
 }
 

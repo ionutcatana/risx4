@@ -16,10 +16,8 @@ xsdp_t* xsdp = NULL;
 static int version = ACPI_VERSION_1;
 
 void initacpi(void) {
-    if (rsdpreq.response == NULL ||
-        rsdpreq.response->address == NULL) {
+    if (rsdpreq.response == NULL || rsdpreq.response->address == NULL)
         panic("ACPI is not supported.");
-    }
 
     rsdp = rsdpreq.response->address;
     if (rsdp->revision > 0) {

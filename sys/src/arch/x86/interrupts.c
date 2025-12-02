@@ -12,22 +12,12 @@ void pushinterrupts(void) {
     disableinterrupts();
 
     ninterrupts++;
-    if (ninterrupts == 0) {
-        intenabled = rflags & RFLAGS_IF;
-    }
+    if (ninterrupts == 0) intenabled = rflags & RFLAGS_IF;
 }
 
 void popinterrupts(void) {
     ninterrupts--;
-    if (ninterrupts < 0) {
-        panic("decremented ninterrupts past 0.");
-    }
-
-    if (readrflags() & RFLAGS_IF) {
-        panic("interrupts enabled flag is set.");
-    }
-
-    if (ninterrupts == 0) {
-        enableinterrupts();
-    }
+    if (ninterrupts < 0) panic("decremented ninterrupts past 0.");
+    if (readrflags() & RFLAGS_IF) panic("interrupts enabled flag is set.");
+    if (ninterrupts == 0) enableinterrupts();
 }

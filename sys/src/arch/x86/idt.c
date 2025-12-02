@@ -16,9 +16,8 @@ void initidt(void) {
     _idtr.limit = (IDT_SIZE) * sizeof(idtsegdesc_t) - 1;
     _idtr.base = (uintptr_t)idt;
 
-    for (size_t i = 0; i < IDT_SIZE; i++) {
+    for (size_t i = 0; i < IDT_SIZE; i++)
         sethandler(i,vectors[i], IDT_INTERRUPT_GATE_RING0);
-    }
 
     loadidt();
 }

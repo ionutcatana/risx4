@@ -61,19 +61,18 @@ void setup(void) {
     printf("setup successful\n");
 }
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
     printf("entered RISX (debug profile)\n");
+    printf("stack top: 0x%016lx\n", stacktop);
 #else
     printf("entered RISX (release profile)\n");
 #endif
 
-//  printf("stack top: 0x%016lx\n", stacktop);
 
-    uintptr_t sevenpages = allocframe(7);
-    printf("allocated 7 pages at physaddr: 0x%016lx\n");
+    uintptr_t funnynumber = allocframe(69420);
+    printf("allocated 69420 pages at physaddr: 0x%016lx\n", funnynumber);
 
     while(true);
 

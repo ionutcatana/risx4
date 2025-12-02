@@ -16,10 +16,8 @@ static volatile struct limine_framebuffer_request fbreq = {
 struct flanterm_context* ft_ctx = NULL;
 
 int initconsole(void) {
-    if (fbreq.response == NULL ||
-        fbreq.response->framebuffer_count == 0) {
+    if (fbreq.response == NULL || fbreq.response->framebuffer_count == 0)
         panic("invalid framebuffer response.");
-    }
 
     struct limine_framebuffer fb;
     memcpy(
@@ -45,15 +43,10 @@ int initconsole(void) {
     );
 
     flanterm_set_autoflush(ft_ctx, true);
-
     return 0;
 }
 
 void consoleputchar(int c) {
-    if (ft_ctx == NULL) {
-        return;
-    }
-
-    flanterm_write(ft_ctx, (const char*)&c, 1);
+    if (ft_ctx != NULL) flanterm_write(ft_ctx, (const char*)&c, 1);
 }
 

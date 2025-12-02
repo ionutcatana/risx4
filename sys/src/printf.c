@@ -23,6 +23,7 @@ int snprintf( char* restrict buffer, size_t bufsz, const char* restrict format, 
     va_start(val, format);
     int const rv = npf_vsnprintf(buffer, bufsz, format, val);
     va_end(val);
+
     return rv;
 }
 
@@ -36,6 +37,7 @@ int printf( const char* restrict format, ... ) {
     va_start(val, format);
     int const rv = npf_vpprintf(wrapper_npf_putc, NULL, format, val);
     va_end(val);
+
     return rv;
 }
 

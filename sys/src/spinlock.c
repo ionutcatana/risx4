@@ -15,24 +15,21 @@ void initlock(spinlock_t* lock, const char* name) {
 
 void acquire(spinlock_t* lock) {
     pushinterrupts();
-    if (holding(lock)) {
-        panic("attempting to acquire held lock.");
-    }
-
+    if (holding(lock)) panic("attempting to acquire held lock.");
     while(exchange(&lock->locked, LOCKHELD) != LOCKFREE);
 }
 
 void release(spinlock_t* lock) {
-    if (!holding(lock)) {
-        panic("attempting to release a free lock.");
-    }
-
+    if (!holding(lock)) panic("attempting to release a free lock.");
     exchange(&lock->locked, LOCKFREE);
     popinterrupts();
 }
 
 bool holding(spinlock_t* lock) {
-    bool result = lock->locked;
-    return result;
+#if defined(RISXDEBUG)
+    return lock->locked;
+#else
+    return lock == 1;
+#endif
 }
 
