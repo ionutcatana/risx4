@@ -97,20 +97,33 @@ void initmm(void) {
 }
 
 uintptr_t allocframe(size_t count) {
-    // if (count == 0) {
-    //     panic("allocated 0 page frames");
-    // }
+    if (count < 0) {
+        panic("allocated negative number of pages");
+    }
 
-    // size_t maxidx = bitmap_size * 8;
-    // for (size_t i = 0; i < maxidx; i++) {
-    //     if (i + count > maxidx) {
-    //         panic("allocation impossible, no free area found");
-    //     }
+    uintptr_t frameptr = 0;
+    switch(count){
+    case 0:
+        panic("allocated 0 page frames");
 
-    //     bool found = true;
-    // }
-    (void)count;
-    return NULL;
+    case 1: // finding a single free page frame is simple
+        for (size_t i = 0; i < bitmap_size; i++) {
+            if (bitmap[i] != 0xff) {
+                for (size_t j = 0; j < 8; j++) {
+                    if (checkbit(j) == 0) {
+                        setbit(8 * i + j);
+                        frameptr = (8 * i + j) * PAGESIZE;
+                        return frameptr;
+                    }
+                }
+            }
+        }
+
+    default:
+        panic("not yet implemented");
+    }
+
+    return frameptr;
 }
 
 void freeframe(uintptr_t frameptr, size_t count) {
