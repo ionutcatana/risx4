@@ -1,5 +1,5 @@
 #include <limine.h>
-#include <mm/mm.h>
+#include <mm.h>
 #include <risx.h>
 
 #include <stdbool.h>
@@ -97,10 +97,6 @@ void initmm(void) {
 }
 
 uintptr_t allocframe(size_t count) {
-    if (count < 0) {
-        panic("allocated negative number of pages");
-    }
-
     uintptr_t frameptr = 0;
     switch(count){
     case 0:
@@ -118,6 +114,7 @@ uintptr_t allocframe(size_t count) {
                 }
             }
         }
+        break;
 
     default:
         panic("not yet implemented");
