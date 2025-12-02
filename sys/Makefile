@@ -1,5 +1,5 @@
 PROFILE ?= DEBUG
-VERSION ?= 0.0.4
+VERSION ?= 0.0.6
 OBJ_DIR ?= target
 ARCH ?= x86_64
 

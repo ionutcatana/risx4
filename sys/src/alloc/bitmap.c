@@ -1,3 +1,5 @@
+#include <alloc/allocator.h>
+#include <alloc/bitmap.h>
 #include <limine.h>
 #include <mm.h>
 #include <risx.h>
@@ -18,115 +20,85 @@ static volatile struct limine_memmap_request memmapreq = {
     .revision = 4
 };
 
-uint8_t*    bitmap = NULL;
-size_t      bitmap_size = 0;
+uint32_t*   bitmap = NULL;
+size_t      size = 0;
 size_t      freepages = 0;
-uintptr_t   offset = 0;
+size_t      totalpages = 0;
 
-void setbit(uint64_t index) {
-    bitmap[index / 8] |= (1 << (index % 8));
+void setbit(size_t idx) {
+    bitmap[idx / 32] |= (1 << (idx % 32));
 }
 
-void unsetbit(uint64_t index) {
-    bitmap[index / 8] &= ~(1 << (index % 8));
+void unsetbit(size_t idx) {
+    bitmap[idx / 32] &= ~(1 << (idx % 32));
 }
 
-int checkbit(uint64_t index) {
-    return bitmap[index / 8] & (1 << (index % 8));
+bool checkbit(size_t idx) {
+    return bitmap[idx / 32] & (1 << (idx % 32));
 }
 
-void initmm(void) {
-    if (hhdmreq.response == NULL) {
-        panic("null hddm response");
-    }
+void initalloc(void) {
+    if (hhdmreq.response == NULL) panic("null hddm response");
+    if (memmapreq.response == NULL) panic("null memmap response");
 
-    offset = (uintptr_t)hhdmreq.response->offset;
-
-    if (memmapreq.response == NULL) {
-        panic("null memmap response");
-    }
-
-    uintptr_t highest_addr = 0;
-    size_t entry_count = memmapreq.response->entry_count;
-    struct limine_memmap_entry** entries = memmapreq.response->entries;
-
-    for (size_t i = 0; i < entry_count; i++) {
-        if (entries[i]->type == LIMINE_MEMMAP_USABLE) {
-            uintptr_t top = entries[i]->base + entries[i]->length;
-
-            if (top > highest_addr) {
-                highest_addr = top;
-            }
+    uint64_t offset = hhdmreq.response->offset;
+    uintptr_t maxtopaddr = 0;
+    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
+        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE) {
+            uintptr_t topaddr = memmapreq.response->entries[i]->base +
+                                memmapreq.response->entries[i]->length;
+            if (topaddr > maxtopaddr) maxtopaddr = topaddr;
         }
-    }
 
-    bitmap_size = (highest_addr / PAGESIZE / 8) + 1;
-    freepages = (highest_addr / PAGESIZE) + 1;
-
-    for (size_t i = 0; i < entry_count; i++) {
-        if (entries[i]->type == LIMINE_MEMMAP_USABLE &&
-            entries[i]->length >= bitmap_size) {
-            bitmap = (uint8_t*)(entries[i]->base + offset);
-            memset(bitmap, 0xff, bitmap_size);
+    size = (maxtopaddr / PAGESIZE / sizeof(uint32_t)) + 1;
+    totalpages = (maxtopaddr / PAGESIZE) + 1;
+    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
+        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE &&
+            memmapreq.response->entries[i]->length >= size) {
+            bitmap = (uint32_t*)(memmapreq.response->entries[i]->base + offset);
+            memset(bitmap, 0xffffffff, size * sizeof(uint32_t));
             break;
         }
-    }
 
-    if (bitmap == NULL) {
-        panic("bitmap doesn't fit into memory");
-    }
+    if (bitmap == NULL) panic("bitmap doesn't fit into memory");
 
-    for (size_t i = 0; i < entry_count; i++) {
-        if (entries[i]->type == LIMINE_MEMMAP_USABLE) {
-            for (uint64_t j = 0; j < entries[i]->length; j += PAGESIZE) {
-                uint64_t physaddr = entries[i]->base + j;
-                uint64_t pos = physaddr / PAGESIZE;
-
-                // the pages that contain the bitmap are never marked as free
-                uintptr_t bitmap_phys_start = (uintptr_t)bitmap - offset;
-                uintptr_t bitmap_phys_end = bitmap_phys_start + bitmap_size;
-                if (physaddr >= bitmap_phys_start &&
-                    physaddr < bitmap_phys_end) {
-                    continue;
+    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
+        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE)
+            for (uint64_t p = 0; p < memmapreq.response->entries[i]->length;
+                p += PAGESIZE) {
+                uintptr_t physaddr = memmapreq.response->entries[i]->base + p;
+                uintptr_t startaddr = (uintptr_t)bitmap - offset;
+                uintptr_t finaladdr = startaddr + size * sizeof(uint32_t);
+                if (physaddr < startaddr || physaddr >= finaladdr) {
+                    unsetbit(physaddr / PAGESIZE);
+                    freepages++;
                 }
-
-                unsetbit(pos);
             }
-        }
-    }
 }
 
 uintptr_t allocframe(size_t count) {
-    uintptr_t frameptr = 0;
-    switch(count){
-    case 0:
-        panic("allocated 0 page frames");
+    if (count == 0) panic("allocated 0 page frames.");
 
-    case 1: // finding a single free page frame is simple
-        for (size_t i = 0; i < bitmap_size; i++) {
-            if (bitmap[i] != 0xff) {
-                for (size_t j = 0; j < 8; j++) {
-                    if (checkbit(j) == 0) {
-                        setbit(8 * i + j);
-                        frameptr = (8 * i + j) * PAGESIZE;
-                        return frameptr;
-                    }
-                }
-            }
+    for (size_t i = 0; i <= totalpages - count; i++) {
+        bool found = true;
+        for (size_t k = 0; k < count; k++) if (checkbit(i + k) != 0) {
+            found = false;
+            i += k;
+            break;
         }
-        break;
 
-    default:
-        panic("not yet implemented");
+        if (found) {
+            for (size_t k = 0; k < count; k++) setbit(i + k);
+            freepages -= count;
+            return (i * PAGESIZE);
+        }
     }
 
-    return frameptr;
+    panic("out of contiguous memory.");
 }
 
 void freeframe(uintptr_t frameptr, size_t count) {
-    uint64_t frame_index = frameptr / 4096;
-
-    for (uint64_t i = frame_index; i < frame_index + count; i++) {
-        unsetbit(frame_index);
-    }
+    uint64_t frameidx = frameptr / 4096;
+    for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(frameidx);
+    freepages += count;
 }

@@ -57,28 +57,27 @@ void setup(void) {
     enableinterrupts();
 #endif
 
-    initmm();
-    printf("Setup successful\n");
+    initpmm();
+    printf("setup successful\n");
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
-    printf("Entered RISX (debug profile)\n");
+    printf("entered RISX (debug profile)\n");
 #else
-    printf("Entered RISX (release profile)\n");
+    printf("entered RISX (release profile)\n");
 #endif
 
 //  printf("stack top: 0x%016lx\n", stacktop);
 
-    // test a page fault
-    uintptr_t ptr = 0xdeadbeef;
-    *((uint64_t*)ptr) = 42;
+    uintptr_t sevenpages = allocframe(7);
+    printf("allocated 7 pages ar physaddr: 0x%016lx\n");
 
     while(true);
 
-    panic("Unexpected return from scheduler.\n");
+    panic("unexpected return from scheduler.\n");
 }
 
 

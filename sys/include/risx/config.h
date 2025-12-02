@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 /* risx release number and codename                                           */
-#define RISXVERSION     "0.0.5"
+#define RISXVERSION     "0.0.6"
 #define RISXCODENAME    "Initial commit"
 
 /* maximum number of entries in the process table for user-mode processes     */
