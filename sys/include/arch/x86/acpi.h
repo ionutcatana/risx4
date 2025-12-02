@@ -49,7 +49,7 @@ typedef struct  {
 } xsdt;
 
 // arch/x86/acpi.c
-void initacpi(void);
-int acpiversion(void);
+void    initacpi(void);
+int     acpiversion(void);
 
 #endif

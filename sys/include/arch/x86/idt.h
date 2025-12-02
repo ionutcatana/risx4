@@ -43,12 +43,12 @@ typedef union {
 
 
 // arch/x86/idt.S
-void loadidt(void);
+void    loadidt(void);
 // arch/x86/idt.c
-void initidt(void);
-void sethandler(size_t vector, uintptr_t handler, uint8_t attributes);
-void idispatch(trapframe_t* tf);
+void    initidt(void);
+void    sethandler(size_t vector, uintptr_t handler, uint8_t attributes);
+void    idispatch(trapframe_t* tf);
 // arch/x86/istub.S
-void istub(void);
+void    istub(void);
 
 #endif

@@ -2,11 +2,11 @@
 #define INTERRUPTS_H 1
 
 // arch/x86/interrupts.S
-void enableinterrupts(void);
-void disableinterrupts(void);
+void    enableinterrupts(void);
+void    disableinterrupts(void);
 
 // arch/x86/interrupts.c
-void pushinterrupts(void);
-void popinterrupts(void);
+void    pushinterrupts(void);
+void    popinterrupts(void);
 
 #endif

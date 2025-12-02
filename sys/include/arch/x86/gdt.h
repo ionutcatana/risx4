@@ -42,10 +42,10 @@ typedef struct {
 
 
 // arch/x86/gdt.S
-void loadgdt(void);
-void loadtr(uint16_t selector);
+void    loadgdt(void);
+void    loadtr(uint16_t selector);
 // arch/x86/gdt.c
-void initgdt(void);
-void inittss(void);
+void    initgdt(void);
+void    inittss(void);
 
 #endif

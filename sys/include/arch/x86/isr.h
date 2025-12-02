@@ -2,6 +2,6 @@
 #define X86_ISR_H 1
 
 // arch/x86/isr.c
-void initisr(void);
+void    initisr(void);
 
 #endif

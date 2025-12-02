@@ -19,9 +19,9 @@ typedef struct {
 typedef uint64_t spinlock_t;
 #endif
 
-void initlock(spinlock_t* lock, const char* name);
-void acquire(spinlock_t* lock);
-void release(spinlock_t* lock);
-bool holding(spinlock_t* lock);
+void    initlock(spinlock_t* lock, const char* name);
+void    acquire(spinlock_t* lock);
+void    release(spinlock_t* lock);
+bool    holding(spinlock_t* lock);
 
 #endif
