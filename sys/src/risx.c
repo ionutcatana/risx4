@@ -73,7 +73,7 @@ noreturn void risx(uintptr_t stacktop) {
 //  printf("stack top: 0x%016lx\n", stacktop);
 
     uintptr_t sevenpages = allocframe(7);
-    printf("allocated 7 pages ar physaddr: 0x%016lx\n");
+    printf("allocated 7 pages at physaddr: 0x%016lx\n");
 
     while(true);
 

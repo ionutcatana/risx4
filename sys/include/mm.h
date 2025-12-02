@@ -1,17 +1,12 @@
 #ifndef MM_H
 #define MM_H 1
 
-#include <stddef.h>
-#include <stdint.h>
-
-#define PAGESIZE    (0x1000)
+// do not remove; all allocator functions are imported here and exposed using
+// the mm.h header file
+#include <alloc/allocator.h>
 
 // mm.c
-void        initpmm(void);
-void        initvmm(void);
-
-// alloc/bitmap.c
-uintptr_t   allocframe(size_t count);
-void        freeframe(uintptr_t frameptr, size_t count);
+void    initpmm(void);
+void    initvmm(void);
 
 #endif

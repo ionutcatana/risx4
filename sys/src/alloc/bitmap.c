@@ -1,7 +1,5 @@
-#include <alloc/allocator.h>
 #include <alloc/bitmap.h>
 #include <limine.h>
-#include <mm.h>
 #include <risx.h>
 
 #include <stdbool.h>

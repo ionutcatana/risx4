@@ -13,4 +13,7 @@
 #define PMM_CURRENT     (PMM_BITMAP)
 #define PMM_DEFAULT     (PMM_BITMAP)
 
+/* machine properties                                                         */
+#define PAGESIZE        4096
+
 #endif
