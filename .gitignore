@@ -1,6 +1,7 @@
 # related to clangd
 .cache
 compile_commands.json
+compile_commands.events.json
 
 # copyrighted material, not yet ready as of 17 nov 2025
 docs
