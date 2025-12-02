@@ -76,8 +76,9 @@ void initalloc(void) {
 
 uintptr_t allocframe(size_t count) {
     if (count == 0) panic("allocated 0 page frames.");
+    if (count > totalpages) panic("requested more memory than installed.");
 
-    for (size_t i = 0; i <= totalpages - count; i++) {
+    for (size_t i = 0; i + count <= totalpages; i++) {
         bool found = true;
         for (size_t k = 0; k < count; k++) if (checkbit(i + k) != 0) {
             found = false;
