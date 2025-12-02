@@ -2,6 +2,7 @@
 #include <mm.h>
 #include <risx.h>
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -19,6 +20,7 @@ static volatile struct limine_memmap_request memmapreq = {
 
 uint8_t*    bitmap = NULL;
 size_t      bitmap_size = 0;
+size_t      freepages = 0;
 uintptr_t   offset = 0;
 
 void setbit(uint64_t index) {
@@ -59,6 +61,7 @@ void initmm(void) {
     }
 
     bitmap_size = (highest_addr / PAGESIZE / 8) + 1;
+    freepages = (highest_addr / PAGESIZE) + 1;
 
     for (size_t i = 0; i < entry_count; i++) {
         if (entries[i]->type == LIMINE_MEMMAP_USABLE &&
@@ -93,29 +96,27 @@ void initmm(void) {
     }
 }
 
-void* allocframe(void) {
-    uint64_t frame_index = 0;
+uintptr_t allocframe(size_t count) {
+    // if (count == 0) {
+    //     panic("allocated 0 page frames");
+    // }
 
-    for (size_t i = 0; i < bitmap_size; i++) {
-        if (bitmap[i] != 0xff) {
-            for (int j = 0; j < 8; j++) {
-                int bit = (bitmap[i] >> j) & 1;
-                if (bit == 0) {
-                    frame_index = i * 8 + j;
-                    setbit(frame_index);
-                    return (void *)(frame_index * PAGESIZE);
-                }
-            }
-        }
-    }
+    // size_t maxidx = bitmap_size * 8;
+    // for (size_t i = 0; i < maxidx; i++) {
+    //     if (i + count > maxidx) {
+    //         panic("allocation impossible, no free area found");
+    //     }
 
+    //     bool found = true;
+    // }
+    (void)count;
     return NULL;
-    // panic?
 }
 
-void freeframe(void *frame) {
-    uintptr_t addr = (uintptr_t)frame;
-    uint64_t frame_index = addr / 4096;
+void freeframe(uintptr_t frameptr, size_t count) {
+    uint64_t frame_index = frameptr / 4096;
 
-    unsetbit(frame_index);
+    for (uint64_t i = frame_index; i < frame_index + count; i++) {
+        unsetbit(frame_index);
+    }
 }
