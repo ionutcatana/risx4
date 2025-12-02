@@ -97,6 +97,6 @@ uintptr_t allocframe(size_t count) {
 
 void freeframe(uintptr_t frameptr, size_t count) {
     uint64_t frameidx = frameptr / 4096;
-    for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(frameidx);
+    for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(i);
     freepages += count;
 }
