@@ -68,7 +68,6 @@ void idispatch(trapframe_t* tf) {
     case X86_INTERRUPT_PF:
         printf("virtaddr: 0x%016lx\n", readcr2());
         panic("unresolved page fault");
-        break;
     case X86_INTERRUPT_MF:
         break;
     case X86_INTERRUPT_AC:
@@ -78,7 +77,7 @@ void idispatch(trapframe_t* tf) {
     case X86_INTERRUPT_XF:
         break;
     default:
-        break;
+        panic("unimplemented interrupt handler");
     }
 
     return;
