@@ -3,4 +3,4 @@
         .global _start
 _start: mov     rdi, rsp
         call    risx                    # should never return
-        call    halt
+        call    abort
