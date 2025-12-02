@@ -1,4 +1,3 @@
-OUTPUT_FORMAT(elf64-x86-64)
 ENTRY(_start)
 
 PHDRS
@@ -24,23 +23,17 @@ SECTIONS
 
     . = ALIGN(CONSTANT(MAXPAGESIZE));
     .text : {
-        /* . = ALIGN(16); */
-        __text_start = .;
         KEEP(*(.text))
         KEEP(*(.text*))
-        __text_end = .;
     } :text
 
     . = ALIGN(CONSTANT(MAXPAGESIZE));
     .rodata : {
-        /* . = ALIGN(16); */
-        __rodata_start = .;
         KEEP(*(.rodata))
         KEEP(*(.rodata*))
-        __rodata_end = .;
     } :rodata
 
-    /* Add a .note.gnu.build-id output section in case a build ID flag is */
+    /* add a .note.gnu.build-id output section in case a build id flag is */
     /* added to the linker command. */
     .note.gnu.build-id : {
         *(.note.gnu.build-id)
@@ -48,8 +41,6 @@ SECTIONS
 
     . = ALIGN(CONSTANT(MAXPAGESIZE));
     .data : {
-        /* . = ALIGN(16); */
-        __data_start = .;
         KEEP(*(.data))
         KEEP(*(.data*))
         KEEP(*(font.o))
@@ -57,16 +48,10 @@ SECTIONS
 
     . = ALIGN(CONSTANT(MAXPAGESIZE));
     .bss : {
-        /* . = ALIGN(16); */
-        /* __bss_start = .; */
         KEEP(*(.bss))
         KEEP(*(.bss*))
         KEEP(*(COMMON))
-        /* __bss_end = .; */
-        __data_end = .;
     } :data
-
-    /* __bss_size = __bss_end - __bss_start; */
 
     /* these segments can cause issues */
     /DISCARD/ : {
