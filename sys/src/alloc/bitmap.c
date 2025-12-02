@@ -36,8 +36,8 @@ bool checkbit(size_t idx) {
 }
 
 void initalloc(void) {
-    if (hhdmreq.response == NULL) panic("null hddm response");
-    if (memmapreq.response == NULL) panic("null memmap response");
+    if (hhdmreq.response == NULL) panic("null hddm response.");
+    if (memmapreq.response == NULL) panic("null memmap response.");
 
     uint64_t offset = hhdmreq.response->offset;
     uintptr_t maxtopaddr = 0;
@@ -58,7 +58,7 @@ void initalloc(void) {
             break;
         }
 
-    if (bitmap == NULL) panic("bitmap doesn't fit into memory");
+    if (bitmap == NULL) panic("bitmap doesn't fit into memory.");
 
     for (size_t i = 0; i < memmapreq.response->entry_count; i++)
         if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE)
