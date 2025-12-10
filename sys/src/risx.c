@@ -1,13 +1,10 @@
-#include <risx.h>
-
+#include <console.h>
 #include <interrupts.h>
 #include <mm.h>
+#include <risx.h>
+#include <serial.h>
 
 #include <limine.h>
-
-// I/O
-#include <console.h>
-#include <serial.h>
 
 #if defined(__x86_64__)
 #include <arch/x86/acpi.h>

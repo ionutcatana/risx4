@@ -1,5 +1,8 @@
 #ifndef X86_INTERRUPTS_H
 #define X86_INTERRUPTS_H 1
+
+#include <interrupts.h>
+
 //                                                                     errcode?
 #define X86_INTERRUPT_DE    (0)     // division error               // no
 #define X86_INTERRUPT_DB    (1)     // debug                        // no
@@ -19,7 +22,5 @@
 #define X86_INTERRUPT_AC    (17)    // alignment check              // yes
 #define X86_INTERRUPT_MC    (18)    // machine check                // no
 #define X86_INTERRUPT_XF    (19)    // simd error                   // no
-
-#include <interrupts.h>
 
 #endif
