@@ -1,3 +1,0 @@
-#ifndef SKEL_INTERRUPTS_H
-#define SKEL_INTERRUPTS_H 1
-#endif
