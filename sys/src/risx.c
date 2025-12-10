@@ -69,25 +69,7 @@ noreturn void risx(uintptr_t stacktop) {
 #else
     printf("entered RISX (release profile)\n");
 #endif
-
-
-    uintptr_t p = allocframe(7);
-    printf("allocated 7 pages at physaddr: 0x%016lx\n", p);
-
-    uintptr_t q = allocframe(3);
-    printf("allocated 3 pages at physaddr: 0x%016lx\n", q);
-
-    uintptr_t r = allocframe(9);
-    printf("allocated 9 pages at physaddr: 0x%016lx\n", r);
-
-    freeframe(p, 4);
-    printf("freed 4 pages at physaddr: 0x%016lx\n", p);
-
-    uintptr_t s = allocframe(2);
-    printf("allocated 2 pages at physaddr: 0x%016lx\n", s);
-
     while(true);
-
     panic("unexpected return from scheduler.\n");
 }
 
