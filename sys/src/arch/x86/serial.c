@@ -1,5 +1,5 @@
 #include <arch/x86/io.h>
-#include <serial.h>
+#include <commonarch/serial.h>
 
 #include <stdbool.h>
 #include <stdint.h>

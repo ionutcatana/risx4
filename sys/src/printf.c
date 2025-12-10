@@ -6,9 +6,9 @@
 #define NANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS 1
 #define NANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS 0
 
-#include <nanoprintf.h>
+#include <commonarch/serial.h>
 #include <console.h>
-#include <serial.h>
+#include <nanoprintf.h>
 
 #include <stdarg.h>
 

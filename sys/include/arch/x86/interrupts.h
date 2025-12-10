@@ -1,7 +1,7 @@
 #ifndef X86_INTERRUPTS_H
 #define X86_INTERRUPTS_H 1
 
-#include <interrupts.h>
+#include <commonarch/interrupts.h>
 
 //                                                                     errcode?
 #define X86_INTERRUPT_DE    (0)     // division error               // no

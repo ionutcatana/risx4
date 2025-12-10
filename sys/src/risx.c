@@ -1,8 +1,8 @@
+#include <commonarch/interrupts.h>
+#include <commonarch/serial.h>
 #include <console.h>
-#include <interrupts.h>
 #include <mm.h>
 #include <risx.h>
-#include <serial.h>
 
 #include <limine.h>
 

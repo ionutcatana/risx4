@@ -1,5 +1,5 @@
-#include <atomic.h>
-#include <interrupts.h>
+#include <commonarch/atomic.h>
+#include <commonarch/interrupts.h>
 #include <risx.h>
 #include <spinlock.h>
 
