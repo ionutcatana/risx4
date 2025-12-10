@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef BITMAP_H
 #define BITMAP_H 1
 
@@ -6,8 +7,8 @@
 #include <stddef.h>
 
 // alloc/bitmap.c
-void    setbit(size_t idx);
-void    unsetbit(size_t idx);
-bool    checkbit(size_t idx);
+void    setbit(uint32_t* bitmap, size_t idx);
+void    unsetbit(uint32_t* bitmap, size_t idx);
+bool    checkbit(uint32_t* bitmap, size_t idx);
 
 #endif

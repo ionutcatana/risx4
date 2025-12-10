@@ -5,3 +5,7 @@
 void initpmm(void) {
     initalloc();
 }
+
+void initvmm(void) {
+    return;
+}

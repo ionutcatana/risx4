@@ -55,6 +55,7 @@ void setup(void) {
 #endif
 
     initpmm();
+    initvmm();
     printf("setup successful\n");
 }
 
