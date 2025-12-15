@@ -1,4 +1,5 @@
 {
+    "editor.guides.indentation": false,
     "editor.rulers": [
         80
     ],
