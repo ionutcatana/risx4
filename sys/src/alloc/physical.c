@@ -1,3 +1,4 @@
+#include <alloc/bitmap.h>
 #include <limine.h>
 #include <risx.h>
 
