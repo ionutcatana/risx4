@@ -22,8 +22,8 @@ void initkpalloc(const uint64_t offset,
             if (topaddr > maxtopaddr) maxtopaddr = topaddr;
         }
 
-    size = (maxtopaddr / PAGESIZE / sizeof(uint32_t)) + 1;
-    totalpages = (maxtopaddr / PAGESIZE) + 1;
+    size = (maxtopaddr / PAGE_SIZE / sizeof(uint32_t)) + 1;
+    totalpages = (maxtopaddr / PAGE_SIZE) + 1;
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE &&
             memmap->entries[i]->length >= size) {
@@ -36,12 +36,12 @@ void initkpalloc(const uint64_t offset,
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
-            for (uint64_t p = 0; p < memmap->entries[i]->length; p += PAGESIZE) {
+            for (uint64_t p = 0; p < memmap->entries[i]->length; p += PAGE_SIZE) {
                 uintptr_t physaddr = memmap->entries[i]->base + p;
                 uintptr_t startaddr = (uintptr_t)physbitmap - offset;
                 uintptr_t finaladdr = startaddr + size * sizeof(uint32_t);
                 if (physaddr < startaddr || physaddr >= finaladdr) {
-                    unsetbit(physbitmap, physaddr / PAGESIZE);
+                    unsetbit(physbitmap, physaddr / PAGE_SIZE);
                     freepages++;
                 }
             }
@@ -62,7 +62,7 @@ uintptr_t allocframe(size_t count) {
         if (found) {
             for (size_t k = 0; k < count; k++) setbit(physbitmap, i + k);
             freepages -= count;
-            return (i * PAGESIZE);
+            return (i * PAGE_SIZE);
         }
     }
 
