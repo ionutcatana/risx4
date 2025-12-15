@@ -15,9 +15,6 @@
 #define PMM_CURRENT     (PMM_BITMAP)
 #define PMM_DEFAULT     (PMM_BITMAP)
 
-/* machine properties                                                         */
-#define PAGE_SIZE       4096
-
 /* stack size and max core count options. all stacks fit on a single 2mib mega
    page. possible configs: 32 cores+64k stacks or 128 cores+16k stacks        */
 #define STACK_SIZE      65536

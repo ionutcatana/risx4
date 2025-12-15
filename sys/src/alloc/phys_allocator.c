@@ -1,5 +1,6 @@
 #include <alloc/bitmap.h>
 #include <alloc/kpalloc.h>
+#include <commonarch/paging.h>
 #include <limine.h>
 #include <risx.h>
 
