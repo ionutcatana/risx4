@@ -56,7 +56,7 @@ void setup(void) {
 #endif
 
     initpmm();  printf("physical frame allocator initialized.\n");
-//  initvmm();  printf("virtual page allocator initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
     printf("setup successful\n");
 }
 
