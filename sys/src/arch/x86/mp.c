@@ -20,9 +20,9 @@ uint32_t bootstrapcpu() {
 }
 
 void enumeratecpus() {
-    printf("bootstrap cpu lapic id %u\n", bootstrapcpu());
+    printf("bootstrap cpu lapic id %llu\n", bootstrapcpu());
     for (uint64_t i = 0; i < cpucount(); i++)
-        printf("lapic id %u -> processor id %u\n",
+        printf("lapic id %2lu -> processor id %2lu\n",
                 mpreq.response->cpus[i]->lapic_id,
                 mpreq.response->cpus[i]->processor_id);
 }
