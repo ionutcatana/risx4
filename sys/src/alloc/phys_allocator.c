@@ -7,18 +7,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_hhdm_request hhdmreq = {
-//     .id = LIMINE_HHDM_REQUEST,
-//     .revision = 4
-// };
-
-// __attribute__((used, section(".limine_requests")))
-// static volatile struct limine_memmap_request memmapreq = {
-//     .id = LIMINE_MEMMAP_REQUEST,
-//     .revision = 4
-// };
-
 uint32_t*   physbitmap = NULL;
 size_t      size = 0;
 size_t      freepages = 0;

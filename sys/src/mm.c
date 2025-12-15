@@ -14,6 +14,12 @@ static volatile struct limine_memmap_request memmapreq = {
     .revision = 4
 };
 
+__attribute__((used, section(".limine_requests")))
+static volatile struct limine_executable_address_request addrreq = {
+    .id = LIMINE_EXECUTABLE_ADDRESS_REQUEST,
+    .revision = 4
+};
+
 void initpmm(void) {
     if (hhdmreq.response == NULL) panic("null hddm response.");
     if (memmapreq.response == NULL) panic("null memmap response.");
@@ -22,5 +28,8 @@ void initpmm(void) {
 }
 
 void initvmm(void) {
-    initkvalloc();    // I want this to be the virtual one...
+    if (addrreq.response == NULL) panic("null executable addr response.");
+
+    initkvalloc(addrreq.response->physical_base,
+                addrreq.response->virtual_base);
 }

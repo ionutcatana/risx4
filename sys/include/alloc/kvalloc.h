@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-void        initkvalloc(void);
+void        initkvalloc(uint64_t physbase, uint64_t virtbase);
 uintptr_t   allocpage(size_t count);
 void        freepage(uintptr_t frameptr, size_t count);
 
