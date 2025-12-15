@@ -27,7 +27,6 @@ static volatile LIMINE_REQUESTS_END_MARKER;
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4);
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
 void setup(void) {
     initserial();
     initconsole();
@@ -38,8 +37,8 @@ void setup(void) {
 //  initisr();
 
     initacpi();
-    extern struct rsdp_t* rsdp;
-    extern struct xsdp_t* xsdp;
+//  extern struct rsdp_t* rsdp;
+//  extern struct xsdp_t* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
 //      printf("ACPI 1.0\n");
