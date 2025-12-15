@@ -1,4 +1,5 @@
 #include <alloc/bitmap.h>
+#include <alloc/kpalloc.h>
 #include <limine.h>
 #include <risx.h>
 
@@ -6,52 +7,49 @@
 #include <stddef.h>
 #include <stdint.h>
 
-__attribute__((used, section(".limine_requests")))
-static volatile struct limine_hhdm_request hhdmreq = {
-    .id = LIMINE_HHDM_REQUEST,
-    .revision = 4
-};
+// __attribute__((used, section(".limine_requests")))
+// static volatile struct limine_hhdm_request hhdmreq = {
+//     .id = LIMINE_HHDM_REQUEST,
+//     .revision = 4
+// };
 
-__attribute__((used, section(".limine_requests")))
-static volatile struct limine_memmap_request memmapreq = {
-    .id = LIMINE_MEMMAP_REQUEST,
-    .revision = 4
-};
+// __attribute__((used, section(".limine_requests")))
+// static volatile struct limine_memmap_request memmapreq = {
+//     .id = LIMINE_MEMMAP_REQUEST,
+//     .revision = 4
+// };
 
 uint32_t*   physbitmap = NULL;
 size_t      size = 0;
 size_t      freepages = 0;
 size_t      totalpages = 0;
 
-void initalloc(void) {
-    if (hhdmreq.response == NULL) panic("null hddm response.");
-    if (memmapreq.response == NULL) panic("null memmap response.");
-
-    uint64_t offset = hhdmreq.response->offset;
+void initkpalloc(const uint64_t offset,
+                 const struct limine_memmap_response* memmap) {
     uintptr_t maxtopaddr = 0;
-    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
-        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE) {
-            uintptr_t topaddr = memmapreq.response->entries[i]->base +
-                                memmapreq.response->entries[i]->length;
+    for (size_t i = 0; i < memmap->entry_count; i++)
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE) {
+            uintptr_t topaddr = memmap->entries[i]->base +
+                                memmap->entries[i]->length;
             if (topaddr > maxtopaddr) maxtopaddr = topaddr;
         }
 
     size = (maxtopaddr / PAGESIZE / sizeof(uint32_t)) + 1;
     totalpages = (maxtopaddr / PAGESIZE) + 1;
-    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
-        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE &&
-            memmapreq.response->entries[i]->length >= size) {
-            physbitmap = (uint32_t*)(memmapreq.response->entries[i]->base + offset);
+    for (size_t i = 0; i < memmap->entry_count; i++)
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE &&
+            memmap->entries[i]->length >= size) {
+            physbitmap = (uint32_t*)(memmap->entries[i]->base + offset);
             memset(physbitmap, 0xffffffff, size * sizeof(uint32_t));
             break;
         }
 
     if (physbitmap == NULL) panic("bitmap doesn't fit into memory.");
 
-    for (size_t i = 0; i < memmapreq.response->entry_count; i++)
-        if (memmapreq.response->entries[i]->type == LIMINE_MEMMAP_USABLE)
-            for (uint64_t p = 0; p < memmapreq.response->entries[i]->length; p += PAGESIZE) {
-                uintptr_t physaddr = memmapreq.response->entries[i]->base + p;
+    for (size_t i = 0; i < memmap->entry_count; i++)
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
+            for (uint64_t p = 0; p < memmap->entries[i]->length; p += PAGESIZE) {
+                uintptr_t physaddr = memmap->entries[i]->base + p;
                 uintptr_t startaddr = (uintptr_t)physbitmap - offset;
                 uintptr_t finaladdr = startaddr + size * sizeof(uint32_t);
                 if (physaddr < startaddr || physaddr >= finaladdr) {
