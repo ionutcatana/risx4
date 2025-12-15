@@ -1,4 +1,6 @@
+#include <commonarch/atomic.h>
 #include <commonarch/interrupts.h>
+#include <commonarch/mp.h>
 #include <commonarch/serial.h>
 #include <console.h>
 #include <mm.h>
@@ -32,9 +34,9 @@ void setup(void) {
     initconsole();
 
 #if defined (__x86_64__)
-    initgdt();
-    initidt();
-//  initisr();
+    initgdt();  printf("GDT installed.\n");
+    initidt();  printf("IDT installed.\n");
+//  initisr();  printf("ISR installed.\n");
 
     initacpi();
 //  extern struct rsdp_t* rsdp;
@@ -53,11 +55,12 @@ void setup(void) {
     enableinterrupts();
 #endif
 
-    initpmm();
-    initvmm();
+    initpmm();  printf("physical frame allocator initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
     printf("setup successful\n");
 }
 
+noreturn void testfunc(struct limine_mp_info* info);
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
@@ -66,6 +69,8 @@ noreturn void risx(uintptr_t stacktop) {
 #else
     printf("entered RISX (release profile)\n");
 #endif
+    enumeratecpus();
+
     while(true);
     panic("unexpected return from scheduler.\n");
 }
