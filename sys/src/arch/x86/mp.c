@@ -11,11 +11,11 @@ static volatile struct limine_mp_request mpreq = {
     .revision = 4
 };
 
-uint64_t cpucount() {
+static inline uint64_t cpucount() {
     return mpreq.response->cpu_count;
 }
 
-uint32_t bootstrapcpu() {
+static inline uint32_t bootstrapcpu() {
     return mpreq.response->bsp_lapic_id;
 }
 
