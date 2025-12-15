@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 uint64_t    cpucount();
-uint64_t    cpunumber();
+uint32_t    bootstrapcpu(); // bsp_lapic_id on x86
 void        enumeratecpus();
 
 #endif
