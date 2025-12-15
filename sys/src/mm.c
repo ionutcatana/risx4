@@ -7,5 +7,5 @@ void initpmm(void) {
 }
 
 void initvmm(void) {
-    return;
+    initalloc();    // I want this to be the virtual one...
 }

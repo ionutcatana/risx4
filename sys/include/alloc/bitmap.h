@@ -1,10 +1,9 @@
-#include <stdint.h>
 #ifndef BITMAP_H
 #define BITMAP_H 1
 
-#include <alloc/allocator.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 // alloc/bitmap.c
 void    setbit(uint32_t* bitmap, size_t idx);
