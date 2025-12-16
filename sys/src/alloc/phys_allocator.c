@@ -1,4 +1,5 @@
 #include <alloc/bitmap.h>
+#include <alloc/conversions.h>
 #include <alloc/kpalloc.h>
 #include <commonarch/paging.h>
 #include <limine.h>
@@ -84,7 +85,7 @@ void initkpalloc(const uint64_t offset,
 
 uintptr_t allocframe(size_t count) {
     if (count == 0) panic("allocated 0 page frames.");
-    if (count > totalpages) panic("requested more memory than installed.");
+    if (count > freepages) panic("requested more memory than available.");
 
     for (size_t i = 0; i + count <= totalpages; i++) {
         bool found = true;
@@ -97,7 +98,34 @@ uintptr_t allocframe(size_t count) {
         if (found) {
             for (size_t k = 0; k < count; k++) setbit(bitmap, i + k);
             freepages -= count;
-            return (i * PAGE_SIZE);
+            uintptr_t p = i * PAGE_SIZE;
+            memset((void*)virtual(p), 0, count * PAGE_SIZE);
+            return p;
+        }
+    }
+
+    panic("out of contiguous memory.");
+}
+
+uintptr_t allocmegaframe(size_t count) {
+    const size_t pages = count * PT_NELEMENTS;
+
+    if (count == 0) panic("allocated 0 mega page frames.");
+    if (pages > freepages) panic("requested more memory than available.");
+
+    for (size_t i = 0; i + pages <= totalpages; i += pages) {
+        bool found = true;
+        for (size_t k = 0; k < pages; k++) if (checkbit(bitmap, i + k) != 0) {
+            found = false;
+            break;
+        }
+
+        if (found) {
+            for (size_t k = 0; k < pages; k++) setbit(bitmap, i + k);
+            freepages -= pages;
+            uintptr_t p = i * PAGE_SIZE;
+            memset((void*)virtual(p), 0, pages * PAGE_SIZE);
+            return p;
         }
     }
 
@@ -110,6 +138,9 @@ void freeframe(uintptr_t frameptr, size_t count) {
     freepages += count;
 }
 
+void freemegaframe(uintptr_t frameptr) {
+    freeframe(frameptr, PT_NELEMENTS);
+}
 
 uint64_t hhdmoffset(void) {
     return offset_val;
