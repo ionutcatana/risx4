@@ -56,11 +56,10 @@ void setup(void) {
 #endif
 
     initpmm();  printf("physical frame allocator initialized.\n");
-//  initvmm();  printf("virtual page allocator initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
     printf("setup successful\n");
 }
 
-noreturn void testfunc(struct limine_mp_info* info);
 noreturn void risx(uintptr_t stacktop) {
     setup();
 #if defined (RISXDEBUG)
