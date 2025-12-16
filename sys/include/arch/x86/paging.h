@@ -4,16 +4,16 @@
 #include <commonarch/paging.h>
 #include <stdint.h>
 
-#define PAGE_PRESENT            (1)
-#define PAGE_WRITABLE           (1 << 1)
-#define PAGE_USER               (1 << 2)
-#define PAGE_WRITE_THROUGH      (1 << 3)
-#define PAGE_CACHE_DISABLE      (1 << 4)
-#define PAGE_ACCESSED           (1 << 5)
-#define PAGE_DIRTY              (1 << 6)
-#define PAGE_HUGE               (1 << 7)
-#define PAGE_GLOBAL             (1 << 8)
-#define PAGE_NO_EXECUTE         (1 << 63)
+#define PAGE_PRESENT            (1ULL)
+#define PAGE_WRITABLE           (1ULL << 1)
+#define PAGE_USER               (1ULL << 2)
+#define PAGE_WRITE_THROUGH      (1ULL << 3)
+#define PAGE_CACHE_DISABLE      (1ULL << 4)
+#define PAGE_ACCESSED           (1ULL << 5)
+#define PAGE_DIRTY              (1ULL << 6)
+#define PAGE_HUGE               (1ULL << 7)
+#define PAGE_GLOBAL             (1ULL << 8)
+#define PAGE_NO_EXECUTE         (1ULL << 63)
 
 #define PTE_PHYS_ADDR_MASK      (0x000FFFFFFFFFF000)
 
