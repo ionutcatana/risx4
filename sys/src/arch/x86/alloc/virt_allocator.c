@@ -9,18 +9,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-static uint64_t offset_val = 0;
 
-void initkvalloc(uint64_t physbase, uint64_t virtbase, uint64_t offset,
+void initkvalloc(uint64_t physbase, uint64_t virtbase,
                  struct limine_memmap_response* memmap) {
-    offset_val = offset;
     uintptr_t new_l4t = allocptframe();
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_EXECUTABLE_AND_MODULES)
             for (uint64_t p = 0; p < memmap->entries[i]->length; p += PAGE_SIZE) {
                 uintptr_t physaddr = memmap->entries[i]->base + p;
-                uintptr_t virtaddr = physaddr + offset_val;
+                uintptr_t virtaddr = physaddr + hhdmoffset();
                 mappage(new_l4t, virtaddr, physaddr, PAGE_PRESENT | PAGE_WRITABLE);
             }
 
@@ -72,8 +70,4 @@ void mappage(uintptr_t l4addr,
     // 1
     uint16_t l1i = LVL1_INDEX(va);
     table[l1i] = pa | flags;
-}
-
-uint64_t offset() {
-    return offset_val;
 }

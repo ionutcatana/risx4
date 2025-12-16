@@ -8,47 +8,78 @@
 #include <stddef.h>
 #include <stdint.h>
 
-uint32_t*   bitmap = NULL;
-uint32_t*   reclaimable_mask = NULL;
-size_t      size = 0;
-size_t      current = 0;
-size_t      freepages = 0;
-size_t      totalpages = 0;
+static uint32_t* bitmap = NULL;
+static uint32_t* reclaimable_mask = NULL;
+static uintptr_t mmend = 0;
+static size_t size = 0;
+static size_t freepages = 0;
+static size_t reclaimablepages = 0;
+static uint64_t totalpages = 0;
+//static size_t nextfree = 0;         // index of the next free page in the bitmap
+//static uint64_t nextfreepages = 0;  // number of free pages after index above
+static uint64_t offset_val = 0;
 
 void initkpalloc(const uint64_t offset,
                  const struct limine_memmap_response* memmap) {
     enumeratememmap(memmap);
-    uintptr_t maxtopaddr = 0;
+    offset_val = offset;
+
     for (size_t i = 0; i < memmap->entry_count; i++)
-        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE) {
-            uintptr_t topaddr = memmap->entries[i]->base +
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE ||
+            memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
+            uintptr_t endaddr = memmap->entries[i]->base +
                                 memmap->entries[i]->length;
-            if (topaddr > maxtopaddr) maxtopaddr = topaddr;
+            if (endaddr > mmend) mmend = endaddr;
         }
 
-    size = (maxtopaddr / PAGE_SIZE / sizeof(uint32_t)) + 1;
-    totalpages = (maxtopaddr / PAGE_SIZE) + 1;
+    totalpages = (mmend / PAGE_SIZE);       // removed +1
+    size = (totalpages / sizeof(uint32_t)); // removed +1
+
     for (size_t i = 0; i < memmap->entry_count; i++)
+        // find a space for both bitmap and reclaimable mask
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE &&
-            memmap->entries[i]->length >= size) {
-            bitmap = (uint32_t*)(memmap->entries[i]->base + offset);
+            memmap->entries[i]->length >= size * 2) {
+            bitmap = (uint32_t*)(memmap->entries[i]->base + hhdmoffset());
+            reclaimable_mask = (uint32_t*)(memmap->entries[i]->base + hhdmoffset()
+                                                                    + size);
             memset(bitmap, 0xffffffff, size * sizeof(uint32_t));
+            memset(reclaimable_mask, 0xffffffff, size * sizeof(uint32_t));
             break;
         }
 
-    if (bitmap == NULL) panic("bitmap doesn't fit into memory.");
+    if (bitmap == NULL || reclaimable_mask == NULL)
+        panic("bitmap (s) don't fit into memory.");
 
-    for (size_t i = 0; i < memmap->entry_count; i++)
+    const uintptr_t bitmap_startaddr = (uintptr_t)bitmap - hhdmoffset();
+    const uintptr_t bitmap_endaddr = bitmap_startaddr + size * sizeof(uint32_t);
+    const uintptr_t reclaimable_mask_startaddr = (uintptr_t)reclaimable_mask - hhdmoffset();
+    const uintptr_t reclaimable_mask_endaddr = reclaimable_mask_startaddr + size * sizeof(uint32_t);
+
+    for (size_t i = 0; i < memmap->entry_count; i++) {
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
-            for (uint64_t p = 0; p < memmap->entries[i]->length; p += PAGE_SIZE) {
-                uintptr_t physaddr = memmap->entries[i]->base + p;
-                uintptr_t startaddr = (uintptr_t)bitmap - offset;
-                uintptr_t finaladdr = startaddr + size * sizeof(uint32_t);
-                if (physaddr < startaddr || physaddr >= finaladdr) {
-                    unsetbit(bitmap, physaddr / PAGE_SIZE);
-                    freepages++;
+            for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
+                uintptr_t currentaddr = memmap->entries[i]->base + j; // address of a page
+                // bitmaps themselves cannot be marked as `free`
+                if ((currentaddr > bitmap_startaddr && currentaddr < bitmap_endaddr) ||
+                    (currentaddr > reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr)) {
+                    continue;
                 }
+
+                unsetbit(bitmap, currentaddr / PAGE_SIZE);
+                freepages++;
             }
+
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) // acpi reclaimable can be added later
+            for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
+                uintptr_t currentaddr = memmap->entries[i]->base + j;
+                setbit(reclaimable_mask, currentaddr / PAGE_SIZE);
+                reclaimablepages++;
+            }
+    }
+
+    printf("physical allocator summary:\n");
+    printf("free pages: %u; bitmap size: %u\n", freepages, size);
+    printf("bitmap location: %016lx; available ram: ~%uM\n", bitmap, freepages * PAGE_SIZE / 1024 / 1024);
 }
 
 uintptr_t allocframe(size_t count) {
@@ -77,4 +108,9 @@ void freeframe(uintptr_t frameptr, size_t count) {
     uint64_t frameidx = frameptr / 4096;
     for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(bitmap, i);
     freepages += count;
+}
+
+
+uint64_t hhdmoffset(void) {
+    return offset_val;
 }

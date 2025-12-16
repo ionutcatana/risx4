@@ -31,5 +31,5 @@ void initvmm(void) {
     if (addrreq.response == NULL) panic("null executable addr response.");
 
     initkvalloc(addrreq.response->physical_base, addrreq.response->virtual_base,
-                hhdmreq.response->offset, memmapreq.response);
+                memmapreq.response);
 }

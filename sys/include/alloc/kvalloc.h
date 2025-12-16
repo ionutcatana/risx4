@@ -6,8 +6,7 @@
 
 // arch/x86/alloc/virt_allocator.c
 void        initkvalloc(uint64_t physbase, uint64_t virtbase,
-                        uint64_t offset, struct limine_memmap_response* memmap);
-uint64_t    offset(void);
+                        struct limine_memmap_response* memmap);
 uintptr_t   allocptframe(void);
 void        unmappage(uintptr_t frameptr, size_t count);
 void        mappage(uintptr_t l4addr,
