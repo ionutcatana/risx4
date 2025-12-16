@@ -1,3 +1,4 @@
+#include <alloc/conversions.h>
 #include <alloc/kpalloc.h>
 #include <alloc/kvalloc.h>
 #include <arch/x86/paging.h>

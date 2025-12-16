@@ -1,3 +1,4 @@
+#include <alloc/conversions.h>
 #include <alloc/kvalloc.h>
 
 uintptr_t physical(uintptr_t virtual) {
