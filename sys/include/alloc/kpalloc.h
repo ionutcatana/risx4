@@ -10,8 +10,11 @@
 // alloc/phys_allocator.c
 void        initkpalloc(const uint64_t offset,
                         const struct limine_memmap_response* memmap);
-void        enumeratememmap(const struct limine_memmap_response* memmap);
 uintptr_t   allocframe(size_t count);
 void        freeframe(uintptr_t frameptr, size_t count);
+
+// alloc/util.c
+void        enumeratememmap(const struct limine_memmap_response* memmap);
+
 
 #endif
