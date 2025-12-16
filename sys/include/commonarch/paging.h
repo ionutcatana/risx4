@@ -14,6 +14,10 @@
 
 #define SIGN_EXTEND(va) ()
 
+#define PT_NELEMENTS    512
+
+#define STACK_BASE_VIRT 0xFFFFFF8000000000
+
 typedef union {
     struct {
         uintptr_t offset : 12;
