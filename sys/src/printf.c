@@ -12,8 +12,8 @@
 
 #include <stdarg.h>
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 static void wrapper_npf_putc(int c, void* ctx) {
-    (void)ctx; // stops the compiler from complaining
     serialputchar(c);
     consoleputchar(c);
 }
