@@ -8,7 +8,7 @@
 void        initkvalloc(uint64_t physbase, uint64_t virtbase,
                         struct limine_memmap_response* memmap);
 void        unmappage(uintptr_t frameptr, size_t count);
-void        mappage(uintptr_t l4addr,
+void        mappage(uintptr_t l4taddr,
                     uintptr_t va, uintptr_t pa, uint64_t flags);
 
 #endif

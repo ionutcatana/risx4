@@ -42,7 +42,41 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void mappage(uintptr_t l4addr,
+void mappage(uintptr_t l4taddr,
              uintptr_t va, uintptr_t pa, uint64_t flags) {
-    return; // this was fucked
+    return; // this is fucked
+    uint64_t index;
+    uint64_t* l4t = (uint64_t*)virtual(l4taddr);
+    index = LVL4_INDEX(va);
+
+    if (!(l4t[index] & PAGE_PRESENT)) {
+        uintptr_t new_l3t = allocframe(1);
+        l4t[index] = new_l3t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
+
+    uint64_t* l3t = (uint64_t*)virtual(l4t[index] & PTE_PHYS_ADDR_MASK);
+    index = LVL3_INDEX(va);
+
+    if (!(l3t[index] & PAGE_PRESENT)) {
+        uintptr_t new_l2t = allocframe(1);
+        l3t[index] = new_l2t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
+
+    uint64_t* l2t = (uint64_t*)virtual(l3t[index] & PTE_PHYS_ADDR_MASK);
+    index = LVL2_INDEX(va);
+
+    if (flags & PAGE_HUGE) {
+        l2t[index] = pa | flags;
+        return;
+    }
+
+    if (!(l2t[index] & PAGE_PRESENT)) {
+        uintptr_t new_l1t = allocframe(1);
+        l2t[index] = new_l1t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
+
+    uint64_t* l1t = (uint64_t*)virtual(l2t[index] & PTE_PHYS_ADDR_MASK);
+    index = LVL1_INDEX(va);
+
+    l1t[index] = pa | flags;
 }
