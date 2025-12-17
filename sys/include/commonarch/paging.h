@@ -24,7 +24,7 @@
 #define PT_NELEMENTS        (512)
 
 typedef struct {
-    uint64_t entry[PT_NELEMENTS];
+    uint64_t entries[PT_NELEMENTS];
 } pagetable_t;
 
 #endif
