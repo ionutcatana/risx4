@@ -1,10 +1,16 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char** argv) {
     if (argc != 2) {
         printf("Usage: ./indices $virtaddr\n");
+        return 1;
+    }
+
+    if (strlen(argv[1]) != 16) {
+        printf("Expected hexadecimal address of 16 characters\n");
         return 1;
     }
 
