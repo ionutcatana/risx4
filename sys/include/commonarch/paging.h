@@ -1,6 +1,8 @@
 #ifndef PAGING_H
 #define PAGING_H 1
 
+#include <stdint.h>
+
 #define PAGE_SIZE           (0x1000)
 #define PAGE_SIZE_2M        (0x200000)
 #define PAGE_SIZE_1G        (0x40000000)
@@ -20,5 +22,9 @@
 #define SIGN_EXTEND_NEG(va) ((uintptr_t)(va) | SIGN_MASK)
 
 #define PT_NELEMENTS        (512)
+
+typedef struct {
+    uint64_t entry[PT_NELEMENTS];
+} pagetable_t;
 
 #endif
