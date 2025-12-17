@@ -54,7 +54,7 @@ void mappage(uintptr_t l4taddr,
         l4t[index] = new_l3t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
     }
 
-    uint64_t* l3t = (uint64_t*)virtual(l4t[index] & PTE_PHYS_ADDR_MASK);
+    uint64_t* l3t = (uint64_t*)virtual(l4t[index] & PTE_ADDRESS_MASK);
     index = LVL3_INDEX(va);
 
     if (!(l3t[index] & PAGE_PRESENT)) {
@@ -62,7 +62,7 @@ void mappage(uintptr_t l4taddr,
         l3t[index] = new_l2t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
     }
 
-    uint64_t* l2t = (uint64_t*)virtual(l3t[index] & PTE_PHYS_ADDR_MASK);
+    uint64_t* l2t = (uint64_t*)virtual(l3t[index] & PTE_ADDRESS_MASK);
     index = LVL2_INDEX(va);
 
     if (flags & PAGE_HUGE) {
@@ -75,7 +75,7 @@ void mappage(uintptr_t l4taddr,
         l2t[index] = new_l1t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
     }
 
-    uint64_t* l1t = (uint64_t*)virtual(l2t[index] & PTE_PHYS_ADDR_MASK);
+    uint64_t* l1t = (uint64_t*)virtual(l2t[index] & PTE_ADDRESS_MASK);
     index = LVL1_INDEX(va);
 
     l1t[index] = pa | flags;
