@@ -99,7 +99,7 @@ uintptr_t allocframe(size_t count) {
             for (size_t k = 0; k < count; k++) setbit(bitmap, i + k);
             freepages -= count;
             uintptr_t p = i * PAGE_SIZE;
-            memset((void*)virtual(p), 0, count * PAGE_SIZE);
+            memset(virtual(p), 0, count * PAGE_SIZE);
             return p;
         }
     }
@@ -124,7 +124,7 @@ uintptr_t allocmegaframe(size_t count) {
             for (size_t k = 0; k < pages; k++) setbit(bitmap, i + k);
             freepages -= pages;
             uintptr_t p = i * PAGE_SIZE;
-            memset((void*)virtual(p), 0, pages * PAGE_SIZE);
+            memset(virtual(p), 0, pages * PAGE_SIZE);
             return p;
         }
     }
