@@ -12,7 +12,7 @@
 
 void initkvalloc(uint64_t physbase, uint64_t virtbase,
                  struct limine_memmap_response* memmap) {
-    pagetable_t* new_l4t = (pagetable_t*)allocframe(1);  // level 4 table
+    pagetable_t* new_l4t = virtual(allocframe(1)); // level 4 table
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_EXECUTABLE_AND_MODULES) {
@@ -44,40 +44,35 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void mappage(pagetable_t* globaltbl,
                     uintptr_t va, uintptr_t pa, uint64_t flags) {
-    return; // this is fucked
+    return; // this is still fucked
+    uint64_t index;
 
-    // uint64_t index;
-    // uint64_t* l4t = (uint64_t*)virtual(l4taddr);
-    // index = LVL4_INDEX(va);
+    index = LVL4_INDEX(va);
+    if (!(globaltbl->entries[index] & PAGE_PRESENT)) {
+        uintptr_t lowertbl = allocframe(1);
+        globaltbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
 
-    // if (!(l4t[index] & PAGE_PRESENT)) {
-    //     uintptr_t new_l3t = allocframe(1);
-    //     l4t[index] = new_l3t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
-    // }
+    pagetable_t* uppertbl = virtual(globaltbl->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL3_INDEX(va);
+    if (!(uppertbl->entries[index] & PAGE_PRESENT)) {
+        uintptr_t lowertbl = allocframe(1);
+        uppertbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
 
-    // uint64_t* l3t = (uint64_t*)virtual(l4t[index] & PTE_ADDRESS_MASK);
-    // index = LVL3_INDEX(va);
+    pagetable_t* middletbl = virtual(uppertbl->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL2_INDEX(va);
+    if (flags & PAGE_HUGE) {
+        middletbl->entries[index] = pa | flags;
+        return;
+    }
+    if (!(middletbl->entries[index] & PAGE_PRESENT)) {
+        uintptr_t lowertbl = allocframe(1);
+        middletbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+    }
 
-    // if (!(l3t[index] & PAGE_PRESENT)) {
-    //     uintptr_t new_l2t = allocframe(1);
-    //     l3t[index] = new_l2t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
-    // }
+    pagetable_t* pagetbl = virtual(middletbl->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL1_INDEX(va);
 
-    // uint64_t* l2t = (uint64_t*)virtual(l3t[index] & PTE_ADDRESS_MASK);
-    // index = LVL2_INDEX(va);
-
-    // if (flags & PAGE_HUGE) {
-    //     l2t[index] = pa | flags;
-    //     return;
-    // }
-
-    // if (!(l2t[index] & PAGE_PRESENT)) {
-    //     uintptr_t new_l1t = allocframe(1);
-    //     l2t[index] = new_l1t | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
-    // }
-
-    // uint64_t* l1t = (uint64_t*)virtual(l2t[index] & PTE_ADDRESS_MASK);
-    // index = LVL1_INDEX(va);
-
-    // l1t[index] = pa | flags;
+    pagetbl->entries[index] = pa | flags;
 }
