@@ -1,4 +1,6 @@
+#include <commonarch/atomic.h>
 #include <commonarch/interrupts.h>
+#include <commonarch/mp.h>
 #include <commonarch/serial.h>
 #include <console.h>
 #include <mm.h>
@@ -27,19 +29,18 @@ static volatile LIMINE_REQUESTS_END_MARKER;
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4);
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
 void setup(void) {
     initserial();
     initconsole();
 
 #if defined (__x86_64__)
-    initgdt();
-    initidt();
-//  initisr();
+    initgdt();  printf("GDT installed.\n");
+    initidt();  printf("IDT installed.\n");
+//  initisr();  printf("ISR installed.\n");
 
     initacpi();
-    extern struct rsdp_t* rsdp;
-    extern struct xsdp_t* xsdp;
+//  extern struct rsdp_t* rsdp;
+//  extern struct xsdp_t* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
 //      printf("ACPI 1.0\n");
@@ -54,8 +55,8 @@ void setup(void) {
     enableinterrupts();
 #endif
 
-    initpmm();
-    initvmm();
+    initpmm();  printf("physical frame allocator initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
     printf("setup successful\n");
 }
 
@@ -67,6 +68,8 @@ noreturn void risx(uintptr_t stacktop) {
 #else
     printf("entered RISX (release profile)\n");
 #endif
+    enumeratecpus();
+
     while(true);
     panic("unexpected return from scheduler.\n");
 }

@@ -4,25 +4,21 @@
 #include <commonarch/paging.h>
 #include <stdint.h>
 
-#define PAGE_PRESENT            (1)
-#define PAGE_WRITABLE           (1 << 1)
-#define PAGE_USER               (1 << 2)
-#define PAGE_WRITE_THROUGH      (1 << 3)
-#define PAGE_CACHE_DISABLE      (1 << 4)
-#define PAGE_ACCESSED           (1 << 5)
-#define PAGE_DIRTY              (1 << 6)
-#define PAGE_HUGE               (1 << 7)
-#define PAGE_GLOBAL             (1 << 8)
-#define PAGE_NO_EXECUTE         (1 << 63)
+#define PAGE_PRESENT            (1ull)
+#define PAGE_WRITABLE           (1ull << 1)
+#define PAGE_USER               (1ull << 2)
+#define PAGE_WRITE_THROUGH      (1ull << 3)
+#define PAGE_CACHE_DISABLED     (1ull << 4)
+#define PAGE_ACCESSED           (1ull << 5)
+#define PAGE_DIRTY              (1ull << 6) // only for lowest level
+#define PAGE_HUGE               (1ull << 7) // only for levels 2 and 3
+#define PAGE_PAT                (1ull << 7) // only for lowest level
+#define PAGE_GLOBAL             (1ull << 8) // only for lowest level
+#define PAGE_NO_EXECUTE         (1ull << 63)
 
-#define PTE_PHYS_ADDR_MASK      (0x000FFFFFFFFFF000)
-
-#define PAGE_MASK               (~(PAGE_SIZE - 1))
-#define PAGE_ALIGN_DOWN(x)      ((x) & PAGE_MASK)
-#define PAGE_ALIGN_UP(x)        (((x) + PAGE_SIZE - 1) & PAGE_MASK)
-
-#define PTE_CREATE(phys, flags) ((uint64_t)(phys) | (uint64_t)(flags))
-#define PTE_GET_ADDR(entry)     ((entry).value & PTE_PHYS_ADDR_MASK)
-#define PTE_GET_FLAGS(entry)    ((entry).value & ~PTE_PHYS_ADDR_MASK)
+#define PTE_FLAGS_MASK          ((uint64_t)0x8000000000000fff)
+#define PTE_ADDRESS_MASK_1G     ((uint64_t)0x0007ffffc0000000) // only level 3
+#define PTE_ADDRESS_MASK_2M     ((uint64_t)0x0007ffffffe00000) // only level 2
+#define PTE_ADDRESS_MASK        ((uint64_t)0x0007fffffffff000)
 
 #endif
