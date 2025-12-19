@@ -1,35 +1,27 @@
-#include <commonarch/atomic.h>
 #include <commonarch/interrupts.h>
 #include <risx.h>
 #include <spinlock.h>
 
+#include <stdatomic.h>
+
 void initlock(spinlock_t* lock, const char* name) {
-#if defined(RISXDEBUG)
-    lock->locked = 1;
+    atomic_init(&lock->locked, LOCK_FREE);
     lock->name = name;
 //  memset(&lock->pcs, 0, sizeof(lock->pcs));
-#else
-    lock = 1;
-#endif
 }
 
 void acquire(spinlock_t* lock) {
     pushinterrupts();
-    if (holding(lock)) panic("attempting to acquire held lock.");
-    while(exchange(&lock->locked, LOCKHELD) != LOCKFREE);
+    if (atomic_load(&lock->locked) == LOCK_HELD)
+        panic("attempting to acquire held lock.");
+    
+    while(atomic_exchange(&lock->locked, LOCK_HELD) != LOCK_FREE);
 }
 
 void release(spinlock_t* lock) {
-    if (!holding(lock)) panic("attempting to release a free lock.");
-    exchange(&lock->locked, LOCKFREE);
+    if (atomic_load(&lock->locked) == LOCK_FREE)
+        panic("attempting to release a free lock.");
+    
+    atomic_exchange(&lock->locked, LOCK_FREE);
     popinterrupts();
 }
-
-bool holding(spinlock_t* lock) {
-#if defined(RISXDEBUG)
-    return lock->locked;
-#else
-    return lock == 1;
-#endif
-}
-

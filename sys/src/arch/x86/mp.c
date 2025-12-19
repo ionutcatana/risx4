@@ -1,4 +1,3 @@
-#include <commonarch/atomic.h>
 #include <commonarch/mp.h>
 #include <risx.h>
 #include <limine.h>

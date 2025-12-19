@@ -1,4 +1,3 @@
-#include <commonarch/atomic.h>
 #include <commonarch/interrupts.h>
 #include <commonarch/mp.h>
 #include <commonarch/serial.h>
