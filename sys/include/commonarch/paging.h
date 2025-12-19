@@ -14,38 +14,4 @@
 
 #define SIGN_EXTEND(va) ()
 
-typedef union {
-    struct {
-        uintptr_t offset : 12;
-        uintptr_t l1i : 9;
-        uintptr_t l2i : 9;
-        uintptr_t l3i : 9;
-        uintptr_t l4i : 9;
-        uintptr_t sign_ext : 16;
-    } __attribute__((packed));
-    uintptr_t value;
-} virtaddr_t;
-
-// pages larger than 4K
-typedef union {
-    struct {
-        uintptr_t offset : 21;
-        uintptr_t l2i : 9;
-        uintptr_t l3i : 9;
-        uintptr_t l4i : 9;
-        uintptr_t sign_ext : 16;
-    } __attribute__((packed));
-    uintptr_t value;
-} virtaddr_2m_t;
-
-typedef union {
-    struct {
-        uintptr_t offset : 30;
-        uintptr_t l3i : 9;
-        uintptr_t l4i : 9;
-        uintptr_t sign_ext : 16;
-    } __attribute__((packed));
-    uintptr_t value;
-} virtaddr_1g_t;
-
 #endif

@@ -6,6 +6,7 @@
 
 #include <stdnoreturn.h>
 
+// panic.c
 noreturn void abort(void);
 noreturn void panic(const char* message);
 
