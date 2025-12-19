@@ -15,13 +15,13 @@ void acquire(spinlock_t* lock) {
     if (atomic_load(&lock->locked) == LOCK_HELD)
         panic("attempting to acquire held lock.");
     
-    while(atomic_exchange(&lock->locked, LOCK_HELD) != LOCK_FREE);
+    while(atomic_exchange_explicit(&lock->locked, LOCK_HELD, memory_order_acquire) != LOCK_FREE);
 }
 
 void release(spinlock_t* lock) {
     if (atomic_load(&lock->locked) == LOCK_FREE)
         panic("attempting to release a free lock.");
     
-    atomic_exchange(&lock->locked, LOCK_FREE);
+    atomic_exchange_explicit(&lock->locked, LOCK_FREE, memory_order_release);
     popinterrupts();
 }
