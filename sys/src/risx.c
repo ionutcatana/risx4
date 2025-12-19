@@ -69,6 +69,8 @@ noreturn void risx(uintptr_t stacktop) {
 #endif
     enumeratecpus();
 
+//  printf("\033[31mThis text is red!\033[0m\n");
+//  printf("This text is not red\n");
     while(true);
     panic("unexpected return from scheduler.\n");
 }
