@@ -12,6 +12,7 @@ PERL := perl
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 all: prepare tools sys
 
+
 prepare:
 	$(PERL) sys/src/arch/x86/vectors.pl > sys/src/arch/x86/vectors.S
 
