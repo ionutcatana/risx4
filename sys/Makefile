@@ -37,8 +37,7 @@ CFLAGS +=			\
 	-O0			\
 	-Wall			\
 	-Wextra			\
-	-Werror			\
-	-DRISXDEBUG
+	-Werror
 endif
 
 ifeq ($(PROFILE), RELEASE)

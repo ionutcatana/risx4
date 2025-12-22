@@ -61,12 +61,8 @@ void setup(void) {
 
 noreturn void risx(uintptr_t stacktop) {
     setup();
-#if defined (RISXDEBUG)
-    printf("entered RISX (debug profile)\n");
+    printf("entered RISX\n");
     printf("stack top: 0x%016lx\n", stacktop);
-#else
-    printf("entered RISX (release profile)\n");
-#endif
     enumeratecpus();
 
 //  printf("\033[31mThis text is red!\033[0m\n");
