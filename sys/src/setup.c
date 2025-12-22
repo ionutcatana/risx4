@@ -14,6 +14,12 @@
 #include <arch/x86/isr.h>
 #endif
 
+#if defined (__aarch64__)
+#endif
+
+#if defined (__riscv)
+#endif
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -52,6 +58,12 @@ void setup(uintptr_t stacktop) {
     }
 
     enableinterrupts();
+#endif
+
+#if defined (__aarch64__)
+#endif
+
+#if defined (__riscv)
 #endif
 
     initpmm();  printf("physical frame allocator initialized.\n");
