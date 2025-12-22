@@ -38,37 +38,42 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
     uintptr_t stacks = allocmegaframe(1);
     mappage(new_l4t, STACK_BASE_VIRT, stacks, PAGE_PRESENT | PAGE_WRITABLE | PAGE_HUGE | PAGE_NO_EXECUTE);
 
-//  loadcr3(new_l4t);   // the stack is fucked
+//  loadcr3(physical(new_l4t));   // the stack is fucked
 }
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 void mappage(pagetable_t* globaltbl,
                     uintptr_t va, uintptr_t pa, uint64_t flags) {
-    return; // this is still fucked
     uint64_t index;
 
     index = LVL4_INDEX(va);
     if (!(globaltbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        globaltbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+        globaltbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
     }
 
     pagetable_t* uppertbl = virtual(globaltbl->entries[index] & PTE_ADDRESS_MASK);
     index = LVL3_INDEX(va);
     if (!(uppertbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        uppertbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+        uppertbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
     }
 
     pagetable_t* middletbl = virtual(uppertbl->entries[index] & PTE_ADDRESS_MASK);
     index = LVL2_INDEX(va);
     if (flags & PAGE_HUGE) {
+        if (middletbl->entries[index] & PAGE_PRESENT)
+            panic("mapping huge page over existing entry.");
         middletbl->entries[index] = pa | flags;
         return;
     }
+
+    if ((middletbl->entries[index] & PAGE_PRESENT) &&
+        (middletbl->entries[index] & PAGE_HUGE))
+        panic("4kib page allocation collided with existing 2mib page.");
+
     if (!(middletbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        middletbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER;
+        middletbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
     }
 
     pagetable_t* pagetbl = virtual(middletbl->entries[index] & PTE_ADDRESS_MASK);
@@ -76,3 +81,4 @@ void mappage(pagetable_t* globaltbl,
 
     pagetbl->entries[index] = pa | flags;
 }
+

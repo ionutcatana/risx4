@@ -33,13 +33,13 @@ void initkpalloc(const uint64_t offset,
             if (endaddr > mmend) mmend = endaddr;
         }
 
-    totalpages = (mmend / PAGE_SIZE);       // removed +1
-    size = (totalpages / sizeof(uint32_t)); // removed +1
+    totalpages = (mmend / PAGE_SIZE);
+    size = (totalpages / 32); if (totalpages % 32 != 0) size++;
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         // find a space for both bitmap and reclaimable mask
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE &&
-            memmap->entries[i]->length >= size * 2) {
+            memmap->entries[i]->length >= size * 2 * sizeof(uint32_t)) {
             bitmap = (uint32_t*)(memmap->entries[i]->base + hhdmoffset());
             reclaimable_mask = (uint32_t*)(memmap->entries[i]->base + hhdmoffset()
                                                                     + size);
@@ -60,11 +60,11 @@ void initkpalloc(const uint64_t offset,
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
             for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
                 uintptr_t currentaddr = memmap->entries[i]->base + j; // address of a page
-                // bitmaps themselves cannot be marked as `free`
+
+                // don't mark as `free` if the address is below 16mib or it contains the bitmaps
                 if ((currentaddr > bitmap_startaddr && currentaddr < bitmap_endaddr) ||
-                    (currentaddr > reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr)) {
-                    continue;
-                }
+                    (currentaddr > reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr) ||
+                    (currentaddr < 0x100000)) continue;
 
                 unsetbit(bitmap, currentaddr / PAGE_SIZE);
                 freepages++;
