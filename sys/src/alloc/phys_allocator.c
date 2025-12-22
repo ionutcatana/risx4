@@ -9,16 +9,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-static uint32_t* bitmap = NULL;
-static uint32_t* reclaimable_mask = NULL;
-static uintptr_t mmend = 0;
-static size_t size = 0;
-static size_t freepages = 0;
-static size_t reclaimablepages = 0;
-static uint64_t totalpages = 0;
-//static size_t nextfree = 0;         // index of the next free page in the bitmap
-//static uint64_t nextfreepages = 0;  // number of free pages after index above
-static uint64_t offset_val = 0;
+static uint32_t*    bitmap = NULL;
+static uint32_t*    reclaimable_mask = NULL;
+static uintptr_t    mmend = 0;
+static size_t       size = 0;
+static size_t       freepages = 0;
+static size_t       reclaimablepages = 0;
+static uint64_t     totalpages = 0;
+//static size_t     nextfree = 0;       // index of the next free page in the bitmap
+//static uint64_t   nextfreepages = 0;  // number of free pages after index above
+static uint64_t     offset_val = 0;
 
 void initkpalloc(const uint64_t offset,
                  const struct limine_memmap_response* memmap) {

@@ -8,8 +8,8 @@
 #include <stddef.h>
 
 static idtsegdesc_t idt[IDT_SIZE];
-idtr_t _idtr; // used in idt.S
-extern uintptr_t vectors[]; // arch/x86/vectors.S
+idtr_t              _idtr;      // used in idt.S
+extern uintptr_t    vectors[];  // arch/x86/vectors.S
 
 void loadidt(void);
 void initidt(void) {
@@ -23,13 +23,13 @@ void initidt(void) {
 }
 
 void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
-    idt[vector].base_lower = (uint16_t)(handler & 0xFFFF);
-    idt[vector].selector = RISX_CODE_SEG;
-    idt[vector].ist = 0;
-    idt[vector].attributes = attributes;
+    idt[vector].base_lower  = (uint16_t)(handler & 0xFFFF);
+    idt[vector].selector    = RISX_CODE_SEG;
+    idt[vector].ist         = 0;
+    idt[vector].attributes  = attributes;
     idt[vector].base_middle = (uint16_t)((handler >> 16) & 0xFFFF);
-    idt[vector].base_upper = (uint32_t)((handler >> 32) & 0xFFFFFFFF);
-    idt[vector].reserved = 0;
+    idt[vector].base_upper  = (uint32_t)((handler >> 32) & 0xFFFFFFFF);
+    idt[vector].reserved    = 0;
 }
 
 void idispatch(trapframe_t* tf) {

@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 static gdtsegdesc_t gdt[GDT_SIZE];
-gdtr_t _desc; // used in gdt.S
-tss_t tss;
+gdtr_t              _desc; // used in gdt.S
+tss_t               tss;
 
 void loadgdt(void);
 void initgdt(void) {

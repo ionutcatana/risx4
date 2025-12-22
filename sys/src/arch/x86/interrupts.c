@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 
-static int64_t ninterrupts = 0;
+static int64_t  ninterrupts = 0;
 static uint64_t intenabled = 1;
 
 void pushinterrupts(void) {
