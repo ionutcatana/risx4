@@ -1,3 +1,4 @@
+OUTPUT_FORMAT(elf64-littleaarch64)
 ENTRY(_start)
 
 PHDRS
@@ -11,7 +12,7 @@ PHDRS
 SECTIONS
 {
     /* risx is a higher-half kernel, it is running in virtual memory at the */
-    /* last 2GB of the address space. */
+    /* last 2GB of the address space.                                       */
     . = 0xffffffff80000000;
 
     .limine_requests :
@@ -33,8 +34,8 @@ SECTIONS
         KEEP(*(.rodata*))
     } :rodata
 
-    /* add a .note.gnu.build-id output section in case a build id flag is */
-    /* added to the linker command. */
+    /* add a .note.gnu.build-id output section in case a build id flag is   */
+    /* added to the linker command.                                         */
     .note.gnu.build-id : {
         *(.note.gnu.build-id)
     } :rodata
@@ -53,7 +54,7 @@ SECTIONS
         KEEP(*(COMMON))
     } :data
 
-    /* these segments can cause issues */
+    /* these segments can cause issues                                       */
     /DISCARD/ : {
         *(.eh_frame*)
         *(.note .note.*)
