@@ -1,11 +1,15 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#			user-configurable variables			      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 OBJ_DIR := target
-
 QEMU64 := qemu-system-x86_64
 QEMUFLAGS := -machine pc -smp cores=2 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
-
 PERL := perl
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#				recipes					      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 all: prepare tools sys
 
 prepare:
