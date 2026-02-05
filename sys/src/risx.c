@@ -42,9 +42,10 @@ noreturn void panic(const char* message) {
     abort();
 }
 
-static _Atomic bool initialized = false;
+static atomic_bool initialized;
 
 void setup(uintptr_t stacktop) {
+    atomic_init(&initialized, false);
     initserial();
     initconsole();
     initprintf();
