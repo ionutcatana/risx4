@@ -10,6 +10,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+static uintptr_t kernelpgtbl = 0;
+uintptr_t readkernelpgtbl(void) {
+    return kernelpgtbl;
+}
+
 void initkvalloc(uint64_t physbase, uint64_t virtbase,
                  struct limine_memmap_response* memmap) {
     pagetable_t* new_l4t = virtual(allocframe(1)); // level 4 table
@@ -42,6 +47,7 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
     uintptr_t stacks = allocmegaframe(1);
     mappage(new_l4t, STACK_BASE_VIRT, stacks, PAGE_PRESENT | PAGE_WRITABLE | PAGE_HUGE | PAGE_NO_EXECUTE);
 
+    kernelpgtbl = physical(new_l4t);
     loadcr3(physical(new_l4t));
 }
 
