@@ -2,7 +2,7 @@
 #			user-configurable variables			      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 PROFILE ?= DEBUG
-VERSION ?= 0.0.6
+VERSION ?= 0.0.7
 OBJ_DIR ?= target
 ARCH ?= x86_64
 
