@@ -14,7 +14,8 @@ char*   strcpy(char* restrict dst, const char* restrict src);
 int     strcmp(const char* s1, const char* s2);
 size_t  strlen(const char* str);
 
-// printf.h
+// printf.c
+void    initprintf(void);
 int     snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... );
 int     vsnprintf(char* restrict buffer, size_t bufsz, const char* restrict format, va_list vlist );
 int     printf(const char* restrict format, ... );
