@@ -25,13 +25,13 @@
 #include <stdint.h>
 
 __attribute__((used, section(".limine_requests_start")))
-static volatile LIMINE_REQUESTS_START_MARKER;
+static volatile LIMINE_REQUESTS_START_MARKER
 
 __attribute__((used, section(".limine_requests_end")))
-static volatile LIMINE_REQUESTS_END_MARKER;
+static volatile LIMINE_REQUESTS_END_MARKER
 
 __attribute__((used, section(".limine_requests")))
-static volatile LIMINE_BASE_REVISION(4);
+static volatile LIMINE_BASE_REVISION(4)
 
 void setup(uintptr_t stacktop) {
     initserial();

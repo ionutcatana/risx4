@@ -21,6 +21,7 @@ CFLAGS := 			\
 	-fno-stack-check	\
 	-fno-stack-protector	\
 	-mno-ms-bitfields	\
+	-pedantic-errors	\
 	-pipe			\
 	-std=c17
 LDFLAGS := -nostdlib -lgcc

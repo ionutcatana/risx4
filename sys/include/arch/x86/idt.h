@@ -6,12 +6,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
-//                  bits:  76543210
-#define INTERRUPT_GATE  (0b00001110)
-#define TRAP_GATE       (0b00001111)
-#define RING0           (0b00000000)
-#define RING3           (0b01100000)
-#define PRESENT         (0b10000000)
+//                         bits:  76543210
+#define INTERRUPT_GATE  0x0E /* 0b00001110 */
+#define TRAP_GATE       0x0F /* 0b00001111 */
+#define RING0           0x00 /* 0b00000000 */
+#define RING3           0x60 /* 0b01100000 */
+#define PRESENT         0x80 /* 0b10000000 */
 
 #define IDT_INTERRUPT_GATE_RING0 ((INTERRUPT_GATE) | (RING0) | (PRESENT))
 #define IDT_INTERRUPT_GATE_RING3 ((INTERRUPT_GATE) | (RING3) | (PRESENT))
