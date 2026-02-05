@@ -9,5 +9,7 @@
 // mm.c
 void    initpmm(void);
 void    initvmm(void);
+void    initheap(void);
 
 #endif
+
