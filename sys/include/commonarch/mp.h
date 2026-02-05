@@ -7,5 +7,6 @@
 uint64_t    cpucount();
 uint32_t    bootstrapcpu(); // bsp_lapic_id on x86
 void        enumeratecpus();
+void        initmp(void);
 
 #endif
