@@ -7,11 +7,11 @@
 #include <stdint.h>
 #include <stdnoreturn.h>
 
-// panic.c
+// arch/x86/abort.S
 noreturn void   abort(void);
-noreturn void   panic(const char* message);
 
-// setup.c
+// risx.c
+noreturn void   panic(const char* message);
 void            setup(uintptr_t stacktop);
 noreturn void   risx(void);
 
