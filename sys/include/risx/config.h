@@ -6,7 +6,8 @@
 #define CODENAME        "Initial commit"
 
 /* maximum number of entries in the process table for user-mode processes     */
-#define NPROC           128
+#define NPROC           224
+#define NTASK           32
 
 /* stack size and max core count options. all stacks fit on a single 2mib mega
    page. possible configs: 32 cores+64k stacks or 128 cores+16k stacks        */
