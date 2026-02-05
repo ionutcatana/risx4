@@ -1,8 +1,16 @@
-#include <arch/x86/paging.h>
 #include <commonarch/paging.h>
 #include <mm.h>
 #include <risx.h>
 #include <spinlock.h>
+
+#if defined(__x86_64__)
+#include <arch/x86/paging.h>
+#endif
+
+// fix later
+#ifndef __x86_64__
+#error "unsupported architecture"
+#endif
 
 typedef size_t dev_t;
 typedef size_t ino_t;
