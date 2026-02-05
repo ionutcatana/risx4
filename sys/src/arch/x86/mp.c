@@ -1,8 +1,17 @@
+// note: having limine_mp_request here is not ideal
+#include <arch/x86/registers.h>
 #include <commonarch/mp.h>
-#include <risx.h>
+#include <commonarch/paging.h>
 #include <limine.h>
+#include <risx.h>
 
+#include <stddef.h>
 #include <stdint.h>
+#include <stdatomic.h>
+
+void initgdt(void);
+void loadidt(void);
+noreturn void enterrisx(uintptr_t stack_top);
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_mp_request mpreq = {
@@ -26,4 +35,23 @@ void enumeratecpus() {
                mpreq.response->cpus[i]->lapic_id,
                mpreq.response->cpus[i]->processor_id,
                mpreq.response->cpus[i]->goto_address);
+}
+
+void mpentrypoint(struct limine_mp_info *info) {
+    loadcr3(readkernelpgtbl());
+    initgdt();
+    loadidt();
+
+    uint64_t stack_top = STACK_BASE_VIRT + ((info->processor_id + 1) * STACK_SIZE);
+    enterrisx(stack_top);
+}
+
+void initmp(void) {
+    if (mpreq.response == NULL) return; // doesn't panic; systems may not have multiple processors
+    for (uint64_t i = 0; i < mpreq.response->cpu_count; i++) {
+        if (mpreq.response->cpus[i]->lapic_id == mpreq.response->bsp_lapic_id) continue;
+        atomic_store_explicit((_Atomic limine_goto_address *)&mpreq.response->cpus[i]->goto_address,
+                              (limine_goto_address)mpentrypoint,
+                              memory_order_seq_cst);
+    }
 }
