@@ -1,7 +1,5 @@
-# related to clangd
-.cache
-compile_commands.json
-compile_commands.events.json
+# continuous deployment files, not yet ready as of 05 feb 2026
+.github
 
 # copyrighted material, not yet ready as of 17 nov 2025
 docs
