@@ -10,7 +10,7 @@ PERL := perl
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				recipes					      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-all: prepare tools sys
+all: prepare tools sys usr
 
 
 prepare:
@@ -22,7 +22,10 @@ tools:
 sys: prepare
 	$(MAKE) -C sys OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
-iso: sys
+usr: prepare
+	$(MAKE) -C usr OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
+
+iso: sys usr
 	@mkdir -p $(OBJ_DIR)/iso_root
 	@cp -r ./boot $(OBJ_DIR)/iso_root
 	@cp target/risx.elf $(OBJ_DIR)/iso_root
