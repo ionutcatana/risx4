@@ -62,8 +62,8 @@ void initkpalloc(const uint64_t offset,
                 uintptr_t currentaddr = memmap->entries[i]->base + j; // address of a page
 
                 // don't mark as `free` if the address is below 16mib or it contains the bitmaps
-                if ((currentaddr > bitmap_startaddr && currentaddr < bitmap_endaddr) ||
-                    (currentaddr > reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr) ||
+                if ((currentaddr >= bitmap_startaddr && currentaddr < bitmap_endaddr) ||
+                    (currentaddr >= reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr) ||
                     (currentaddr < 0x100000)) continue;
 
                 unsetbit(bitmap, currentaddr / PAGE_SIZE);

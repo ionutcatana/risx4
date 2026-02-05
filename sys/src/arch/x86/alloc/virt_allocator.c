@@ -33,12 +33,16 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
                 uintptr_t virtaddr = physaddr + hhdmoffset();
 
                 mappage(new_l4t, virtaddr, physaddr, PAGE_PRESENT | PAGE_WRITABLE | PAGE_NO_EXECUTE);
+
+                if (memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
+                    mappage(new_l4t, physaddr, physaddr, PAGE_PRESENT | PAGE_WRITABLE | PAGE_NO_EXECUTE);
+                }
             }
 
     uintptr_t stacks = allocmegaframe(1);
     mappage(new_l4t, STACK_BASE_VIRT, stacks, PAGE_PRESENT | PAGE_WRITABLE | PAGE_HUGE | PAGE_NO_EXECUTE);
 
-//  loadcr3(physical(new_l4t));   // the stack is fucked
+    loadcr3(physical(new_l4t));
 }
 
 void mappage(pagetable_t* globaltbl,
