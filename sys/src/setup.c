@@ -36,6 +36,7 @@ static volatile LIMINE_BASE_REVISION(4)
 void setup(uintptr_t stacktop) {
     initserial();
     initconsole();
+    initprintf();
     printf("stack top: 0x%016lx\n", stacktop);
 
 #if defined (__x86_64__)
@@ -68,5 +69,7 @@ void setup(uintptr_t stacktop) {
 
     initpmm();  printf("physical frame allocator initialized.\n");
     initvmm();  printf("virtual page allocator initialized.\n");
+    initmp();   printf("multiprocessing initialized.\n");
+
     printf("setup successful\n");
 }
