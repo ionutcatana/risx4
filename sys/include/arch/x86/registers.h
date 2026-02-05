@@ -20,6 +20,7 @@ uint64_t    readcr3(void);
 uint64_t    readcr4(void);
 uint64_t    readcr8(void);
 uint64_t    readrflags(void);
+uint64_t    readlapicid(void);
 
 void        loadcr0(uint64_t value);
 void        loadcr2(uint64_t value);

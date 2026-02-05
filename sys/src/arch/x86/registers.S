@@ -62,3 +62,13 @@ loadrflags:
         push    rdi
         popfq
         ret
+
+        .global readlapicid
+readlapicid:
+        push    rbx
+        mov     rax, 1
+        cpuid
+        mov     rax, rbx
+        shr     rax, 24
+        pop     rbx
+        ret
