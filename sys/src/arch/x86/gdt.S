@@ -8,13 +8,12 @@
         .section .text
         .global loadgdt
         .global loadtr
-        .extern _desc
 loadgdt:
 #       push    rsp
 #       mov     rbp, rsp
 
         cli
-        lgdt    [_desc]                 # load global descriptor table
+        lgdt    [rdi]                   # load global descriptor table
 
         mov     ax, RISX_DATA_SEG       # update other segment registers
         mov     ds, ax
