@@ -15,10 +15,11 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdatomic.h>
 
 thread_t    threads[NPROC];
 struct cpu  cpus[NCPU];
-uint64_t    next_tid = 1;
+atomic_uint_fast64_t    next_tid = ATOMIC_VAR_INIT(1);
 
 static spinlock_t sched_lock;
 
@@ -120,7 +121,7 @@ thread_t* kthread_create(void (*start_routine)(void)) {
 
     if (!t) return NULL;
 
-    t->tid = __atomic_fetch_add(&next_tid, 1, __ATOMIC_RELAXED);
+    t->tid = atomic_fetch_add_explicit(&next_tid, 1, memory_order_relaxed);
     t->cpu_id = 0;
     t->cr3 = readkernelpgtbl();
     t->kstack = malloc(16384);

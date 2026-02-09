@@ -46,7 +46,7 @@ static volatile struct limine_module_request module_request = {
 
 noreturn void abort(void);
 noreturn void panic(const char* message) {
-    // printf("PANIC: %s\n", message);
+//  printf("PANIC: %s\n", message);
     (void)message;
     abort();
 }
@@ -106,14 +106,14 @@ void setup(uintptr_t stacktop) {
 noreturn void risx(void) {
     while (!atomic_load_explicit(&initialized, memory_order_acquire));
 
-    // Initialize Syscall MSRs on this CPU
-    #if defined(__x86_64__)
+// initialize syscall msrs on this cpu
+#if defined(__x86_64__)
     init_syscall_msrs();
-    #endif
+#endif
 
     printf("[CPU %lu] entered RISX\n", readlapicid());
 
-    // Create a dummy kernel thread
+    // create a dummy kernel thread
     if (readlapicid() == 0) {
         if (module_request.response) {
             struct limine_module_response* modules = module_request.response;
@@ -126,10 +126,10 @@ noreturn void risx(void) {
             }
         }
 
-        // Use kernel thread test only if no modules or for testing alongside?
-        // For now, let's keep the test if no modules, or disable it.
-        // I'll disable it if modules are loaded to reduce noise, or run it anyway.
-        // Let's comment out the kernel threads for now to focus on user process.
+        // use kernel thread test only if no modules or for testing alongside?
+        // for now, let's keep the test if no modules, or disable it.
+        // i'll disable it if modules are loaded to reduce noise, or run it anyway.
+        // let's comment out the kernel threads for now to focus on user process.
         /*
         extern void kernel_thread_test(void);
         kthread_create(kernel_thread_test);
@@ -137,16 +137,14 @@ noreturn void risx(void) {
         */
     }
 
-    // Enter scheduler loop (never returns)
     scheduler();
-
     panic("unexpected return from scheduler.\n");
 }
 
 void kernel_thread_test(void) {
     int id = readlapicid(); // Might change as we migrate
-    static int counter = 0;
-    int my_count = __atomic_fetch_add(&counter, 1, __ATOMIC_SEQ_CST);
+    static atomic_int counter = ATOMIC_VAR_INIT(0);
+    int my_count = atomic_fetch_add_explicit(&counter, 1, memory_order_seq_cst);
 
     printf("Hello from Kernel Thread %d running on CPU %d!\n", my_count, id);
 
@@ -156,5 +154,6 @@ void kernel_thread_test(void) {
     }
 
     printf("Thread %d exiting...\n", my_count);
-    // return; // Will hit the exit handler we pushed
+//  return;
+//  will hit the exit handler we pushed
 }
