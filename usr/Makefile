@@ -15,7 +15,10 @@ CFLAGS := 			\
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				recipes					      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-all: $(OBJ_DIR)/cat $(OBJ_DIR)/echo $(OBJ_DIR)/grep $(OBJ_DIR)/kill $(OBJ_DIR)/rm $(OBJ_DIR)/wc
+all: $(OBJ_DIR)/cat $(OBJ_DIR)/echo $(OBJ_DIR)/grep $(OBJ_DIR)/kill $(OBJ_DIR)/rm $(OBJ_DIR)/wc $(OBJ_DIR)/test_simple
+
+$(OBJ_DIR)/test_simple:
+	$(CC) $(CPPFLAGS) -static -nostdlib -fno-stack-protector src/test_simple.c -o $(OBJ_DIR)/test_simple
 
 $(OBJ_DIR)/cat:
 	$(CC) $(CPPFLAGS) $(CFLAGS) src/cat.c -o $(OBJ_DIR)/cat

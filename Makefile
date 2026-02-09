@@ -29,6 +29,8 @@ iso: sys usr
 	@mkdir -p $(OBJ_DIR)/iso_root
 	@cp -r ./boot $(OBJ_DIR)/iso_root
 	@cp target/risx.elf $(OBJ_DIR)/iso_root
+	@cp target/cat $(OBJ_DIR)/iso_root/cat
+	@cp target/test_simple $(OBJ_DIR)/iso_root/test_simple
 	@xorriso -as mkisofs				\
 		-b boot/limine/limine-bios-cd.bin	\
 		-no-emul-boot				\
