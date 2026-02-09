@@ -49,5 +49,10 @@ void inittss(uint64_t id) {
     gdt[id][6].base_upper  = 0;
 }
 
+void tss_update_rsp0(uintptr_t stack) {
+    uint64_t id = readlapicid();
+    tss[id].rsp0 = stack;
+}
+
 
 

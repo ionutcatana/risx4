@@ -47,5 +47,6 @@ void    loadtr(uint16_t selector);
 // arch/x86/gdt.c
 void    initgdt(void);
 void    inittss(uint64_t id);
+void    tss_update_rsp0(uintptr_t stack);
 
 #endif

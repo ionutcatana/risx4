@@ -26,8 +26,31 @@ istub:  push    rax                     # save the general purpose registers
         push    r14
         push    r15
 
+        # Check for user mode (CS & 3 == 3)
+        # RSP points to saved R15.
+        # Registers: 15 * 8 = 120 bytes.
+        # Stack: [R15 ... RAX] [VEC] [ERR] [RIP] [CS]
+        # Offset to CS: 120 + 8 (VEC) + 8 (ERR) + 8 (RIP) = 144 = 18 * 8.
+        mov     rax, [rsp + 144]
+        and     rax, 3
+        cmp     rax, 3
+        jne     1f
+        swapgs
+1:
+
         mov     rdi, rsp                # move trapframe into first argument
         call    idispatch
+
+        # Restore GS if returning to user mode
+        mov     rax, [rsp + 144]
+        and     rax, 3
+        cmp     rax, 3
+        jne     2f
+        swapgs
+2:
+
+        pop     r15
+        pop     r14
 
         pop     r15
         pop     r14

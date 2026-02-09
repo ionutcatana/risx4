@@ -37,10 +37,13 @@ void enumeratecpus() {
                mpreq.response->cpus[i]->goto_address);
 }
 
+void initlapic(void);
+
 void mpentrypoint(struct limine_mp_info *info) {
     loadcr3(readkernelpgtbl());
     initgdt();
     loadidt();
+    initlapic();
 
     uint64_t stack_top = STACK_BASE_VIRT + ((info->processor_id + 1) * STACK_SIZE);
     enterrisx(stack_top);

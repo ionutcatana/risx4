@@ -2,6 +2,8 @@
 #include <arch/x86/idt.h>
 #include <arch/x86/interrupts.h>
 #include <arch/x86/registers.h>
+#include <arch/x86/apic.h>
+#include <process.h>
 #include <risx.h>
 
 #include <stdint.h>
@@ -33,7 +35,7 @@ void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
 }
 
 void idispatch(trapframe_t* tf) {
-    printf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
+    // printf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
 
     // handle the interrupt after it has been announced on the serial port
     // exceptions 9 & 15 not defined yet
@@ -75,7 +77,21 @@ void idispatch(trapframe_t* tf) {
         break;
     case X86_INTERRUPT_XF:
         break;
+    case 32: // Timer
+        acklapic();
+        sched();
+        return;
+    case 33: // Keyboard
+        printf("K");
+        acklapic();
+        return;
     default:
+        // For now, assuming spurious or unknown IRQ
+        if (tf->vector >= 32) {
+             printf("Unknown IRQ: %d\n", tf->vector);
+             acklapic();
+             return;
+        }
         panic("unimplemented interrupt handler.");
     }
 

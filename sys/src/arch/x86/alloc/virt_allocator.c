@@ -6,6 +6,7 @@
 #include <commonarch/paging.h>
 #include <limine.h>
 #include <risx.h>
+#include <string.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -37,7 +38,12 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
                 uintptr_t physaddr = memmap->entries[i]->base + j;
                 uintptr_t virtaddr = physaddr + hhdmoffset();
 
-                mappage(new_l4t, virtaddr, physaddr, PAGE_PRESENT | PAGE_WRITABLE | PAGE_NO_EXECUTE);
+                uint64_t flags = PAGE_PRESENT | PAGE_WRITABLE | PAGE_NO_EXECUTE;
+                if (memmap->entries[i]->type == LIMINE_MEMMAP_FRAMEBUFFER) {
+                    flags |= PAGE_CACHE_DISABLED | PAGE_WRITE_THROUGH;
+                }
+
+                mappage(new_l4t, virtaddr, physaddr, flags);
 
                 if (memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
                     mappage(new_l4t, physaddr, physaddr, PAGE_PRESENT | PAGE_WRITABLE | PAGE_NO_EXECUTE);
@@ -58,14 +64,18 @@ void mappage(pagetable_t* globaltbl,
     index = LVL4_INDEX(va);
     if (!(globaltbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        globaltbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
+        globaltbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | (flags & PAGE_USER);
+    } else {
+        globaltbl->entries[index] |= (flags & PAGE_USER);
     }
 
     pagetable_t* uppertbl = virtual(globaltbl->entries[index] & PTE_ADDRESS_MASK);
     index = LVL3_INDEX(va);
     if (!(uppertbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        uppertbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
+        uppertbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | (flags & PAGE_USER);
+    } else {
+        uppertbl->entries[index] |= (flags & PAGE_USER);
     }
 
     pagetable_t* middletbl = virtual(uppertbl->entries[index] & PTE_ADDRESS_MASK);
@@ -83,7 +93,9 @@ void mappage(pagetable_t* globaltbl,
 
     if (!(middletbl->entries[index] & PAGE_PRESENT)) {
         uintptr_t lowertbl = allocframe(1);
-        middletbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE;
+        middletbl->entries[index] = lowertbl | PAGE_PRESENT | PAGE_WRITABLE | (flags & PAGE_USER);
+    } else {
+        middletbl->entries[index] |= (flags & PAGE_USER);
     }
 
     pagetable_t* pagetbl = virtual(middletbl->entries[index] & PTE_ADDRESS_MASK);
@@ -92,3 +104,20 @@ void mappage(pagetable_t* globaltbl,
     pagetbl->entries[index] = pa | flags;
 }
 
+
+uintptr_t vmm_new_pml4(void) {
+    uintptr_t kpgtbl_phys = readkernelpgtbl();
+    pagetable_t* kpgtbl = (pagetable_t*)virtual(kpgtbl_phys);
+
+    uintptr_t new_pml4_phys = allocframe(1);
+    pagetable_t* new_pml4 = (pagetable_t*)virtual(new_pml4_phys);
+
+    memset(new_pml4, 0, PAGE_SIZE);
+
+    // Copy kernel mappings (upper half)
+    for (int i = 256; i < 512; i++) {
+        new_pml4->entries[i] = kpgtbl->entries[i];
+    }
+
+    return new_pml4_phys;
+}

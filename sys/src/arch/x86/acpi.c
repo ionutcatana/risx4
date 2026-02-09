@@ -1,4 +1,5 @@
 #include <arch/x86/acpi.h>
+#include <alloc/conversions.h>
 #include <limine.h>
 #include <risx.h>
 
@@ -29,4 +30,28 @@ void initacpi(void) {
 
 int acpiversion(void) {
     return version;
+}
+
+void* acpifindtable(const char* signature) {
+    size_t entries = 0;
+    sdpheader_t* header = NULL;
+
+    if (version == ACPI_VERSION_1 && rsdp) {
+        rsdt* rsdtval = (rsdt*)virtual(rsdp->rsdpaddr);
+        entries = (rsdtval->header.length - sizeof(rsdtval->header)) / 4;
+
+        for (size_t i = 0; i < entries; i++) {
+             header = (sdpheader_t*)virtual(rsdtval->sdtaddr[i]);
+             if (memcmp(header->signature, signature, 4) == 0) return (void*)header;
+        }
+    } else if (xsdp) {
+        xsdt* xsdtval = (xsdt*)virtual(xsdp->xsdtaddr);
+        entries = (xsdtval->header.length - sizeof(xsdtval->header)) / 8;
+
+        for (size_t i = 0; i < entries; i++) {
+             header = (sdpheader_t*)virtual(xsdtval->sdtaddr[i]);
+             if (memcmp(header->signature, signature, 4) == 0) return (void*)header;
+        }
+    }
+    return NULL;
 }
