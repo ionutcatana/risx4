@@ -4,7 +4,6 @@
 #include <alloc/kpalloc.h>
 #include <alloc/conversions.h>
 #include <arch/x86/paging.h>
-#include <string.h>
 #include <stddef.h>
 #include <risx.h>
 #include <commonarch/paging.h>

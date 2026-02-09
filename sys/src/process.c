@@ -9,7 +9,6 @@
 #include <spinlock.h>
 #include <elf.h>
 #include <arch/x86/trapframe.h>
-#include <string.h>
 #include <arch/x86/gdt.h>
 #include <alloc/conversions.h>
 #include <arch/x86/paging.h>
