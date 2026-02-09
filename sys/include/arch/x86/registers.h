@@ -13,6 +13,13 @@
 #define EFER_LME        (1ull << 7)
 #define EFER_NX         (1ull << 10)
 
+#define MSR_EFER        0xC0000080
+#define MSR_STAR        0xC0000081
+#define MSR_LSTAR       0xC0000082
+#define MSR_SFMASK      0xC0000084
+#define MSR_GS_BASE     0xC0000101
+#define MSR_KERNEL_GS_BASE 0xC0000102
+
 // arch/x86/registers.S
 uint64_t    readcr0(void);
 uint64_t    readcr2(void);
@@ -28,4 +35,7 @@ void        loadcr3(uint64_t value);
 void        loadcr4(uint64_t value);
 void        loadcr8(uint64_t value);
 void        loadrflags(uint64_t value);
+void        wrmsr(uint32_t msr, uint64_t value);
+uint64_t    rdmsr(uint32_t msr);
+
 #endif

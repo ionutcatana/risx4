@@ -72,3 +72,20 @@ readlapicid:
         shr     rax, 24
         pop     rbx
         ret
+
+.global wrmsr
+wrmsr:
+    mov rcx, rdi
+    mov rax, rsi
+    mov rdx, rsi
+    shr rdx, 32
+    wrmsr
+    ret
+
+.global rdmsr
+rdmsr:
+    mov rcx, rdi
+    rdmsr
+    shl rdx, 32
+    or  rax, rdx
+    ret
