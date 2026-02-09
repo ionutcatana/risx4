@@ -9,6 +9,8 @@
 // arch/x86/alloc/virt_allocator.c
 void        initkvalloc(uint64_t physbase, uint64_t virtbase,
                         struct limine_memmap_response* memmap);
+uintptr_t   readkernelpgtbl(void);
+uintptr_t   vmm_new_pml4(void);
 void        unmappage(uintptr_t frameptr, size_t count);
 void        mappage(pagetable_t* globaltbl,
                     uintptr_t va, uintptr_t pa, uint64_t flags);
