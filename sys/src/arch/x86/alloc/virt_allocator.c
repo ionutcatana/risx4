@@ -6,7 +6,6 @@
 #include <commonarch/paging.h>
 #include <limine.h>
 #include <risx.h>
-#include <string.h>
 
 #include <stddef.h>
 #include <stdint.h>
