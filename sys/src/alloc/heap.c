@@ -1,8 +1,9 @@
-#include <commonarch/paging.h>
-#include <mm.h>
-#include <risx.h>
-#include "sync/spinlock.h"
+#include "commonarch/paging.h"
 #include "lib/string.h"
+#include "mm.h"
+#include "panic.h"
+#include "risx.h"
+#include "sync/spinlock.h"
 
 #if defined(__x86_64__)
 #include <arch/x86_64/paging.h>

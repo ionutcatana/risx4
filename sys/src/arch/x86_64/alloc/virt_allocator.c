@@ -5,6 +5,7 @@
 #include "arch/x86_64/specific/registers.h"
 #include "commonarch/paging.h"
 #include "limine.h"
+#include "panic.h"
 #include "risx.h"
 #include <stddef.h>
 #include <stdint.h>

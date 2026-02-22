@@ -1,6 +1,7 @@
-#include "mm.h"
-#include "risx.h"
 #include "limine.h"
+#include "mm.h"
+#include "panic.h"
+#include "risx.h"
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_hhdm_request hhdmreq = {

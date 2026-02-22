@@ -2,10 +2,11 @@
 #include "alloc/conversions.h"
 #include "alloc/kpalloc.h"
 #include "commonarch/paging.h"
-#include "limine.h"
-#include "risx.h"
-#include "lib/string.h"
 #include "lib/printf.h"
+#include "lib/string.h"
+#include "limine.h"
+#include "panic.h"
+#include "risx.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

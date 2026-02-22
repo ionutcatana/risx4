@@ -1,4 +1,5 @@
 #include "commonarch/interrupts.h"
+#include "panic.h"
 #include "risx.h"
 #include "sync/spinlock.h"
 #include <stdatomic.h>

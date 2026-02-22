@@ -1,7 +1,7 @@
 #include "acpi.h"
 #include "limine.h"
+#include "panic.h"
 #include "risx.h"
-
 #include <stddef.h>
 #include <stdnoreturn.h>
 
