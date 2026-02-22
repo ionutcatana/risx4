@@ -7,8 +7,7 @@
 #include <stdint.h>
 
 // alloc/phys_allocator.c
-void     initkpalloc(const uint64_t offset,
-                     const struct limine_memmap_response* memmap);
+void     initkpalloc(const struct limine_memmap_response* memmap);
 
 uint64_t allocframe(size_t count);
 uint64_t allocmegaframe(size_t count);
@@ -16,6 +15,8 @@ uint64_t allocmegaframe(size_t count);
 void     freeframe(uint64_t frameptr, size_t count);
 void     freemegaframe(uint64_t frameptr);
 
+// alloc/hddmoffset.c
+void     initoffset(const uint64_t offset);
 uint64_t hhdmoffset(void);
 
 // alloc/util.c

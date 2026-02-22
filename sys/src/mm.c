@@ -25,7 +25,8 @@ void initpmm(void) {
     if (hhdmreq.response == NULL) panic("null hddm response.");
     if (memmapreq.response == NULL) panic("null memmap response.");
 
-    initkpalloc(hhdmreq.response->offset, memmapreq.response);
+    initoffset(hhdmreq.response->offset);
+    initkpalloc(memmapreq.response);
 }
 
 void initvmm(void) {

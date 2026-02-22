@@ -13,25 +13,22 @@
 
 static uint32_t*    bitmap = NULL;
 static uint32_t*    reclaimable_mask = NULL;
-static uint64_t    mmend = 0;
+static uint64_t     mmend = 0;
 static size_t       size = 0;
 static size_t       freepages = 0;
 static size_t       reclaimablepages = 0;
 static uint64_t     totalpages = 0;
 //static size_t     nextfree = 0;       // index of the next free page in the bitmap
 //static uint64_t   nextfreepages = 0;  // number of free pages after index above
-static uint64_t     offset_val = 0;
 
-void initkpalloc(const uint64_t offset,
-                 const struct limine_memmap_response* memmap) {
+void initkpalloc(const struct limine_memmap_response* memmap) {
     enumeratememmap(memmap);
-    offset_val = offset;
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE ||
             memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
             uint64_t endaddr = memmap->entries[i]->base +
-                                memmap->entries[i]->length;
+                               memmap->entries[i]->length;
             if (endaddr > mmend) mmend = endaddr;
         }
 
@@ -142,8 +139,4 @@ void freeframe(uint64_t frameptr, size_t count) {
 
 void freemegaframe(uint64_t frameptr) {
     freeframe(frameptr, PT_NELEMENTS);
-}
-
-uint64_t hhdmoffset(void) {
-    return offset_val;
 }
