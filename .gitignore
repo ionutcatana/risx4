@@ -1,11 +1,5 @@
 # continuous deployment files, not yet ready as of 05 feb 2026
 .github
 
-# copyrighted material, not yet ready as of 17 nov 2025
-docs
-
-# automatically generated files
-vectors.S
-
 # compilation ouput
 target

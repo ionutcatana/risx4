@@ -28,4 +28,5 @@ void        loadcr3(uint64_t value);
 void        loadcr4(uint64_t value);
 void        loadcr8(uint64_t value);
 void        loadrflags(uint64_t value);
+
 #endif

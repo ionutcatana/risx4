@@ -1,7 +1,6 @@
-#ifndef CORE_H
-#define CORE_H 1
+#ifndef LIB_STRING_H
+#define LIB_STRING_H 1
 
-#include <stdarg.h>
 #include <stddef.h>
 
 // string.c
@@ -13,11 +12,5 @@ void*   memset(void* bufptr, int value, size_t n);
 char*   strcpy(char* restrict dst, const char* restrict src);
 int     strcmp(const char* s1, const char* s2);
 size_t  strlen(const char* str);
-
-// printf.c
-void    initprintf(void);
-int     snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... );
-int     vsnprintf(char* restrict buffer, size_t bufsz, const char* restrict format, va_list vlist );
-int     printf(const char* restrict format, ... );
 
 #endif

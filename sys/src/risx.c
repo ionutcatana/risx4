@@ -46,16 +46,14 @@ static atomic_bool initialized;
 
 void setup(uintptr_t stacktop) {
     atomic_init(&initialized, false);
+    initprintf();
     initserial();
     initconsole();
-    initprintf();
     printf("stack top: 0x%016lx\n", stacktop);
 
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");
     initidt();  printf("IDT installed.\n");
-//  initisr();  printf("ISR installed.\n");
-
     initacpi();
 //  extern struct rsdp_t* rsdp;
 //  extern struct xsdp_t* xsdp;

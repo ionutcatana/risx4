@@ -23,7 +23,10 @@ CFLAGS := 			\
 	-mno-ms-bitfields	\
 	-pedantic-errors	\
 	-pipe			\
-	-std=c17
+	-std=c17		\
+	-Wall			\
+	-Werror			\
+	-Wextra
 LDFLAGS := -nostdlib -lgcc
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -49,10 +52,6 @@ LDFLAGS +=			\
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), aarch64)
 ARCH_DIR := arm
-CFLAGS +=			\
-        -mcpu=generic 		\
-        -mgeneral-regs-only	\
-        -march=armv8-a+nofp+nosimd
 LDFLAGS +=			\
 	-T src/kernel-arm.ld
 
@@ -61,10 +60,6 @@ LDFLAGS +=			\
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), riscv64)
 ARCH_DIR := riscv
-CFLAGS +=			\
-        -mabi=lp64		\
-        -mno-relax		\
-	-march=rv64imac_zicsr_zifencei
 LDFLAGS +=			\
 	-T src/kernel-riscv.ld
 endif
@@ -76,9 +71,6 @@ ifeq ($(PROFILE), DEBUG)
 CFLAGS +=			\
 	-g			\
 	-O0			\
-	-Wall			\
-	-Wextra			\
-	-Werror
 endif
 
 ifeq ($(PROFILE), RELEASE)
