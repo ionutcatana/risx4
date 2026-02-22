@@ -78,10 +78,8 @@ endif
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #			source and object files detection		      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-SRCS := $(shell find vendors              -type f -name '*.S' -o -name '*.c') \
-        $(shell find src -maxdepth 1      -type f -name '*.S' -o -name '*.c') \
-        $(shell find src/alloc            -type f -name '*.S' -o -name '*.c') \
-        $(shell find src/arch/$(ARCH)     -type f -name '*.S' -o -name '*.c')
+SRCS := $(shell find vendors -type f -name '*.S' -o -name '*.c') \
+	$(shell find src     -type f -name '*.S' -o -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter src/%.S,$(SRCS))) \
 	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter src/%.c,$(SRCS)))
 OBJS += $(patsubst vendors/%.S,$(OBJ_DIR)/vendors/%.S.o,$(filter vendors/%.S,$(SRCS))) \

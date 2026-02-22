@@ -1,12 +1,13 @@
         .intel_syntax noprefix
         .section .text
 
-        .global enableinterrupts
-enableinterrupts:
+        .global intenable
+        .global intdisable
+
+intenable:
         sti
         ret
 
-        .global disableinterrupts
-disableinterrupts:
+intdisable:
         cli
         ret

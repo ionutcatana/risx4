@@ -9,7 +9,7 @@
 #include "commonarch/serial.h"
 #include "console.h"
 #include "nanoprintf.h"
-#include "spinlock.h"
+#include "sync/spinlock.h"
 #include <stdarg.h>
 
 static spinlock_t printflock;

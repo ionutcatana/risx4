@@ -1,6 +1,6 @@
 #include "commonarch/interrupts.h"
 #include "risx.h"
-#include "spinlock.h"
+#include "sync/spinlock.h"
 #include <stdatomic.h>
 
 void initlock(spinlock_t* lock, const char* name) {
@@ -10,7 +10,7 @@ void initlock(spinlock_t* lock, const char* name) {
 }
 
 void acquire(spinlock_t* lock) {
-    pushinterrupts();
+    intpush();
     while(atomic_exchange_explicit(&lock->locked, LOCK_HELD, memory_order_acquire) != LOCK_FREE);
 }
 
@@ -19,5 +19,5 @@ void release(spinlock_t* lock) {
         panic("attempting to release a free lock.");
 
     atomic_exchange_explicit(&lock->locked, LOCK_FREE, memory_order_release);
-    popinterrupts();
+    intpop();
 }
