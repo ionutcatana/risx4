@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#define X86_SERIAL_PORT (0x3f8)
-
 // arch/x86/io.S
 uint8_t     reads(uint32_t port);
 void        writes(uint32_t port, uint8_t data);

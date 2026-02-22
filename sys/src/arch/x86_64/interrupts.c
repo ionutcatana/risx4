@@ -1,15 +1,14 @@
-#include <arch/x86/interrupts.h>
-#include <arch/x86/registers.h>
-#include <risx.h>
-
+#include "arch/x86_64/interrupts.h"
+#include "arch/x86_64/specific/registers.h"
+#include "risx.h"
 #include <stdint.h>
 
 static int64_t  ninterrupts[NPROC] = {0};
 static uint64_t intenabled[NPROC] = {0};
 
-void pushinterrupts(void) {
+void intpush(void) {
     uint64_t rflags = readrflags();
-    disableinterrupts();
+    intdisable();
 
     uint64_t id = readlapicid();
     if (ninterrupts[id] == 0)
@@ -17,7 +16,7 @@ void pushinterrupts(void) {
     ninterrupts[id]++;
 }
 
-void popinterrupts(void) {
+void intpop(void) {
     uint64_t id = readlapicid();
 
     ninterrupts[id]--;
@@ -28,5 +27,5 @@ void popinterrupts(void) {
         panic("interrupts enabled flag is set.");
 
     if (ninterrupts[id] == 0 && intenabled[id])
-        enableinterrupts();
+        intenable();
 }

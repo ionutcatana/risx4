@@ -1,9 +1,8 @@
-#include <arch/x86/gdt.h>
-#include <arch/x86/idt.h>
-#include <arch/x86/interrupts.h>
-#include <arch/x86/registers.h>
-#include <risx.h>
-
+#include "arch/x86_64/specific/gdt.h"
+#include "arch/x86_64/specific/idt.h"
+#include "arch/x86_64/interrupts.h"
+#include "arch/x86_64/specific/registers.h"
+#include "risx.h"
 #include <stdint.h>
 #include <stddef.h>
 

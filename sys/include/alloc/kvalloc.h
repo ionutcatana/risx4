@@ -1,9 +1,8 @@
 #ifndef KVALLOC_H
 #define KVALLOC_H 1
 
-#include <limine.h>
-#include <commonarch/paging.h>
-
+#include "limine.h"
+#include "commonarch/paging.h"
 #include <stddef.h>
 
 // arch/x86/alloc/virt_allocator.c

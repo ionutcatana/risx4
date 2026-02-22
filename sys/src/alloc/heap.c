@@ -1,10 +1,10 @@
 #include <commonarch/paging.h>
 #include <mm.h>
 #include <risx.h>
-#include <spinlock.h>
+#include "sync/spinlock.h"
 
 #if defined(__x86_64__)
-#include <arch/x86/paging.h>
+#include <arch/x86_64/paging.h>
 #endif
 
 // fix later

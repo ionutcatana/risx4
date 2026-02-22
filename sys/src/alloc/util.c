@@ -1,6 +1,7 @@
-#include <alloc/kpalloc.h>
-#include <risx.h>
+#include "alloc/kpalloc.h"
+#include "risx.h"
 
+// TODO: remove later
 void enumeratememmap(const struct limine_memmap_response* memmap) {
     for (size_t i = 0; i < memmap->entry_count; i++)
         switch (memmap->entries[i]->type) {

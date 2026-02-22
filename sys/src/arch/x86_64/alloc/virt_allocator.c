@@ -1,12 +1,11 @@
-#include <alloc/conversions.h>
-#include <alloc/kpalloc.h>
-#include <alloc/kvalloc.h>
-#include <arch/x86/paging.h>
-#include <arch/x86/registers.h>
-#include <commonarch/paging.h>
-#include <limine.h>
-#include <risx.h>
-
+#include "alloc/conversions.h"
+#include "alloc/kpalloc.h"
+#include "alloc/kvalloc.h"
+#include "arch/x86_64/paging.h"
+#include "arch/x86_64/specific/registers.h"
+#include "commonarch/paging.h"
+#include "limine.h"
+#include "risx.h"
 #include <stddef.h>
 #include <stdint.h>
 

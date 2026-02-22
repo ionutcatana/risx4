@@ -1,10 +1,9 @@
 // note: having limine_mp_request here is not ideal
-#include <arch/x86/registers.h>
-#include <commonarch/mp.h>
-#include <commonarch/paging.h>
-#include <limine.h>
-#include <risx.h>
-
+#include "arch/x86_64/specific/registers.h"
+#include "commonarch/mp.h"
+#include "commonarch/paging.h"
+#include "limine.h"
+#include "risx.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdatomic.h>

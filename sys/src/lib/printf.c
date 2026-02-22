@@ -6,11 +6,10 @@
 #define NANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS 1
 #define NANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS 0
 
-#include <commonarch/serial.h>
-#include <console.h>
-#include <nanoprintf.h>
-#include <spinlock.h>
-
+#include "commonarch/serial.h"
+#include "console.h"
+#include "nanoprintf.h"
+#include "spinlock.h"
 #include <stdarg.h>
 
 static spinlock_t printflock;

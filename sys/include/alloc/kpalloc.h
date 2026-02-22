@@ -1,7 +1,7 @@
 #ifndef KPALLOC_H
 #define KPALLOC_H 1
 
-#include <limine.h>
+#include "limine.h"
 
 #include <stdbool.h>
 #include <stddef.h>

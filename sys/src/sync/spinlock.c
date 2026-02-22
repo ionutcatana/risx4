@@ -1,7 +1,6 @@
-#include <commonarch/interrupts.h>
-#include <risx.h>
-#include <spinlock.h>
-
+#include "commonarch/interrupts.h"
+#include "risx.h"
+#include "spinlock.h"
 #include <stdatomic.h>
 
 void initlock(spinlock_t* lock, const char* name) {

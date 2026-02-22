@@ -1,18 +1,17 @@
-#include <commonarch/interrupts.h>
-#include <commonarch/mp.h>
-#include <commonarch/serial.h>
-#include <console.h>
-#include <limine.h>
-#include <mm.h>
-#include <process.h>
-#include <risx.h>
+#include "acpi.h"
+#include "commonarch/interrupts.h"
+#include "commonarch/mp.h"
+#include "commonarch/serial.h"
+#include "console.h"
+#include "limine.h"
+#include "mm.h"
+#include "process.h"
+#include "risx.h"
 
 #if defined(__x86_64__)
-#include <arch/x86/acpi.h>
-#include <arch/x86/gdt.h>
-#include <arch/x86/idt.h>
-#include <arch/x86/isr.h>
-#include <arch/x86/registers.h>
+#include "arch/x86_64/specific/gdt.h"
+#include "arch/x86_64/specific/idt.h"
+#include "arch/x86_64/specific/registers.h"
 #endif
 
 #if defined (__aarch64__)
@@ -68,7 +67,7 @@ void setup(uintptr_t stacktop) {
         break;
     }
 
-    enableinterrupts();
+    intenable();
 #endif
 
 #if defined (__aarch64__)

@@ -1,6 +1,6 @@
-#include <arch/x86/acpi.h>
-#include <limine.h>
-#include <risx.h>
+#include "acpi.h"
+#include "limine.h"
+#include "risx.h"
 
 #include <stddef.h>
 #include <stdnoreturn.h>

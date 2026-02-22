@@ -1,7 +1,7 @@
 #ifndef X86_IDT_H
 #define X86_IDT_H 1
 
-#include <arch/x86/trapframe.h>
+#include "arch/x86_64/specific/trapframe.h"
 
 #include <stddef.h>
 #include <stdint.h>

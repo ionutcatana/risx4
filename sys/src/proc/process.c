@@ -1,8 +1,7 @@
-#include <process.h>
-#include <risx.h>
-#include <arch/x86/registers.h>
-#include <dlmalloc.h>
-
+#include "process.h"
+#include "risx.h"
+#include "arch/x86_64/specific/registers.h"
+#include "dlmalloc.h"
 #include <stdbool.h>
 
 void schedule(void) {

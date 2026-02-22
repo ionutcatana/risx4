@@ -1,12 +1,12 @@
 #ifndef INTERRUPTS_H
 #define INTERRUPTS_H 1
 
-// arch/x86/interrupts.S
-void    enableinterrupts(void);
-void    disableinterrupts(void);
+// arch/x86_64/interrupts.S
+void    intenable(void);
+void    intdisable(void);
 
-// arch/x86/interrupts.c
-void    pushinterrupts(void);
-void    popinterrupts(void);
+// arch/x86_64/interrupts.c
+void    intpush(void);
+void    intpop(void);
 
 #endif
