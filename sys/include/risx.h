@@ -10,7 +10,7 @@ noreturn void   abort(void);
 
 // risx.c
 noreturn void   panic(const char* message);
-void            setup(uintptr_t stacktop);
+void            setup(uint64_t stacktop);
 noreturn void   risx(void);
 
 #endif

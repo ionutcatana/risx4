@@ -10,7 +10,7 @@
 typedef struct {
     _Atomic(uint64_t) locked;   // not `bool` because i want a register width value
     const char* name;
-//  uintptr_t pcs[8];           // stack trace
+//  uint64_t pcs[8];           // stack trace
 } spinlock_t;
 
 void    initlock(spinlock_t* lock, const char* name);

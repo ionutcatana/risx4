@@ -11,7 +11,7 @@
 
 void initgdt(void);
 void loadidt(void);
-noreturn void enterrisx(uintptr_t stack_top);
+noreturn void enterrisx(uint64_t stack_top);
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_mp_request mpreq = {

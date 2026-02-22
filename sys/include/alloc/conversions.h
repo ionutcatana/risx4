@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 // alloc/conversions.c
-uintptr_t   physical(void* virtual);
-void*       virtual(uintptr_t physical);
+uint64_t   physical(void* virtual);
+void*       virtual(uint64_t physical);
 
 #endif

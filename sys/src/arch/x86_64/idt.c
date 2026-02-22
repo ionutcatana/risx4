@@ -9,7 +9,7 @@
 
 static idtsegdesc_t idt[IDT_SIZE];
 idtr_t              _idtr;      // used in idt.S
-extern uintptr_t    vectors[];  // arch/x86/vectors.S
+extern uint64_t    vectors[];  // arch/x86/vectors.S
 
 void loadidt(void);
 void initidt(void) {
@@ -22,7 +22,7 @@ void initidt(void) {
     loadidt();
 }
 
-void sethandler(size_t vector, uintptr_t handler, uint8_t attributes) {
+void sethandler(size_t vector, uint64_t handler, uint8_t attributes) {
     idt[vector].base_lower  = (uint16_t)(handler & 0xFFFF);
     idt[vector].selector    = RISX_CODE_SEG;
     idt[vector].ist         = 0;

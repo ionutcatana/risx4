@@ -13,7 +13,7 @@
 
 typedef struct {
     uint16_t limit;
-    uintptr_t base;
+    uint64_t base;
 } __attribute__((packed)) gdtr_t;
 
 typedef union {

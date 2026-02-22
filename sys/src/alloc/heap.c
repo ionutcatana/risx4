@@ -32,19 +32,19 @@ static inline void heap_release_lock(spinlock_t* lock) {
     release(lock);
 }
 
-static uintptr_t heap_start      = KERNEL_HEAP_BASE;
-static uintptr_t heap_break      = KERNEL_HEAP_BASE;
-static uintptr_t heap_mapped_top = KERNEL_HEAP_BASE;
+static uint64_t heap_start      = KERNEL_HEAP_BASE;
+static uint64_t heap_break      = KERNEL_HEAP_BASE;
+static uint64_t heap_mapped_top = KERNEL_HEAP_BASE;
 static spinlock_t heap_sbrk_lock;
 
-uintptr_t readkernelpgtbl(void);
+uint64_t readkernelpgtbl(void);
 static void* sbrk(intptr_t increment) {
     if (heap_start == 0) initheap();
 
     acquire(&heap_sbrk_lock);
 
-    uintptr_t old_break = heap_break;
-    uintptr_t new_break = heap_break + increment;
+    uint64_t old_break = heap_break;
+    uint64_t new_break = heap_break + increment;
     if (increment > 0) {
         /* overflow */
         if (new_break < old_break) {
@@ -53,12 +53,12 @@ static void* sbrk(intptr_t increment) {
         }
 
         if (new_break > heap_mapped_top) {
-             uintptr_t current_pt = readkernelpgtbl() + hhdmoffset();
-             uintptr_t needed = new_break - heap_mapped_top;
+             uint64_t current_pt = readkernelpgtbl() + hhdmoffset();
+             uint64_t needed = new_break - heap_mapped_top;
              size_t    frames = (needed + PAGE_SIZE - 1) / PAGE_SIZE;
 
              for (size_t i = 0; i < frames; i++) {
-                 uintptr_t phys = allocframe(1);
+                 uint64_t phys = allocframe(1);
                  /* oom, just fail */
                  if (phys == 0) {
                      release(&heap_sbrk_lock);

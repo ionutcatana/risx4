@@ -12,7 +12,7 @@
 
 static uint32_t*    bitmap = NULL;
 static uint32_t*    reclaimable_mask = NULL;
-static uintptr_t    mmend = 0;
+static uint64_t    mmend = 0;
 static size_t       size = 0;
 static size_t       freepages = 0;
 static size_t       reclaimablepages = 0;
@@ -29,7 +29,7 @@ void initkpalloc(const uint64_t offset,
     for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE ||
             memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
-            uintptr_t endaddr = memmap->entries[i]->base +
+            uint64_t endaddr = memmap->entries[i]->base +
                                 memmap->entries[i]->length;
             if (endaddr > mmend) mmend = endaddr;
         }
@@ -52,15 +52,15 @@ void initkpalloc(const uint64_t offset,
     if (bitmap == NULL || reclaimable_mask == NULL)
         panic("bitmap (s) don't fit into memory.");
 
-    const uintptr_t bitmap_startaddr = (uintptr_t)bitmap - hhdmoffset();
-    const uintptr_t bitmap_endaddr = bitmap_startaddr + size * sizeof(uint32_t);
-    const uintptr_t reclaimable_mask_startaddr = (uintptr_t)reclaimable_mask - hhdmoffset();
-    const uintptr_t reclaimable_mask_endaddr = reclaimable_mask_startaddr + size * sizeof(uint32_t);
+    const uint64_t bitmap_startaddr = (uintptr_t)bitmap - hhdmoffset();
+    const uint64_t bitmap_endaddr = bitmap_startaddr + size * sizeof(uint32_t);
+    const uint64_t reclaimable_mask_startaddr = (uintptr_t)reclaimable_mask - hhdmoffset();
+    const uint64_t reclaimable_mask_endaddr = reclaimable_mask_startaddr + size * sizeof(uint32_t);
 
     for (size_t i = 0; i < memmap->entry_count; i++) {
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
             for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
-                uintptr_t currentaddr = memmap->entries[i]->base + j; // address of a page
+                uint64_t currentaddr = memmap->entries[i]->base + j; // address of a page
 
                 // don't mark as `free` if the address is below 16mib or it contains the bitmaps
                 if ((currentaddr >= bitmap_startaddr && currentaddr < bitmap_endaddr) ||
@@ -73,7 +73,7 @@ void initkpalloc(const uint64_t offset,
 
         if (memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) // acpi reclaimable can be added later
             for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
-                uintptr_t currentaddr = memmap->entries[i]->base + j;
+                uint64_t currentaddr = memmap->entries[i]->base + j;
                 setbit(reclaimable_mask, currentaddr / PAGE_SIZE);
                 reclaimablepages++;
             }
@@ -84,7 +84,7 @@ void initkpalloc(const uint64_t offset,
     printf("bitmap location: %016lx; available ram: ~%uM\n", bitmap, freepages * PAGE_SIZE / 1024 / 1024);
 }
 
-uintptr_t allocframe(size_t count) {
+uint64_t allocframe(size_t count) {
     if (count == 0) panic("allocated 0 page frames.");
     if (count > freepages) panic("requested more memory than available.");
 
@@ -99,7 +99,7 @@ uintptr_t allocframe(size_t count) {
         if (found) {
             for (size_t k = 0; k < count; k++) setbit(bitmap, i + k);
             freepages -= count;
-            uintptr_t p = i * PAGE_SIZE;
+            uint64_t p = i * PAGE_SIZE;
             memset(virtual(p), 0, count * PAGE_SIZE);
             return p;
         }
@@ -108,7 +108,7 @@ uintptr_t allocframe(size_t count) {
     panic("out of contiguous memory.");
 }
 
-uintptr_t allocmegaframe(size_t count) {
+uint64_t allocmegaframe(size_t count) {
     const size_t pages = count * PT_NELEMENTS;
 
     if (count == 0) panic("allocated 0 mega page frames.");
@@ -124,7 +124,7 @@ uintptr_t allocmegaframe(size_t count) {
         if (found) {
             for (size_t k = 0; k < pages; k++) setbit(bitmap, i + k);
             freepages -= pages;
-            uintptr_t p = i * PAGE_SIZE;
+            uint64_t p = i * PAGE_SIZE;
             memset(virtual(p), 0, pages * PAGE_SIZE);
             return p;
         }
@@ -133,13 +133,13 @@ uintptr_t allocmegaframe(size_t count) {
     panic("out of contiguous memory.");
 }
 
-void freeframe(uintptr_t frameptr, size_t count) {
+void freeframe(uint64_t frameptr, size_t count) {
     uint64_t frameidx = frameptr / PAGE_SIZE;
     for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(bitmap, i);
     freepages += count;
 }
 
-void freemegaframe(uintptr_t frameptr) {
+void freemegaframe(uint64_t frameptr) {
     freeframe(frameptr, PT_NELEMENTS);
 }
 

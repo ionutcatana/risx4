@@ -3,11 +3,11 @@
 #include "commonarch/mp.h"
 #include "commonarch/serial.h"
 #include "console.h"
+#include "lib/printf.h"
 #include "limine.h"
 #include "mm.h"
 #include "process.h"
 #include "risx.h"
-#include "lib/printf.h"
 
 #if defined(__x86_64__)
 #include "arch/x86_64/specific/gdt.h"
@@ -44,7 +44,7 @@ noreturn void panic(const char* message) {
 
 static atomic_bool initialized;
 
-void setup(uintptr_t stacktop) {
+void setup(uint64_t stacktop) {
     atomic_init(&initialized, false);
     initprintf();
     initserial();

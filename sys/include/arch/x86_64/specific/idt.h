@@ -2,7 +2,6 @@
 #define X86_IDT_H 1
 
 #include "arch/x86_64/specific/trapframe.h"
-
 #include <stddef.h>
 #include <stdint.h>
 
@@ -46,7 +45,7 @@ typedef union {
 void    loadidt(void);
 // arch/x86/idt.c
 void    initidt(void);
-void    sethandler(size_t vector, uintptr_t handler, uint8_t attributes);
+void    sethandler(size_t vector, uint64_t handler, uint8_t attributes);
 void    idispatch(trapframe_t* tf);
 // arch/x86/istub.S
 void    istub(void);

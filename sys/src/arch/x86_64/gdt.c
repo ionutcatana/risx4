@@ -34,7 +34,7 @@ void inittss(uint64_t id) {
     memset(&tss[id], 0, sizeof(tss_t));
     tss[id].iomap_base = sizeof(tss_t);
 
-    uintptr_t base = (uintptr_t)&tss[id];
+    uint64_t base = (uintptr_t)&tss[id];
     uint32_t limit = sizeof(tss_t) - 1;
 
     gdt[id][5].limit       = limit & 0xFFFF;

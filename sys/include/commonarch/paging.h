@@ -27,6 +27,6 @@ typedef struct {
     uint64_t entries[PT_NELEMENTS];
 } pagetable_t;
 
-uintptr_t   readkernelpgtbl(void);
+uint64_t   readkernelpgtbl(void);
 
 #endif
