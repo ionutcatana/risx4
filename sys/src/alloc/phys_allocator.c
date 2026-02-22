@@ -4,6 +4,8 @@
 #include "commonarch/paging.h"
 #include "limine.h"
 #include "risx.h"
+#include "lib/string.h"
+#include "lib/printf.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

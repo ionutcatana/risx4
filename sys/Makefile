@@ -33,7 +33,6 @@ LDFLAGS := -nostdlib -lgcc
 #				x86 options				      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ifeq ($(ARCH), x86_64)
-ARCH_DIR := x86
 CFLAGS +=			\
 	-m64			\
 	-mabi=sysv		\
@@ -51,7 +50,6 @@ LDFLAGS +=			\
 #				arm options				      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), aarch64)
-ARCH_DIR := arm
 LDFLAGS +=			\
 	-T src/kernel-arm.ld
 
@@ -59,7 +57,6 @@ LDFLAGS +=			\
 #				risc-v options				      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), riscv64)
-ARCH_DIR := riscv
 LDFLAGS +=			\
 	-T src/kernel-riscv.ld
 endif
@@ -70,7 +67,7 @@ endif
 ifeq ($(PROFILE), DEBUG)
 CFLAGS +=			\
 	-g			\
-	-O0			\
+	-O0
 endif
 
 ifeq ($(PROFILE), RELEASE)
@@ -84,7 +81,7 @@ endif
 SRCS := $(shell find vendors              -type f -name '*.S' -o -name '*.c') \
         $(shell find src -maxdepth 1      -type f -name '*.S' -o -name '*.c') \
         $(shell find src/alloc            -type f -name '*.S' -o -name '*.c') \
-        $(shell find src/arch/$(ARCH_DIR) -type f -name '*.S' -o -name '*.c')
+        $(shell find src/arch/$(ARCH)     -type f -name '*.S' -o -name '*.c')
 OBJS := $(patsubst src/%.S,$(OBJ_DIR)/%.S.o,$(filter src/%.S,$(SRCS))) \
 	$(patsubst src/%.c,$(OBJ_DIR)/%.c.o,$(filter src/%.c,$(SRCS)))
 OBJS += $(patsubst vendors/%.S,$(OBJ_DIR)/vendors/%.S.o,$(filter vendors/%.S,$(SRCS))) \

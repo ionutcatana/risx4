@@ -2,6 +2,7 @@
 #include <mm.h>
 #include <risx.h>
 #include "sync/spinlock.h"
+#include "lib/string.h"
 
 #if defined(__x86_64__)
 #include <arch/x86_64/paging.h>

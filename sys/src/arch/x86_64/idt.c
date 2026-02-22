@@ -2,6 +2,7 @@
 #include "arch/x86_64/specific/idt.h"
 #include "arch/x86_64/interrupts.h"
 #include "arch/x86_64/specific/registers.h"
+#include "lib/printf.h"
 #include "risx.h"
 #include <stdint.h>
 #include <stddef.h>

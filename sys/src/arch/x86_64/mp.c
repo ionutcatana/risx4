@@ -4,6 +4,7 @@
 #include "commonarch/paging.h"
 #include "limine.h"
 #include "risx.h"
+#include "lib/printf.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdatomic.h>

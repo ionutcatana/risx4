@@ -7,6 +7,7 @@
 #include "mm.h"
 #include "process.h"
 #include "risx.h"
+#include "lib/printf.h"
 
 #if defined(__x86_64__)
 #include "arch/x86_64/specific/gdt.h"

@@ -3,6 +3,7 @@
 #include "flanterm_backends/fb.h"
 #include "flanterm.h"
 #include "limine.h"
+#include "lib/string.h"
 #include <stdbool.h>
 #include <stdint.h>
 

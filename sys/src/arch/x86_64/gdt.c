@@ -1,5 +1,7 @@
 #include "arch/x86_64/specific/gdt.h"
 #include "arch/x86_64/specific/registers.h"
+#include "lib/printf.h"
+#include "lib/string.h"
 #include "risx.h"
 
 #include <stdint.h>

@@ -1,5 +1,6 @@
 #include "alloc/kpalloc.h"
 #include "risx.h"
+#include "lib/printf.h"
 
 // TODO: remove later
 void enumeratememmap(const struct limine_memmap_response* memmap) {
