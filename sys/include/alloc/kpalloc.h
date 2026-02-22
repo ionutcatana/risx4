@@ -1,5 +1,5 @@
-#ifndef KPALLOC_H
-#define KPALLOC_H 1
+#ifndef ALLOC_KPALLOC_H
+#define ALLOC_KPALLOC_H 1
 
 #include "limine.h"
 #include <stdbool.h>
@@ -7,16 +7,19 @@
 #include <stdint.h>
 
 // alloc/phys_allocator.c
-void        initkpalloc(const uint64_t offset,
-                        const struct limine_memmap_response* memmap);
-uint64_t   allocframe(size_t count);
-uint64_t   allocmegaframe(size_t count);
-void        freeframe(uint64_t frameptr, size_t count);
-void        freemegaframe(uint64_t frameptr);
-uint64_t    hhdmoffset(void);
+void     initkpalloc(const uint64_t offset,
+                     const struct limine_memmap_response* memmap);
+
+uint64_t allocframe(size_t count);
+uint64_t allocmegaframe(size_t count);
+
+void     freeframe(uint64_t frameptr, size_t count);
+void     freemegaframe(uint64_t frameptr);
+
+uint64_t hhdmoffset(void);
 
 // alloc/util.c
-void        enumeratememmap(const struct limine_memmap_response* memmap);
+void     enumeratememmap(const struct limine_memmap_response* memmap);
 
 
 #endif

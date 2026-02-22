@@ -52,9 +52,9 @@ void initkpalloc(const uint64_t offset,
     if (bitmap == NULL || reclaimable_mask == NULL)
         panic("bitmap (s) don't fit into memory.");
 
-    const uint64_t bitmap_startaddr = (uintptr_t)bitmap - hhdmoffset();
+    const uint64_t bitmap_startaddr = (uint64_t)bitmap - hhdmoffset();
     const uint64_t bitmap_endaddr = bitmap_startaddr + size * sizeof(uint32_t);
-    const uint64_t reclaimable_mask_startaddr = (uintptr_t)reclaimable_mask - hhdmoffset();
+    const uint64_t reclaimable_mask_startaddr = (uint64_t)reclaimable_mask - hhdmoffset();
     const uint64_t reclaimable_mask_endaddr = reclaimable_mask_startaddr + size * sizeof(uint32_t);
 
     for (size_t i = 0; i < memmap->entry_count; i++) {

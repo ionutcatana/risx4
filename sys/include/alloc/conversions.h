@@ -1,5 +1,5 @@
-#ifndef CONVERSIONS_H
-#define CONVERSIONS_H 1
+#ifndef ALLOC_CONVERSIONS_H
+#define ALLOC_CONVERSIONS_H 1
 
 #include <stdint.h>
 

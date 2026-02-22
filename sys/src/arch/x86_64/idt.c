@@ -14,7 +14,7 @@ extern uint64_t    vectors[];  // arch/x86/vectors.S
 void loadidt(void);
 void initidt(void) {
     _idtr.limit = (IDT_SIZE) * sizeof(idtsegdesc_t) - 1;
-    _idtr.base = (uintptr_t)idt;
+    _idtr.base = (uint64_t)idt;
 
     for (size_t i = 0; i < IDT_SIZE; i++)
         sethandler(i,vectors[i], IDT_INTERRUPT_GATE_RING0);

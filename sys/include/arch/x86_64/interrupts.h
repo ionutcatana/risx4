@@ -1,5 +1,5 @@
-#ifndef X86_INTERRUPTS_H
-#define X86_INTERRUPTS_H 1
+#ifndef X86_64_EXTENDED_INTERRUPTS_H
+#define X86_64_EXTENDED_INTERRUPTS_H 1
 
 #include "commonarch/interrupts.h"
 

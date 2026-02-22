@@ -6,10 +6,10 @@
 #include <stddef.h>
 
 // arch/x86/alloc/virt_allocator.c
-void        initkvalloc(uint64_t physbase, uint64_t virtbase,
-                        struct limine_memmap_response* memmap);
-void        unmappage(uint64_t frameptr, size_t count);
-void        mappage(pagetable_t* globaltbl,
-                    uint64_t va, uint64_t pa, uint64_t flags);
+void initkvalloc(uint64_t physbase, uint64_t virtbase,
+                 struct limine_memmap_response* memmap);
+
+void unmappage(uint64_t frameptr, size_t count);
+void mappage(pagetable_t* globaltbl, uint64_t va, uint64_t pa, uint64_t flags);
 
 #endif

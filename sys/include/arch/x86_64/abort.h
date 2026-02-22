@@ -1,0 +1,3 @@
+#ifndef X86_64_EXTENDED_ABORT_H
+#define X86_64_EXTENDED_ABORT_H 1
+#endif

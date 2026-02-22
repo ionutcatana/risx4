@@ -1,7 +1,6 @@
-#ifndef X86_PAGING_H
-#define X86_PAGING_H 1
+#ifndef X86_64_EXTENDED_PAGING_H
+#define X86_64_EXTENDED_PAGING_H 1
 
-#include "commonarch/paging.h"
 #include <stdint.h>
 
 #define PAGE_PRESENT            (1ull)

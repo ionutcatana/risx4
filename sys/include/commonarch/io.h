@@ -1,5 +1,7 @@
-#ifndef IO_H
-#define IO_H 1
+#ifndef COMMONARCH_IO_H
+#define COMMONARCH_IO_H 1
+// port i/o is characteristic of x86, but i decided to make this a "commonarch"
+// header
 
 #include <stdint.h>
 

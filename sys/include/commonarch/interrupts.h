@@ -1,5 +1,5 @@
-#ifndef INTERRUPTS_H
-#define INTERRUPTS_H 1
+#ifndef COMMONARCH_INTERRUPTS_H
+#define COMMONARCH_INTERRUPTS_H 1
 
 // arch/x86_64/interrupts.S
 void    intenable(void);

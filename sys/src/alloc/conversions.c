@@ -3,7 +3,7 @@
 #include "alloc/kvalloc.h"
 
 uint64_t physical(void* virtual) {
-    return (uintptr_t)virtual - hhdmoffset();
+    return (uint64_t)virtual - hhdmoffset();
 }
 
 void* virtual(uint64_t physical) {

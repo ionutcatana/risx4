@@ -1,5 +1,5 @@
-#ifndef MP_H
-#define MP_H 1
+#ifndef COMMONARCH_MP_H
+#define COMMONARCH_MP_H 1
 
 #include <stdint.h>
 

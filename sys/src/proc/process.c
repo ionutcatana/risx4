@@ -15,7 +15,7 @@ void schedule(void) {
         if (ptr1 == NULL) {
             printf("[CPU %lu] failed to allocate memory.\n", id);
         } else {
-            printf("[CPU %lu] allocated 4 KiB at 0x%016lx\n", id, (uintptr_t)ptr1);
+            printf("[CPU %lu] allocated 4 KiB at 0x%016lx\n", id, (uint64_t)ptr1);
             printf("[CPU %lu] freed memory.\n", id);
         }
 
@@ -30,7 +30,7 @@ void schedule(void) {
             for (size_t i = 0; i < 10; i++) {
                 printf("[CPU %lu] ptr2[%zu] = %d\n", id, i, ptr2[i]);
             }
-            printf("[CPU %lu] allocated 10 integers at 0x%016lx\n", id, (uintptr_t)ptr2);
+            printf("[CPU %lu] allocated 10 integers at 0x%016lx\n", id, (uint64_t)ptr2);
         }
 
         char* ptr3 = malloc(20 * sizeof(char));
@@ -39,7 +39,7 @@ void schedule(void) {
         } else {
             strcpy(ptr3, "Hello, RISX!");
             printf("[CPU %lu] ptr3 = %s\n", id, ptr3);
-            printf("[CPU %lu] allocated 20 characters at 0x%016lx\n", id, (uintptr_t)ptr3);
+            printf("[CPU %lu] allocated 20 characters at 0x%016lx\n", id, (uint64_t)ptr3);
         }
 
         if (ptr1 != NULL) free(ptr1);

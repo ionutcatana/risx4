@@ -1,9 +1,9 @@
-#ifndef CONFIG_H
-#define CONFIG_H 1
+#ifndef RISX_CONFIG_H
+#define RISX_CONFIG_H 1
 
 /* risx release number and codename                                           */
 #define VERSION             "0.0.7"
-#define CODENAME            "Initial commit"
+#define CODENAME            "initial commit"
 
 /* maximum number of entries in the process table for user-mode processes     */
 #define NPROC               224
@@ -15,6 +15,6 @@
 #define NCPU                32
 
 /* kernel heap base address (hhdm+4tib)                                       */
-#define KERNEL_HEAP_BASE    0xFFFFA00000000000
+#define KERNEL_HEAP_BASE    0xffffa00000000000
 
 #endif

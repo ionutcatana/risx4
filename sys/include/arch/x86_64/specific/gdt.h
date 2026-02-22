@@ -1,5 +1,5 @@
-#ifndef X86_GDT_H
-#define X86_GDT_H 1
+#ifndef X86_64_SPECIFIC_GDT_H
+#define X86_64_SPECIFIC_GDT_H 1
 
 #include <stdint.h>
 

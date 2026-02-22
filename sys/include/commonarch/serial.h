@@ -1,5 +1,5 @@
-#ifndef SERIAL_H
-#define SERIAL_H 1
+#ifndef COMMONARCH_SERIAL_H
+#define COMMONARCH_SERIAL_H 1
 
 // arch/x86/serial.c
 int     initserial(void);

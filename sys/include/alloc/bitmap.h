@@ -1,5 +1,5 @@
-#ifndef BITMAP_H
-#define BITMAP_H 1
+#ifndef ALLOC_BITMAP_H
+#define ALLOC_BITMAP_H 1
 
 #include <stdbool.h>
 #include <stddef.h>

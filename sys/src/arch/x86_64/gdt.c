@@ -23,7 +23,7 @@ void initgdt(void) {
 
     gdtr_t desc;
     desc.limit = (GDT_SIZE) * sizeof(gdtsegdesc_t) - 1;
-    desc.base = (uintptr_t)&gdt[id];
+    desc.base = (uint64_t)&gdt[id];
 
     loadgdt(&desc);
     loadtr(TSS_SEG);
@@ -34,7 +34,7 @@ void inittss(uint64_t id) {
     memset(&tss[id], 0, sizeof(tss_t));
     tss[id].iomap_base = sizeof(tss_t);
 
-    uint64_t base = (uintptr_t)&tss[id];
+    uint64_t base = (uint64_t)&tss[id];
     uint32_t limit = sizeof(tss_t) - 1;
 
     gdt[id][5].limit       = limit & 0xFFFF;
