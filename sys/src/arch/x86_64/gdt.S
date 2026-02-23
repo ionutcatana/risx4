@@ -113,8 +113,8 @@ _gdt:   .quad   0                       # null descriptor
         .quad   0
         .quad   0
         .quad   0
-_desc:  .word   (_desc - _gdt - 1)      # limit
-        .quad   _gdt                    # base
+_desc:  .word   (_desc - _gdt - 1)      # gdtdesc_t.limit
+        .quad   _gdt                    # gdtdesc_t.base
 
         .section .bss
         .align  16
@@ -193,7 +193,7 @@ loadgdt:
 #       mov     rbp, rsp
 
         cli
-        lgdt    [rdi]                   # load global descriptor table
+        lgdt    [_desc]                 # load global descriptor table
 
         mov     ax, RISX_DATA_SEG       # update other segment registers
         mov     ds, ax
