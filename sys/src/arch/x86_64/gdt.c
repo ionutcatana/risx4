@@ -6,9 +6,7 @@
 
 #include <stdint.h>
 
-extern uint64_t  _gdt[69];
-extern segdesc_t _desc;
-extern tss_t     _tss0;
+extern segdesc_t _gdt[69];
 extern tss_t*    _tssaddrs[32];
 
 void loadgdt(void);
@@ -22,14 +20,25 @@ void initgdt(void) {
 
 void loadtr(uint16_t selector);
 void inittssdescriptors(void) {
-    uint16_t limit = sizeof(tss_t) - 1;
+    uint64_t limit = sizeof(tss_t) - 1;
     for (size_t i = 0; i < 32; i++) {
         // tss descriptors start at index 5, each is 2 entries
         size_t idx1 = 5 + (i * 2);
         size_t idx2 = 5 + (i * 2) + 1;
         uint64_t base = (uint64_t)_tssaddrs[i];
-        _gdt[idx1] = ((base & 0xffff) << 16) | (limit & 0xffff) | 0x89;         // present, type=9 (available 64-bit tss)
-        _gdt[idx2] = ((base >> 16) & 0xffffff) | ((base >> 24) & 0xff000000);   // high 32 bits of base
+
+        _gdt[idx1].limit       = (limit & 0xFFFF);
+        _gdt[idx1].base_lower  = (base & 0xFFFF);
+        _gdt[idx1].base_middle = (base >> 16) & 0xFF;
+        _gdt[idx1].access      = (0x89);
+        _gdt[idx1].granularity = (0x00);
+        _gdt[idx1].base_upper  = (base >> 24) & 0xFF;
+        _gdt[idx2].limit       = (base >> 32) & 0xFFFF;
+        _gdt[idx2].base_lower  = (base >> 48) & 0xFFFF;
+        _gdt[idx2].base_middle = (0);
+        _gdt[idx2].access      = (0);
+        _gdt[idx2].granularity = (0);
+        _gdt[idx2].base_upper  = (0);
     }
 }
 

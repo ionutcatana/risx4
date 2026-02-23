@@ -1,4 +1,5 @@
 #include "acpi.h"
+#include "commonarch/abort.h"
 #include "commonarch/interrupts.h"
 #include "commonarch/mp.h"
 #include "commonarch/serial.h"
@@ -6,6 +7,7 @@
 #include "lib/printf.h"
 #include "limine.h"
 #include "mm.h"
+#include "panic.h"
 #include "process.h"
 #include "risx.h"
 
@@ -36,7 +38,6 @@ static volatile LIMINE_REQUESTS_END_MARKER
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4)
 
-noreturn void abort(void);
 noreturn void panic(const char* message) {
     printf("PANIC: %s\n", message);
     abort();
@@ -50,6 +51,11 @@ void setup(uint64_t stacktop) {
     initserial();
     initconsole();
     printf("stack top: 0x%016lx\n", stacktop);
+
+//  initpmm();  printf("physical frame allocator initialized.\n");
+//  initvmm();  printf("virtual page allocator initialized.\n");
+//  initheap(); printf("kernel heap initialized.\n");
+//  initmp();   printf("multiprocessing initialized.\n");
 
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");
@@ -67,8 +73,6 @@ void setup(uint64_t stacktop) {
 //      printf("XSDT addr: 0x%016lx\n", xsdp->xsdtaddr);
         break;
     }
-
-    intenable();
 #endif
 
 #if defined (__aarch64__)
@@ -77,10 +81,7 @@ void setup(uint64_t stacktop) {
 #if defined (__riscv)
 #endif
 
-//  initpmm();  printf("physical frame allocator initialized.\n");
-//  initvmm();  printf("virtual page allocator initialized.\n");
-//  initheap(); printf("kernel heap initialized.\n");
-//  initmp();   printf("multiprocessing initialized.\n");
+    intenable();
 
     printf("setup successful\n");
     atomic_store_explicit(&initialized, true, memory_order_release);
