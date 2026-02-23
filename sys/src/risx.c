@@ -52,14 +52,14 @@ void setup(uint64_t stacktop) {
     initconsole();
     printf("stack top: 0x%016lx\n", stacktop);
 
-//  initpmm();  printf("physical frame allocator initialized.\n");
+    initpmm();  printf("physical frame allocator initialized.\n");
 //  initvmm();  printf("virtual page allocator initialized.\n");
 //  initheap(); printf("kernel heap initialized.\n");
 //  initmp();   printf("multiprocessing initialized.\n");
 
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");
-//  initidt();  printf("IDT installed.\n");
+    initidt();  printf("IDT installed.\n");
 //  initacpi();
 //  extern struct rsdp_t* rsdp;
 //  extern struct xsdp_t* xsdp;

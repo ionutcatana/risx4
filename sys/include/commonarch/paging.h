@@ -21,8 +21,10 @@
 #define SIGN_EXTEND_POZ(va) ((uint64_t)(va) & SIGN_MASK)
 #define SIGN_EXTEND_NEG(va) ((uint64_t)(va) | SIGN_MASK)
 
+#define NENTRIES            (512)
+
 typedef struct {
-    uint64_t entries[512];
+    uint64_t entries[NENTRIES];
 } pagetable_t;
 
 uint64_t   readkernelpgtbl(void);

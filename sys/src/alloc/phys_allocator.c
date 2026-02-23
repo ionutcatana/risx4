@@ -11,78 +11,60 @@
 #include <stddef.h>
 #include <stdint.h>
 
-static uint32_t*    bitmap = NULL;
-static uint32_t*    reclaimable_mask = NULL;
-static uint64_t     mmend = 0;
-static size_t       size = 0;
-static size_t       freepages = 0;
-static size_t       reclaimablepages = 0;
-static uint64_t     totalpages = 0;
-//static size_t     nextfree = 0;       // index of the next free page in the bitmap
-//static uint64_t   nextfreepages = 0;  // number of free pages after index above
+static uint32_t*  bitmap     = NULL;
+static physaddr_t mmend      = 0;
+static size_t     size       = 0;
+static uint64_t   freepages  = 0;
+static uint64_t   totalpages = 0;
 
 void initkpalloc(const struct limine_memmap_response* memmap) {
     enumeratememmap(memmap);
 
+    // compute addr of the end of memory
     for (size_t i = 0; i < memmap->entry_count; i++)
-        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE ||
-            memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) {
-            uint64_t endaddr = memmap->entries[i]->base +
-                               memmap->entries[i]->length;
+        if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE) {
+            physaddr_t endaddr = memmap->entries[i]->base +
+                                 memmap->entries[i]->length;
             if (endaddr > mmend) mmend = endaddr;
         }
 
-    totalpages = (mmend / PAGE_SIZE);
-    size = (totalpages / 32); if (totalpages % 32 != 0) size++;
+    // determine bitmap size
+    totalpages = ((mmend + 1) / PAGE_SIZE);
+    size = (totalpages / sizeof(uint32_t)); if (totalpages % sizeof(uint32_t) != 0) size++;
 
     for (size_t i = 0; i < memmap->entry_count; i++)
-        // find a space for both bitmap and reclaimable mask
+        // find a space for bitmap
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE &&
-            memmap->entries[i]->length >= size * 2 * sizeof(uint32_t)) {
-            bitmap = (uint32_t*)(memmap->entries[i]->base + hhdmoffset());
-            reclaimable_mask = (uint32_t*)(memmap->entries[i]->base + hhdmoffset()
-                                                                    + size);
+            memmap->entries[i]->length >= size * sizeof(uint32_t)) {
+            bitmap = virtual(memmap->entries[i]->base);
             memset(bitmap, 0xffffffff, size * sizeof(uint32_t));
-            memset(reclaimable_mask, 0xffffffff, size * sizeof(uint32_t));
             break;
         }
 
-    if (bitmap == NULL || reclaimable_mask == NULL)
-        panic("bitmap (s) don't fit into memory.");
+    if (bitmap == NULL) panic("bitmap doesn't fit in memory.");
 
-    const uint64_t bitmap_startaddr = (uint64_t)bitmap - hhdmoffset();
-    const uint64_t bitmap_endaddr = bitmap_startaddr + size * sizeof(uint32_t);
-    const uint64_t reclaimable_mask_startaddr = (uint64_t)reclaimable_mask - hhdmoffset();
-    const uint64_t reclaimable_mask_endaddr = reclaimable_mask_startaddr + size * sizeof(uint32_t);
+    const physaddr_t bitmap_startaddr = physical(bitmap);
+    const physaddr_t bitmap_endaddr = (bitmap_startaddr + size * sizeof(uint32_t) + 4095) & ~4095; // round up to nearest page
 
-    for (size_t i = 0; i < memmap->entry_count; i++) {
+    for (size_t i = 0; i < memmap->entry_count; i++)
         if (memmap->entries[i]->type == LIMINE_MEMMAP_USABLE)
-            for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
-                uint64_t currentaddr = memmap->entries[i]->base + j; // address of a page
+            for (physaddr_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
+                physaddr_t currentaddr = memmap->entries[i]->base + j; // address of a page
 
                 // don't mark as `free` if the address is below 16mib or it contains the bitmaps
-                if ((currentaddr >= bitmap_startaddr && currentaddr < bitmap_endaddr) ||
-                    (currentaddr >= reclaimable_mask_startaddr && currentaddr < reclaimable_mask_endaddr) ||
+                if ((currentaddr >= bitmap_startaddr && currentaddr <= bitmap_endaddr) ||
                     (currentaddr < 0x100000)) continue;
 
                 unsetbit(bitmap, currentaddr / PAGE_SIZE);
                 freepages++;
             }
 
-        if (memmap->entries[i]->type == LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE) // acpi reclaimable can be added later
-            for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
-                uint64_t currentaddr = memmap->entries[i]->base + j;
-                setbit(reclaimable_mask, currentaddr / PAGE_SIZE);
-                reclaimablepages++;
-            }
-    }
 
-    printf("physical allocator summary:\n");
-    printf("free pages: %u; bitmap size: %u\n", freepages, size);
-    printf("bitmap location: %016lx; available ram: ~%uM\n", bitmap, freepages * PAGE_SIZE / 1024 / 1024);
+    printf("bitmap location: %016lx\n", bitmap);
+    printf("free pages: %lu (approx. %lu megabytes)\n", freepages, freepages * PAGE_SIZE / 1000000);
 }
 
-uint64_t allocframe(size_t count) {
+physaddr_t allocframe(size_t count) {
     if (count == 0) panic("allocated 0 page frames.");
     if (count > freepages) panic("requested more memory than available.");
 
@@ -97,7 +79,7 @@ uint64_t allocframe(size_t count) {
         if (found) {
             for (size_t k = 0; k < count; k++) setbit(bitmap, i + k);
             freepages -= count;
-            uint64_t p = i * PAGE_SIZE;
+            physaddr_t p = i * PAGE_SIZE;
             memset(virtual(p), 0, count * PAGE_SIZE);
             return p;
         }
@@ -106,24 +88,26 @@ uint64_t allocframe(size_t count) {
     panic("out of contiguous memory.");
 }
 
-uint64_t allocmegaframe(size_t count) {
-    const size_t pages = count * 512;
+physaddr_t allocmegaframe(size_t count) {
+    const size_t pages_per_mega = NENTRIES;
+    const size_t total_required_pages = count * pages_per_mega;
 
     if (count == 0) panic("allocated 0 mega page frames.");
-    if (pages > freepages) panic("requested more memory than available.");
+    if (total_required_pages > freepages) panic("requested more memory than available.");
 
-    for (size_t i = 0; i + pages <= totalpages; i += pages) {
+    // start i at a multiple of NENTRIES to ensure alignment
+    for (size_t i = 0; i + total_required_pages <= totalpages; i += pages_per_mega) {
         bool found = true;
-        for (size_t k = 0; k < pages; k++) if (checkbit(bitmap, i + k) != 0) {
+        for (size_t k = 0; k < total_required_pages; k++) if (checkbit(bitmap, i + k) != 0) {
             found = false;
             break;
         }
 
         if (found) {
-            for (size_t k = 0; k < pages; k++) setbit(bitmap, i + k);
-            freepages -= pages;
-            uint64_t p = i * PAGE_SIZE;
-            memset(virtual(p), 0, pages * PAGE_SIZE);
+            for (size_t k = 0; k < total_required_pages; k++) setbit(bitmap, i + k);
+            freepages -= total_required_pages;
+            physaddr_t p = i * PAGE_SIZE;
+            memset(virtual(p), 0, total_required_pages * PAGE_SIZE);
             return p;
         }
     }
@@ -131,12 +115,12 @@ uint64_t allocmegaframe(size_t count) {
     panic("out of contiguous memory.");
 }
 
-void freeframe(uint64_t frameptr, size_t count) {
-    uint64_t frameidx = frameptr / PAGE_SIZE;
-    for (uint64_t i = frameidx; i < frameidx + count; i++) unsetbit(bitmap, i);
+void freeframe(physaddr_t frameptr, size_t count) {
+    physaddr_t frameidx = frameptr / PAGE_SIZE;
+    for (size_t i = frameidx; i < frameidx + count; i++) unsetbit(bitmap, i);
     freepages += count;
 }
 
-void freemegaframe(uint64_t frameptr) {
-    freeframe(frameptr, 512);
+void freemegaframe(physaddr_t frameptr) {
+    freeframe(frameptr, NENTRIES);
 }

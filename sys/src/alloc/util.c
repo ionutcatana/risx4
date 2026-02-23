@@ -4,6 +4,7 @@
 
 // TODO: remove later
 void enumeratememmap(const struct limine_memmap_response* memmap) {
+    printf("memory map:\n");
     for (size_t i = 0; i < memmap->entry_count; i++)
         switch (memmap->entries[i]->type) {
         case LIMINE_MEMMAP_USABLE:

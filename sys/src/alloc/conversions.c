@@ -2,10 +2,10 @@
 #include "alloc/kpalloc.h"
 #include "alloc/kvalloc.h"
 
-uint64_t physical(void* virtual) {
-    return (uint64_t)virtual - hhdmoffset();
+physaddr_t physical(virtaddr_t virtual) {
+    return (physaddr_t)virtual - hhdmoffset();
 }
 
-void* virtual(uint64_t physical) {
-    return (void*)(physical + hhdmoffset());
+virtaddr_t virtual(physaddr_t physical) {
+    return (virtaddr_t)(physical + hhdmoffset());
 }
