@@ -6,7 +6,7 @@
 #include <stdnoreturn.h>
 
 // risx.c
-void            setup(uint64_t stacktop);
-noreturn void   risx(void);
+void          setup(uint64_t stacktop);
+noreturn void risx(void);
 
 #endif

@@ -7,9 +7,9 @@
 #include "alloc/kvalloc.h"
 
 // mm.c
-void    initpmm(void);
-void    initvmm(void);
-void    initheap(void);
+void initpmm(void);
+void initvmm(void);
+void initheap(void);
 
 #endif
 

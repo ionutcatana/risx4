@@ -9,12 +9,12 @@
 #define NPROC               224
 #define NTASK               32
 
-/* stack size and max core count options. all stacks fit on a single 2mib mega
-   page. possible configs: 32 cores+64k stacks or 128 cores+16k stacks        */
+/* stack size and max core count options. all stacks fit on a single 2mib huge
+   page. risx uses 32 cores and 64kib kernel stacks                           */
 #define STACK_SIZE          65536
 #define NCPU                32
 
-/* kernel heap base address (hhdm+4tib)                                       */
+/* kernel heap base address (hhdm + 4tib)                                       */
 #define KERNEL_HEAP_BASE    0xffffa00000000000
 
 #endif

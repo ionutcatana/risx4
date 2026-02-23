@@ -42,11 +42,11 @@ typedef struct {
 
 
 // arch/x86/gdt.S
-void    loadgdt(gdtr_t* desc);
-void    loadtr(uint16_t selector);
+void loadgdt(gdtr_t* desc);
+void loadtr(uint16_t selector);
 
 // arch/x86/gdt.c
-void    initgdt(void);
-void    inittss(uint64_t id);
+void initgdt(void);
+void inittss(uint64_t id);
 
 #endif
