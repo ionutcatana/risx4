@@ -107,7 +107,7 @@ uint64_t allocframe(size_t count) {
 }
 
 uint64_t allocmegaframe(size_t count) {
-    const size_t pages = count * PT_NELEMENTS;
+    const size_t pages = count * 512;
 
     if (count == 0) panic("allocated 0 mega page frames.");
     if (pages > freepages) panic("requested more memory than available.");
@@ -138,5 +138,5 @@ void freeframe(uint64_t frameptr, size_t count) {
 }
 
 void freemegaframe(uint64_t frameptr) {
-    freeframe(frameptr, PT_NELEMENTS);
+    freeframe(frameptr, 512);
 }

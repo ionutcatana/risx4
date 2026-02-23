@@ -129,28 +129,29 @@ _tss19: .space  104
         .align  16
 _tss20: .space  104
         .align  16
-_tss31: .space  104
+_tss21: .space  104
         .align  16
-_tss32: .space  104
+_tss22: .space  104
         .align  16
-_tss33: .space  104
+_tss23: .space  104
         .align  16
-_tss34: .space  104
+_tss24: .space  104
         .align  16
-_tss35: .space  104
+_tss25: .space  104
         .align  16
-_tss36: .space  104
+_tss26: .space  104
         .align  16
-_tss37: .space  104
+_tss27: .space  104
         .align  16
-_tss38: .space  104
+_tss28: .space  104
         .align  16
-_tss39: .space  104
+_tss29: .space  104
         .align  16
 _tss30: .space  104
         .align  16
 _tss31: .space  104
 
+        .section .data
         .align  16
 _tssaddrs:                              # uint64_t _tssaddrs[32]
         .quad   _tss0
