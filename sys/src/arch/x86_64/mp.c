@@ -50,7 +50,7 @@ void initmp(void) {
     if (mpreq.response == NULL) return; // doesn't panic; systems may not have multiple processors
     for (uint64_t i = 0; i < mpreq.response->cpu_count; i++) {
         if (mpreq.response->cpus[i]->lapic_id == mpreq.response->bsp_lapic_id) continue;
-        atomic_store_explicit((_Atomic limine_goto_address *)&mpreq.response->cpus[i]->goto_address,
+        atomic_store_explicit((_Atomic limine_goto_address*)&mpreq.response->cpus[i]->goto_address,
                               (limine_goto_address)mpentrypoint,
                               memory_order_seq_cst);
     }

@@ -80,7 +80,7 @@ void setup(uint64_t stacktop) {
     initpmm();  printf("physical frame allocator initialized.\n");
     initvmm();  printf("virtual page allocator initialized.\n");
     initheap(); printf("kernel heap initialized.\n");
-    initmp();   printf("multiprocessing initialized.\n");
+//  initmp();   printf("multiprocessing initialized.\n");
 
     printf("setup successful\n");
     atomic_store_explicit(&initialized, true, memory_order_release);
