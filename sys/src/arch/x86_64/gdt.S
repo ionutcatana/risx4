@@ -7,40 +7,9 @@
         .equ    RISX_TSS0_SEG, 0x28
 
         .global _gdt                    # uint64_t _gdt[69]
-#       .global _desc
-        .global _tss0                   # uint64_t _tss0[13]
-        .global _tss1
-        .global _tss2
-        .global _tss3
-        .global _tss4
-        .global _tss5
-        .global _tss6
-        .global _tss7
-        .global _tss8
-        .global _tss9
-        .global _tss10
-        .global _tss11
-        .global _tss12
-        .global _tss13
-        .global _tss14
-        .global _tss15
-        .global _tss16
-        .global _tss17
-        .global _tss18
-        .global _tss19
-        .global _tss20
-        .global _tss31
-        .global _tss32
-        .global _tss33
-        .global _tss34
-        .global _tss35
-        .global _tss36
-        .global _tss37
-        .global _tss38
-        .global _tss39
-        .global _tss30
-        .global _tss31
-        .global _tss32
+        .global _tssaddrs               # uint64_t _tssaddrs[32]
+        .global loadgdt
+        .global loadtr
 
         .section .data
         .align  16
@@ -113,12 +82,11 @@ _gdt:   .quad   0                       # null descriptor
         .quad   0
         .quad   0
         .quad   0
-_desc:  .word   (_desc - _gdt - 1)      # gdtdesc_t.limit
-        .quad   _gdt                    # gdtdesc_t.base
+_desc:  .word   (_desc - _gdt - 1)      # limit
+        .quad   _gdt                    # base
 
         .section .bss
         .align  16
-        .extern _tss0
 _tss0:  .space  104                     # 32 task state segments
         .align  16
 _tss1:  .space  104
@@ -182,12 +150,44 @@ _tss39: .space  104
 _tss30: .space  104
         .align  16
 _tss31: .space  104
-        .align  16
-_tss32: .space  104
 
+        .align  16
+_tssaddrs:                              # uint64_t _tssaddrs[32]
+        .quad   _tss0
+        .quad   _tss1
+        .quad   _tss2
+        .quad   _tss3
+        .quad   _tss4
+        .quad   _tss5
+        .quad   _tss6
+        .quad   _tss7
+        .quad   _tss8
+        .quad   _tss9
+        .quad   _tss10
+        .quad   _tss11
+        .quad   _tss12
+        .quad   _tss13
+        .quad   _tss14
+        .quad   _tss15
+        .quad   _tss16
+        .quad   _tss17
+        .quad   _tss18
+        .quad   _tss19
+        .quad   _tss20
+        .quad   _tss21
+        .quad   _tss22
+        .quad   _tss23
+        .quad   _tss24
+        .quad   _tss25
+        .quad   _tss26
+        .quad   _tss27
+        .quad   _tss28
+        .quad   _tss29
+        .quad   _tss30
+        .quad   _tss31
+
+        .code64
         .section .text
-        .global loadgdt
-        .global loadtr
 loadgdt:
 #       push    rsp
 #       mov     rbp, rsp

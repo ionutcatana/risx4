@@ -9,35 +9,36 @@
 extern uint64_t  _gdt[69];
 extern segdesc_t _desc;
 extern tss_t     _tss0;
+extern tss_t*    tssaddrs[32];
 
 void loadgdt(void);
 void initgdt(void) {
-    uint64_t const id = readlapicid();
-    inittss(id);
+    // the gdt is mostly static
+    // but we need to fill in the TSS descriptors at runtime
+    inittssdescriptors();
     loadgdt();
-    loadtr(RISX_TSS0_SEG + (id * 16));
+    loadtr(RISX_TSS0_SEG + (readlapicid() * 16));
 }
 
 void loadtr(uint16_t selector);
-void inittss(uint64_t id) {
-    // memset(&tss[id], 0, sizeof(tss_t));
-    // tss[id].iomap_base = sizeof(tss_t);
+void inittssdescriptors(void) {
+    uint16_t limit = sizeof(tss_t) - 1;
+    for (size_t i = 0; i < 32; i++) {
+        // tss descriptors start at index 5, each is 2 entries
+        size_t idx1 = 5 + (i * 2);
+        size_t idx2 = 5 + (i * 2) + 1;
+        uint64_t base = (uint64_t)tssaddrs[i];
+        _gdt[idx1] = ((base & 0xffff) << 16) | (limit & 0xffff) | 0x89;         // present, type=9 (available 64-bit tss)
+        _gdt[idx2] = ((base >> 16) & 0xffffff) | ((base >> 24) & 0xff000000);   // high 32 bits of base
+    }
+}
 
-    uint64_t base = (uint64_t)&tss[id];
-    uint32_t limit = sizeof(tss_t) - 1;
-
-    // gdt[id][5].limit       = limit & 0xFFFF;
-    // gdt[id][5].base_lower  = base & 0xFFFF;
-    // gdt[id][5].base_middle = (base >> 16) & 0xFF;
-    // gdt[id][5].access      = 0x89;
-    // gdt[id][5].granularity = 0x00;
-    // gdt[id][5].base_upper  = (base >> 24) & 0xFF;
-    // gdt[id][6].limit       = (base >> 32) & 0xFFFF;
-    // gdt[id][6].base_lower  = (base >> 48) & 0xFFFF;
-    // gdt[id][6].base_middle = 0;
-    // gdt[id][6].access      = 0;
-    // gdt[id][6].granularity = 0;
-    // gdt[id][6].base_upper  = 0;
+void inittss(void) {
+    // initialize only what's needed for now
+    for (size_t i = 0; i < 32; i++) {
+        tssaddrs[i]->iomap_base = 0;
+        tssaddrs[i]->rsp0 = 0;
+    }
 }
 
 

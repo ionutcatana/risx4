@@ -9,11 +9,6 @@
 #define USER_CODE_SEG   ((uint16_t)0x23)
 #define RISX_TSS0_SEG   ((uint16_t)0x28)
 
-typedef struct {
-    uint16_t limit;
-    uint64_t base;
-} __attribute__((packed)) gdtdesc_t;
-
 typedef union {
     struct {
         uint16_t limit;
@@ -45,6 +40,7 @@ void loadtr(uint16_t selector);
 
 // arch/x86/gdt.c
 void initgdt(void);
-void inittss(uint64_t id);
+void inittssdescriptors(void);
+void inittss(void);
 
 #endif
