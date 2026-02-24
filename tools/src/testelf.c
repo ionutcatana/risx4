@@ -1,6 +1,6 @@
+#include "elf.h"
 #include <stdio.h>
 #include <malloc.h>
-#include "../sys/include/elf.h"
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
