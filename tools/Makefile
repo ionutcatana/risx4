@@ -1,7 +1,7 @@
 OBJ_DIR ?= target
 CC := gcc
 
-all: $(OBJ_DIR)/gdt $(OBJ_DIR)/indices
+all: $(OBJ_DIR)/gdt $(OBJ_DIR)/indices $(OBJ_DIR)/testelf
 
 
 $(OBJ_DIR)/gdt: gdt.c
@@ -9,6 +9,10 @@ $(OBJ_DIR)/gdt: gdt.c
 	$(CC) -o $@ $<
 
 $(OBJ_DIR)/indices: indices.c
+	@mkdir -p $(dir $@)
+	$(CC) -o $@ $<
+
+$(OBJ_DIR)/testelf: testelf.c
 	@mkdir -p $(dir $@)
 	$(CC) -o $@ $<
 
