@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
     fseek(f, header->e_phoff, SEEK_SET);
     elfprogramheader_t* programheaders = malloc(sizeof(elfprogramheader_t) * header->e_phnum);
 
-    /* Read all program headers at once */
+    /* read all program headers at once */
     fread(programheaders, sizeof(elfprogramheader_t), header->e_phnum, f);
 
     for (size_t i = 0; i < header->e_phnum; i++) {
@@ -209,10 +209,10 @@ int main(int argc, char* argv[]) {
     fseek(f, header->e_shoff, SEEK_SET);
     elfsectionheader_t* sectionheaders = malloc(sizeof(elfsectionheader_t) * header->e_shnum);
 
-    /* Read all section headers at once so we can locate the section-name string table */
+    /* read all section headers at once so we can locate the section-name string table */
     fread(sectionheaders, sizeof(elfsectionheader_t), header->e_shnum, f);
 
-    /* Load section header string table (shstrtab) */
+    /* load section header string table (shstrtab) */
     char* shstrtab = NULL;
     uint64_t shstr_size = 0;
     if (header->e_shstrndx < header->e_shnum) {
