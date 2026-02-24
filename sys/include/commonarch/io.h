@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-// arch/x86/io.S
+// arch/x86_64/io.S
 uint8_t  reads(uint32_t port);
 void     writes(uint32_t port, uint8_t data);
 

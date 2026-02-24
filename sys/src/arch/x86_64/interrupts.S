@@ -1,15 +1,17 @@
         .intel_syntax noprefix
 
-        .global vectors
-        .global istub
         .global intenable
         .global intdisable
+        .global istub
+        .global _vectors
+        .global _idt                    # intdesc_t _idt[256]
+        .global loadidt                 # loadidt(intdesc_t* desc)
 
         .extern idispatch
 
         .section .data
         .align  16
-vectors:                                # uint64_t vectors[256]
+_vectors:                               # uint64_t _vectors[256]
         .quad   _int0
         .quad   _int1
         .quad   _int2
@@ -266,6 +268,10 @@ vectors:                                # uint64_t vectors[256]
         .quad   _int253
         .quad   _int254
         .quad   _int255
+
+        .section .bss
+        .align  16
+_idt:   .space  4096
 
         .code64
         .section .text
@@ -1343,3 +1349,8 @@ intdisable:
         cli
         ret
 
+        .code64
+        .section .text
+loadidt:
+        lidt    [rdi]
+        ret

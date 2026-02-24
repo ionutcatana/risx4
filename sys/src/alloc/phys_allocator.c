@@ -89,13 +89,13 @@ physaddr_t allocframe(size_t count) {
 }
 
 physaddr_t allocmegaframe(size_t count) {
-    const size_t pages_per_mega = NENTRIES;
+    const size_t pages_per_mega = NENTRIES_PT;
     const size_t total_required_pages = count * pages_per_mega;
 
     if (count == 0) panic("allocated 0 mega page frames.");
     if (total_required_pages > freepages) panic("requested more memory than available.");
 
-    // start i at a multiple of NENTRIES to ensure alignment
+    // start i at a multiple of NENTRIES_PT to ensure alignment
     for (size_t i = 0; i + total_required_pages <= totalpages; i += pages_per_mega) {
         bool found = true;
         for (size_t k = 0; k < total_required_pages; k++) if (checkbit(bitmap, i + k) != 0) {
@@ -122,5 +122,5 @@ void freeframe(physaddr_t frameptr, size_t count) {
 }
 
 void freemegaframe(physaddr_t frameptr) {
-    freeframe(frameptr, NENTRIES);
+    freeframe(frameptr, NENTRIES_PT);
 }

@@ -1,7 +1,6 @@
 #ifndef X86_64_SPECIFIC_IDT_H
 #define X86_64_SPECIFIC_IDT_H 1
 
-#include "arch/x86_64/specific/trapframe.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -17,7 +16,7 @@
 #define IDT_TRAP_GATE_RING0      ((TRAP_GATE)      | (RING0) | (PRESENT))
 #define IDT_TRAP_GATE_RING3      ((TRAP_GATE)      | (RING3) | (PRESENT))
 
-#define IDT_SIZE        (256)
+#define NENTRIES_IDT    (256)
 
 typedef struct {
     uint16_t limit;
@@ -38,18 +37,12 @@ typedef union {
         uint64_t lo;
         uint64_t hi;
     };
-} __attribute__((packed)) idtsegdesc_t;
+} __attribute__((packed)) intdesc_t;
 
+// arch/x86_86/interrupts.S
+void loadidt(idtr_t* desc);
 
-// arch/x86/idt.S
-void loadidt(void);
-
-// arch/x86/idt.c
+// arch/x86_86/interrupts.c
 void initidt(void);
-void sethandler(size_t vector, uint64_t handler, uint8_t attributes);
-void idispatch(trapframe_t* tf);
-
-// arch/x86/istub.S
-void istub(void);
 
 #endif

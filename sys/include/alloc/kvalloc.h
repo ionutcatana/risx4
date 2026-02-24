@@ -5,7 +5,7 @@
 #include "limine.h"
 #include <stddef.h>
 
-// arch/x86/alloc/virt_allocator.c
+// arch/x86_64/alloc/virt_allocator.c
 void initkvalloc(uint64_t physbase, uint64_t virtbase,
                  struct limine_memmap_response* memmap);
 

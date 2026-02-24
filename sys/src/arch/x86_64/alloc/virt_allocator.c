@@ -51,8 +51,7 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
     loadcr3(physical(new_l4t));
 }
 
-void mappage(pagetable_t* globaltbl,
-                    uint64_t va, uint64_t pa, uint64_t flags) {
+void mappage(pagetable_t* globaltbl, uint64_t va, uint64_t pa, uint64_t flags) {
     uint64_t index;
 
     index = LVL4_INDEX(va);

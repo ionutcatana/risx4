@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-// arch/x86/mp.c
+// arch/x86_64/mp.c
 uint64_t cpucount();
 uint32_t bootstrapcpu(); // bsp_lapic_id on x86
 void     enumeratecpus();

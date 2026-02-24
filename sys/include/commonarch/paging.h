@@ -21,12 +21,13 @@
 #define SIGN_EXTEND_POZ(va) ((uint64_t)(va) & SIGN_MASK)
 #define SIGN_EXTEND_NEG(va) ((uint64_t)(va) | SIGN_MASK)
 
-#define NENTRIES            (512)
+#define NENTRIES_PT         (512)
 
 typedef struct {
-    uint64_t entries[NENTRIES];
+    uint64_t entries[NENTRIES_PT];
 } pagetable_t;
 
+// arch/x86_64/alloc/virt_allocator.c
 uint64_t   readkernelpgtbl(void);
 
 #endif

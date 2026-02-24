@@ -1,8 +1,7 @@
-#include "commonarch/io.h"
-// TODO: fix later
 #include "arch/x86_64/io.h"
+#include "arch/x86_64/serial.h"
+#include "commonarch/io.h"
 #include "commonarch/serial.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
