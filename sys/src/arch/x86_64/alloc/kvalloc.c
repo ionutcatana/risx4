@@ -44,8 +44,8 @@ void initkvalloc(uint64_t physbase, uint64_t virtbase,
                 }
             }
 
-    uint64_t stacks = allocmegaframe(1);
-    mappage(new_l4t, STACK_BASE_VIRT, stacks, PAGE_PRESENT | PAGE_WRITABLE | PAGE_HUGE | PAGE_NO_EXECUTE);
+    // uint64_t stacks = allocmegaframe(1);
+    // mappage(new_l4t, STACK_BASE_VIRT, stacks, PAGE_PRESENT | PAGE_WRITABLE | PAGE_HUGE | PAGE_NO_EXECUTE);
 
     kernelpgtbl = physical(new_l4t);
     loadcr3(physical(new_l4t));

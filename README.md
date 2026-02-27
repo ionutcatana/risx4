@@ -1,3 +1,7 @@
 # risx-bachelors-project
 - (21/11/2025) Just a toy kernel for now
-- (23/02/2026) Impose 32-core limit for simplicity
+- (23/02/2026) Impose 32-core limit for
+- (27/02/2026)
+    - Impose 4K pages only for simplicity
+    - Impose Limine revision 4
+    - Impose `uint64_t` as the type used to represent physical addresses.
