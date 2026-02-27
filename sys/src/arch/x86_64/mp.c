@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdatomic.h>
+#include "alloc/kvalloc.h"
 
 void initgdt(void);
 void loadidt(void);
@@ -38,7 +39,7 @@ void enumeratecpus() {
 }
 
 void mpentrypoint(struct limine_mp_info *info) {
-    loadcr3(readkernelpgtbl());
+    loadcr3((uint64_t)kerneltable());
     initgdt();
     loadidt();
 

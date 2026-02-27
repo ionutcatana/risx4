@@ -7,10 +7,10 @@
 
 #define STACK_BASE_VIRT     ((uint64_t)0xffffffffffe00000)
 
-#define LVL4_INDEX(va)      (((uint64_t)(va) >> 39) & 0x1FF)
-#define LVL3_INDEX(va)      (((uint64_t)(va) >> 30) & 0x1FF)
-#define LVL2_INDEX(va)      (((uint64_t)(va) >> 21) & 0x1FF)
-#define LVL1_INDEX(va)      (((uint64_t)(va) >> 12) & 0x1FF)
+#define LVL4_INDEX(va)      (((uint64_t)(va) >> 39) & 0x1ff)
+#define LVL3_INDEX(va)      (((uint64_t)(va) >> 30) & 0x1ff)
+#define LVL2_INDEX(va)      (((uint64_t)(va) >> 21) & 0x1ff)
+#define LVL1_INDEX(va)      (((uint64_t)(va) >> 12) & 0x1ff)
 
 #define OFFSET_MASK         ((uint64_t)0x0000000000000fff)
 #define SIGN_MASK           ((uint64_t)0xffff000000000000)

@@ -5,11 +5,12 @@
 #include "limine.h"
 #include <stddef.h>
 
-// arch/x86_64/alloc/virt_allocator.c
-void initkvalloc(uint64_t physbase, uint64_t virtbase,
-                 struct limine_memmap_response* memmap);
-
-void unmappage(uint64_t frameptr, size_t count);
-void mappage(pagetable_t* globaltbl, uint64_t va, uint64_t pa, uint64_t flags);
+// arch/x86_64/alloc/kvalloc.c
+pagetable_t* kerneltable(void);
+void         initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr,
+                         struct limine_memmap_response* memmap);
+void         mappage(pagetable_t* globaltbl, uint64_t virtaddr,
+                                             uint64_t physaddr, uint64_t flags);
+void         unmappage(uint64_t start_virtaddr, size_t count);
 
 #endif
