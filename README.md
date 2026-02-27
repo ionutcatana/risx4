@@ -5,3 +5,4 @@
     - Impose 4K pages only for simplicity
     - Impose Limine revision 4
     - Impose `uint64_t` as the type used to represent physical addresses.
+- (28/02/2026) Forbid malloc in the kernel

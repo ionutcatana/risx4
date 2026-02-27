@@ -53,8 +53,7 @@ void setup(uint64_t stacktop) {
     printf("stack top: 0x%016lx\n", stacktop);
 
     initpmm();  printf("physical frame allocator initialized.\n");
-//  initvmm();  printf("virtual page allocator initialized.\n");
-//  initheap(); printf("kernel heap initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
 //  initmp();   printf("multiprocessing initialized.\n");
 
 #if defined (__x86_64__)

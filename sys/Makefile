@@ -27,7 +27,7 @@ CFLAGS := 			\
 	-Wall			\
 	-Werror			\
 	-Wextra
-LDFLAGS := -nostdlib -lgcc
+LDFLAGS := -nostdlib -lgcc -T src/kernel-$(ARCH).ld
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				x86 options				      #
@@ -43,22 +43,16 @@ CFLAGS +=			\
 	-mno-red-zone		\
 	-mno-sse		\
 	-mno-sse2
-LDFLAGS +=			\
-	-T src/kernel-x86.ld
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				arm options				      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), aarch64)
-LDFLAGS +=			\
-	-T src/kernel-arm.ld
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				risc-v options				      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 else ifeq ($(ARCH), riscv64)
-LDFLAGS +=			\
-	-T src/kernel-riscv.ld
 endif
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -91,7 +85,7 @@ OBJS += $(patsubst vendors/%.S,$(OBJ_DIR)/vendors/%.S.o,$(filter vendors/%.S,$(S
 all: $(OBJ_DIR)/risx.elf
 
 
-$(OBJ_DIR)/risx.elf: $(OBJS) src/kernel-x86.ld
+$(OBJ_DIR)/risx.elf: $(OBJS) src/kernel-$(ARCH).ld
 	@mkdir -p $(dir $@)
 	$(CC) $(OBJS) $(LDFLAGS) -o $@
 
