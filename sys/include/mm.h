@@ -5,10 +5,11 @@
 // the mm.h header file
 #include "alloc/kpalloc.h"
 #include "alloc/kvalloc.h"
+#include <stdint.h>
 
 // mm.c
 void initpmm(void);
-void initvmm(void);
+void initvmm(uint64_t stackbase);
 
 #endif
 

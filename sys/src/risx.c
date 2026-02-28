@@ -45,16 +45,16 @@ noreturn void panic(const char* message) {
 
 static atomic_bool initialized;
 
-void setup(uint64_t stacktop) {
+void setup(uint64_t stackbase) {
     atomic_init(&initialized, false);
     initprintf();
     initserial();
     initconsole();
-    printf("stack top: 0x%016lx\n", stacktop);
+    printf("stack top: 0x%016lx\n", stackbase);
 
-    initpmm();  printf("physical frame allocator initialized.\n");
-    initvmm();  printf("virtual page allocator initialized.\n");
-//  initmp();   printf("multiprocessing initialized.\n");
+    initpmm();          printf("physical frame allocator initialized.\n");
+//  initvmm(stackbase); printf("virtual page allocator initialized.\n");
+//  initmp();           printf("multiprocessing initialized.\n");
 
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");

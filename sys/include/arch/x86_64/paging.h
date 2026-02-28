@@ -23,10 +23,20 @@
 #define PTE_FLAGS_MASK          ((uint64_t)0x8000000000000fff)
 #define PTE_ADDRESS_MASK        ((uint64_t)0x0007fffffffff000)
 
+/* portable flags for page table entries */
+#define PAGE_TABLE_FLAGS        (PAGE_PRESENT | PAGE_WRITABLE)
+
 /* every architecture should define these constants */
-#define PAGE_RISX_CODE          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_GLOBAL)
+#define PAGE_RISX_TEXT          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_GLOBAL)
+#define PAGE_RISX_RODATA        (PAGE_PRESENT | PAGE_GLOBAL | PAGE_NO_EXECUTE)
 #define PAGE_RISX_DATA          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_GLOBAL | PAGE_NO_EXECUTE)
-#define PAGE_USER_CODE          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER)
+#define PAGE_RISX_STACK         (PAGE_PRESENT | PAGE_WRITABLE | PAGE_GLOBAL)
+#define PAGE_RISX_GUARD         (0ULL)  /* unmapped guard page */
+
+#define PAGE_USER_TEXT          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER)
+#define PAGE_USER_RODATA        (PAGE_PRESENT | PAGE_USER | PAGE_NO_EXECUTE)
 #define PAGE_USER_DATA          (PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER | PAGE_NO_EXECUTE)
+#define PAGE_USER_STACK         (PAGE_PRESENT | PAGE_WRITABLE | PAGE_USER | PAGE_NO_EXECUTE)
+#define PAGE_USER_GUARD         (0ULL)  /* unmapped guard page */
 
 #endif

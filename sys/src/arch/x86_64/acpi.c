@@ -8,7 +8,7 @@
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_rsdp_request rsdpreq = {
     .id = LIMINE_RSDP_REQUEST,
-    .revision = 4
+    .revision = LIMINE_API_REVISION
 };
 
 rsdp_t*     rsdp    = NULL;

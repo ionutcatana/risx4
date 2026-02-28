@@ -11,7 +11,7 @@
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_framebuffer_request fbreq = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 4
+    .revision = LIMINE_API_REVISION
 };
 
 struct flanterm_context* ft_ctx = NULL;

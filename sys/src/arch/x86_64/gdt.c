@@ -2,6 +2,7 @@
 #include "arch/x86_64/specific/registers.h"
 #include "lib/printf.h"
 #include "lib/string.h"
+#include "memlayout.h"
 #include "risx.h"
 #include <stdint.h>
 
@@ -48,8 +49,8 @@ void inittssdescriptors(void) {
 void inittss(void) {
     // initialize only what's needed for now
     for (size_t i = 0; i < NCPU; i++) {
-        _tssaddrs[i]->iomap_base = 0;
-        _tssaddrs[i]->rsp0 = 0;
+        _tssaddrs[i]->iomap_base = sizeof(tss_t);
+        _tssaddrs[i]->rsp0 = STACKBASEINT0 - i * DISTANCE;
     }
 }
 
