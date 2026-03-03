@@ -56,28 +56,40 @@ void idispatch(trapframe_t* tf) {
     // exceptions 9 & 15 not defined yet
     switch (tf->vector) {
     case X86_INTERRUPT_DE:
+        panic("unresolved division error.");
         break;
     case X86_INTERRUPT_DB:
+        panic("unresolved debug interrupts.");
         break;
     case X86_INTERRUPT_NMI:
+        panic("unresolved non maskable interrupt.");
         break;
     case X86_INTERRUPT_BP:
+        panic("unresolved breakpoint.");
         break;
     case X86_INTERRUPT_OF:
+        panic("unresolved overflow.");
         break;
     case X86_INTERRUPT_BR:
+        panic("unresolved bound range exceeded.");
         break;
     case X86_INTERRUPT_UD:
+        panic("unresolved invalid opcode.");
         break;
     case X86_INTERRUPT_NM:
+        panic("unresolved device not available.");
         break;
     case X86_INTERRUPT_DF:
+        panic("unresolved double fault.");
         break;
     case X86_INTERRUPT_TS:
+        panic("unresolved invalid tss.");
         break;
     case X86_INTERRUPT_NP:
+        panic("unresolved segment not present.");
         break;
     case X86_INTERRUPT_SS:
+        panic("unresolved stack segment fault.");
         break;
     case X86_INTERRUPT_GP:
         panic("general protection fault.");
@@ -85,12 +97,16 @@ void idispatch(trapframe_t* tf) {
         printf("virtaddr: 0x%016lx\n", readcr2());
         panic("unresolved page fault.");
     case X86_INTERRUPT_MF:
+        panic("unresolved fpu unit fault.");
         break;
     case X86_INTERRUPT_AC:
+        panic("unresolved alignment check.");
         break;
     case X86_INTERRUPT_MC:
+        panic("unresolved machine check.");
         break;
     case X86_INTERRUPT_XF:
+        panic("unresolved simd error.");
         break;
     default:
         panic("unimplemented interrupt handler.");
