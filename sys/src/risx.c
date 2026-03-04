@@ -7,6 +7,7 @@
 #include "lib/printf.h"
 #include "limine.h"
 #include "mm.h"
+#include "modules.h"
 #include "panic.h"
 #include "process.h"
 #include "risx.h"
@@ -52,6 +53,8 @@ void setup(uint64_t stackbase) {
     initconsole();
     printf("stack top: 0x%016lx\n", stackbase);
 
+    initmodules();
+
     initpmm();          printf("physical frame allocator initialized.\n");
 //  initvmm(stackbase); printf("virtual page allocator initialized.\n");
 //  initmp();           printf("multiprocessing initialized.\n");
@@ -82,13 +85,13 @@ void setup(uint64_t stackbase) {
 
     intenable();
 
-    printf("setup successful\n");
+    printf("setup successful.\n");
     atomic_store_explicit(&initialized, true, memory_order_release);
 }
 
 noreturn void risx(void) {
     while (!atomic_load_explicit(&initialized, memory_order_acquire));
-    printf("[CPU %lu] entered RISX\n", readlapicid());
+    printf("[CPU %lu] entered RISX.\n", readlapicid());
 
     schedule();
     panic("unexpected return from scheduler.\n");
