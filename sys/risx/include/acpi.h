@@ -121,7 +121,7 @@ typedef struct {
     genericaddress_t x_pm_timer_block;
     genericaddress_t x_gpe0_block;
     genericaddress_t x_gpe1_block;
-}
+} __attribute__((packed)) fadt_t;
 
 /* multiple apic description table */
 typedef struct {
