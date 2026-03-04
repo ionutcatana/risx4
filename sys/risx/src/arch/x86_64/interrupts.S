@@ -1,14 +1,24 @@
         .intel_syntax noprefix
 
+        # # # # # # # # # # # # # # # #
+        #       EXPORTED SYMBOLS      #
+        # # # # # # # # # # # # # # # #
         .global intenable
         .global intdisable
         .global istub
         .global _vectors
+        .global _istacks                # uint64_t _istacks[32]
         .global _idt                    # intdesc_t _idt[256]
         .global loadidt                 # loadidt(intdesc_t* desc)
 
+        # # # # # # # # # # # # # # # #
+        #       EXTERNAL SYMBOLS      #
+        # # # # # # # # # # # # # # # #
         .extern idispatch
 
+        # # # # # # # # # # # # # # # #
+        #       DATA SECTION          #
+        # # # # # # # # # # # # # # # #
         .section .data
         .align  16
 _vectors:                               # uint64_t _vectors[256]
@@ -269,10 +279,149 @@ _vectors:                               # uint64_t _vectors[256]
         .quad   _int254
         .quad   _int255
 
+        .align  16
+_istacks:                               # uint64_t _istacks[32]
+        .quad   _istack0
+        .quad   _istack1
+        .quad   _istack2
+        .quad   _istack3
+        .quad   _istack4
+        .quad   _istack5
+        .quad   _istack6
+        .quad   _istack7
+        .quad   _istack8
+        .quad   _istack9
+        .quad   _istack10
+        .quad   _istack11
+        .quad   _istack12
+        .quad   _istack13
+        .quad   _istack14
+        .quad   _istack15
+        .quad   _istack16
+        .quad   _istack17
+        .quad   _istack18
+        .quad   _istack19
+        .quad   _istack20
+        .quad   _istack21
+        .quad   _istack22
+        .quad   _istack23
+        .quad   _istack24
+        .quad   _istack25
+        .quad   _istack26
+        .quad   _istack27
+        .quad   _istack28
+        .quad   _istack29
+        .quad   _istack30
+        .quad   _istack31
+
+        # # # # # # # # # # # # # # # #
+        #       BSS SECTION           #
+        # # # # # # # # # # # # # # # #
         .section .bss
         .align  16
 _idt:   .space  4096
 
+        .align  16
+_istack0:                               # 32 stacks for interrupts
+        .space  16384
+        .align  16
+_istack1:
+        .space  16384
+        .align  16
+_istack2:
+        .space  16384
+        .align  16
+_istack3:
+        .space  16384
+        .align  16
+_istack4:
+        .space  16384
+        .align  16
+_istack5:
+        .space  16384
+        .align  16
+_istack6:
+        .space  16384
+        .align  16
+_istack7:
+        .space  16384
+        .align  16
+_istack8:
+        .space  16384
+        .align  16
+_istack9:
+        .space  16384
+        .align  16
+_istack10:
+        .space  16384
+        .align  16
+_istack11:
+        .space  16384
+        .align  16
+_istack12:
+        .space  16384
+        .align  16
+_istack13:
+        .space  16384
+        .align  16
+_istack14:
+        .space  16384
+        .align  16
+_istack15:
+        .space  16384
+        .align  16
+_istack16:
+        .space  16384
+        .align  16
+_istack17:
+        .space  16384
+        .align  16
+_istack18:
+        .space  16384
+        .align  16
+_istack19:
+        .space  16384
+        .align  16
+_istack20:
+        .space  16384
+        .align  16
+_istack21:
+        .space  16384
+        .align  16
+_istack22:
+        .space  16384
+        .align  16
+_istack23:
+        .space  16384
+        .align  16
+_istack24:
+        .space  16384
+        .align  16
+_istack25:
+        .space  16384
+        .align  16
+_istack26:
+        .space  16384
+        .align  16
+_istack27:
+        .space  16384
+        .align  16
+_istack28:
+        .space  16384
+        .align  16
+_istack29:
+        .space  16384
+        .align  16
+_istack30:
+        .space  16384
+        .align  16
+_istack31:
+        .space  16384
+        .align  16
+
+        # # # # # # # # # # # # # # # #
+        #       TEXT SECTION          #
+        # # # # # # # # # # # # # # # #
         .code64
         .section .text
 _int0:

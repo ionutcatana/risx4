@@ -12,6 +12,10 @@ static gdtr_t desc __attribute__((aligned(16)));
 extern segdesc_t _gdt[NENTRIES_GDT];
 extern tss_t*    _tssaddrs[NCPU];
 
+// from arch/x86_64/interrupts.S
+extern uint64_t  _istacks[NCPU];
+
+
 void initgdt(void) {
     desc.limit = sizeof(segdesc_t) * NENTRIES_GDT - 1;
     desc.base = (uint64_t)_gdt;
@@ -50,7 +54,7 @@ void inittss(void) {
     // initialize only what's needed for now
     for (size_t i = 0; i < NCPU; i++) {
         _tssaddrs[i]->iomap_base = sizeof(tss_t);
-        _tssaddrs[i]->rsp0 = STACKBASEINT0 - i * DISTANCE;
+        _tssaddrs[i]->rsp0 = _istacks[i];
     }
 }
 
