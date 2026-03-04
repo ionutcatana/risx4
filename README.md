@@ -6,3 +6,8 @@
     - Impose Limine revision 4
     - Impose `uint64_t` as the type used to represent physical addresses.
 - (28/02/2026) Forbid malloc in the kernel
+- (03/03/2026) Keep in kernel:
+    - IPC (message passing)
+    - Memory management mechanism (policy in userspace!)
+    - Process creation mechanism (policy in userspace!)
+    - Scheduling
