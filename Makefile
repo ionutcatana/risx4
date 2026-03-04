@@ -1,53 +1,54 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #			user-configurable variables			      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-OBJ_DIR := target
-QEMU64 := qemu-system-x86_64
+ARCH ?= x86_64
+TARGET := $(CURDIR)/target
+QEMU64 := qemu-system-$(ARCH)
+
+ifeq ($(ARCH), x86_64)
 QEMUFLAGS := -machine pc -smp cores=6 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
-PERL := perl
+endif
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				recipes					      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-all: tools sys usr servers
+all: sys
 
 
 tools:
-	$(MAKE) -C tools OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
+	$(MAKE) -C tools ROOTDIR=$(CURDIR)
 
 sys:
-	$(MAKE) -C sys OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
+	$(MAKE) -C sys ROOTDIR=$(CURDIR) ARCH=$(ARCH)
 
 usr:
-	$(MAKE) -C usr OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
+	$(MAKE) -C usr ROOTDIR=$(CURDIR) ARCH=$(ARCH)
 
-servers:
-	$(MAKE) -C servers OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
-
-iso: sys usr servers
-	@mkdir -p $(OBJ_DIR)/iso_root
-	@cp -r ./boot $(OBJ_DIR)/iso_root
-	@cp target/risx.elf $(OBJ_DIR)/iso_root
-	@cp target/dummy $(OBJ_DIR)/iso_root
-	@xorriso -as mkisofs				\
+ISOROOT ?= $(TARGET)/$(ARCH)/iso_root
+ISOFILE ?= $(TARGET)/$(ARCH)/risx.iso
+iso: sys
+	@cp -r ./boot $(TARGET)/$(ARCH)/iso_root
+	@xorriso					\
+		-as mkisofs				\
 		-b boot/limine/limine-bios-cd.bin	\
-		-no-emul-boot				\
-		-boot-load-size 4			\
 		-boot-info-table			\
-		$(OBJ_DIR)/iso_root -o target/risx.iso
-	@limine bios-install target/risx.iso
+		-boot-load-size 4			\
+		-no-emul-boot				\
+		-o $(ISOFILE)				\
+		$(ISOROOT)
+	@limine bios-install $(ISOFILE)
 
 clean:
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(TARGET)
 
 qemu: iso
-	$(QEMU64) $(QEMUFLAGS) -cdrom target/risx.iso
+	$(QEMU64) $(QEMUFLAGS) -cdrom $(ISOFILE)
 
 qemu-serial: iso
-	$(QEMU64) $(QEMUFLAGS) -cdrom target/risx.iso -nographic
+	$(QEMU64) $(QEMUFLAGS) -cdrom $(ISOFILE) -nographic
 
 qemu-debug: iso
-	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom target/risx.iso
+	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom $(ISOFILE)
 
-.PHONY: all tools servers sys iso clean qemu qemu-debug
+.PHONY: all tools sys iso clean qemu qemu-debug
