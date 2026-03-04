@@ -29,5 +29,6 @@
         "*.{s,S}": "asm-intel-x86-generic",
         "*.ld": "linkerscript",
         "*.pl": "perl"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
