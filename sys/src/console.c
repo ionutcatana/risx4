@@ -1,16 +1,17 @@
-#include <risx.h>
-#include <console.h>
-#include <flanterm_backends/fb.h>
-#include <flanterm.h>
-#include <limine.h>
-
+#include "console.h"
+#include "flanterm_backends/fb.h"
+#include "flanterm.h"
+#include "lib/string.h"
+#include "limine.h"
+#include "panic.h"
+#include "risx.h"
 #include <stdbool.h>
 #include <stdint.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_framebuffer_request fbreq = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 4
+    .revision = LIMINE_API_REVISION
 };
 
 struct flanterm_context* ft_ctx = NULL;

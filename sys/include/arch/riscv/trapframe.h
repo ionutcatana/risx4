@@ -1,3 +1,0 @@
-#ifndef RISCV_TRAPFRAME_H
-#define RISCV_TRAPFRAME_H 1
-#endif

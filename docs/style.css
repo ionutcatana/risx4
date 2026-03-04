@@ -1,0 +1,22 @@
+body {
+    background-color: aquamarine;
+}
+
+* {
+    outline: 1px solid red;
+}
+
+.horizontal-flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.evenly-spaced {
+    justify-content: space-evenly;
+}
+

@@ -10,25 +10,26 @@ PERL := perl
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				recipes					      #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-all: prepare tools sys usr
+all: tools sys usr servers
 
-
-prepare:
-	$(PERL) sys/src/arch/x86/vectors.pl > sys/src/arch/x86/vectors.S
 
 tools:
 	$(MAKE) -C tools OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
-sys: prepare
+sys:
 	$(MAKE) -C sys OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
-usr: prepare
+usr:
 	$(MAKE) -C usr OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
 
-iso: sys usr
+servers:
+	$(MAKE) -C servers OBJ_DIR=$(CURDIR)/$(OBJ_DIR)
+
+iso: sys usr servers
 	@mkdir -p $(OBJ_DIR)/iso_root
 	@cp -r ./boot $(OBJ_DIR)/iso_root
 	@cp target/risx.elf $(OBJ_DIR)/iso_root
+	@cp target/dummy $(OBJ_DIR)/iso_root
 	@xorriso -as mkisofs				\
 		-b boot/limine/limine-bios-cd.bin	\
 		-no-emul-boot				\
@@ -49,4 +50,4 @@ qemu-serial: iso
 qemu-debug: iso
 	$(QEMU64) $(QEMUFLAGS) $(QEMUDEBUGFLAGS) -cdrom target/risx.iso
 
-.PHONY: all prepare tools sys iso clean qemu qemu-debug
+.PHONY: all tools servers sys iso clean qemu qemu-debug
