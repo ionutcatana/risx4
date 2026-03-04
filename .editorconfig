@@ -18,6 +18,6 @@ indent_size = 8
 indent_style = space
 indent_size = 4
 
-[*.pl]
+[*.py]
 indent_style = space
 indent_size = 4
