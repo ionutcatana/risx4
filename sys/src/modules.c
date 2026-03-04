@@ -11,7 +11,7 @@ static volatile struct limine_module_request modulereq = {
 
 void initmodules(void) {
     if (modulereq.response == NULL) {
-        printf("no modules loaded");
+        printf("no modules loaded\n");
         return;
     }
 
