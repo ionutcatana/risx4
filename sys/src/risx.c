@@ -77,12 +77,6 @@ void setup(uint64_t stackbase) {
     }
 #endif
 
-#if defined (__aarch64__)
-#endif
-
-#if defined (__riscv)
-#endif
-
     intenable();
 
     printf("setup successful.\n");
