@@ -6,11 +6,17 @@
         .equ    USER_CODE_SEG, 0x23
         .equ    RISX_TSS0_SEG, 0x28
 
+        # # # # # # # # # # # # # # # #
+        #       EXPORTED SYMBOLS      #
+        # # # # # # # # # # # # # # # #
         .global _gdt                    # uint64_t _gdt[69]
         .global _tssaddrs               # uint64_t _tssaddrs[32]
         .global loadgdt
         .global loadtr
 
+        # # # # # # # # # # # # # # # #
+        #       DATA SECTION          #
+        # # # # # # # # # # # # # # # #
         .section .data
         .align  16
 _gdt:   .quad   0                       # null descriptor
@@ -83,6 +89,9 @@ _gdt:   .quad   0                       # null descriptor
         .quad   0
         .quad   0
 
+        # # # # # # # # # # # # # # # #
+        #       BSS SECTION           #
+        # # # # # # # # # # # # # # # #
         .section .bss
         .align  16
 _tss0:  .space  104                     # 32 task state segments
@@ -149,6 +158,9 @@ _tss30: .space  104
         .align  16
 _tss31: .space  104
 
+        # # # # # # # # # # # # # # # #
+        #       DATA SECTION          #
+        # # # # # # # # # # # # # # # #
         .section .data
         .align  16
 _tssaddrs:                              # uint64_t _tssaddrs[32]
@@ -185,6 +197,9 @@ _tssaddrs:                              # uint64_t _tssaddrs[32]
         .quad   _tss30
         .quad   _tss31
 
+        # # # # # # # # # # # # # # # #
+        #       TEXT SECTION          #
+        # # # # # # # # # # # # # # # #
         .code64
         .section .text
 loadgdt:

@@ -1,5 +1,8 @@
         .intel_syntax noprefix
-        .section .text
+
+        # # # # # # # # # # # # # # # #
+        #       EXPORTED SYMBOLS      #
+        # # # # # # # # # # # # # # # #
         .global reads
         .global writes
         .global readw
@@ -10,6 +13,11 @@
         .global writel
         .global io_wait
 
+        # # # # # # # # # # # # # # # #
+        #       TEXT SECTION          #
+        # # # # # # # # # # # # # # # #
+        .code64
+        .section .text
 reads:  mov     edx, edi                # move port number to edx
         xor     eax, eax                # clear rax
         in      al, dx                  # read byte from port dx into al

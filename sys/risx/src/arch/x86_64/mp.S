@@ -1,6 +1,15 @@
         .intel_syntax noprefix
-        .section .text
+
+        # # # # # # # # # # # # # # # #
+        #       EXPORTED SYMBOLS      #
+        # # # # # # # # # # # # # # # #
         .global enterrisx
+
+        # # # # # # # # # # # # # # # #
+        #       TEXT SECTION          #
+        # # # # # # # # # # # # # # # #
+        .code64
+        .section .text
 enterrisx:
         mov     rsp, rdi
         xor     rbp, rbp
