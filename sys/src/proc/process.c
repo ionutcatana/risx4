@@ -8,7 +8,7 @@
 
 void schedule(void) {
     uint64_t id = readlapicid();
-    printf("[CPU %lu] entered scheduler\n", id);
+    printf("[CPU %lu] entered scheduler.\n", id);
 
     // if (id == 0) {
     //     void* ptr1 = malloc(4096);
