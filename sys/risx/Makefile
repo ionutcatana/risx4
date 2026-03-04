@@ -1,0 +1,111 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#			user-configurable variables			      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+PROFILE ?= DEBUG
+VERSION ?= 0.0.7
+ARCH ?= x86_64
+ROOTDIR ?= .
+TARGET ?= $(ROOTDIR)/target/$(ARCH)/build
+ISOROOTDIR ?= $(ROOTDIR)/target/$(ARCH)/iso_root
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#			toolchain default configuration			      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+CC := $(ARCH)-elf-gcc
+CPPFLAGS := -Iinclude -Ivendors
+CFLAGS := 			\
+	-DLIMINE_API_REVISION=4	\
+	-fdata-sections		\
+	-ffreestanding		\
+	-ffunction-sections	\
+	-fno-lto		\
+	-fno-PIC		\
+	-fno-stack-check	\
+	-fno-stack-protector	\
+	-mno-ms-bitfields	\
+	-mno-red-zone		\
+	-pedantic-errors	\
+	-pipe			\
+	-std=c17		\
+	-Wall			\
+	-Werror			\
+	-Wextra
+LDFLAGS := -nostdlib -lgcc -T src/kernel-$(ARCH).ld
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#				x86 options				      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ifeq ($(ARCH), x86_64)
+CFLAGS +=			\
+	-m64			\
+	-mabi=sysv		\
+	-mcmodel=kernel		\
+	-mno-3dnow		\
+	-mno-80387		\
+	-mno-mmx		\
+	-mno-red-zone		\
+	-mno-sse		\
+	-mno-sse2
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#				arm options				      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+else ifeq ($(ARCH), aarch64)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#				risc-v options				      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+else ifeq ($(ARCH), riscv64)
+endif
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#			build profile configuration			      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ifeq ($(PROFILE), DEBUG)
+CFLAGS +=			\
+	-g			\
+	-O0
+endif
+
+ifeq ($(PROFILE), RELEASE)
+CFLAGS +=
+	-O2			\
+	-DVERSION
+endif
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#			source and object files detection		      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+SRCS := $(shell find vendors -type f -name '*.S' -o -name '*.c') \
+	$(shell find src     -type f -name '*.S' -o -name '*.c')
+OBJS := $(patsubst src/%.S,$(TARGET)/%.S.o,$(filter src/%.S,$(SRCS))) \
+	$(patsubst src/%.c,$(TARGET)/%.c.o,$(filter src/%.c,$(SRCS)))
+OBJS += $(patsubst vendors/%.S,$(TARGET)/vendors/%.S.o,$(filter vendors/%.S,$(SRCS))) \
+	$(patsubst vendors/%.c,$(TARGET)/vendors/%.c.o,$(filter vendors/%.c,$(SRCS)))
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#				recipes					      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+all: $(ISOROOTDIR)/risx.elf
+
+
+$(ISOROOTDIR)/risx.elf: $(OBJS) src/kernel-$(ARCH).ld
+	@mkdir -p $(dir $@)
+	$(CC) $(OBJS) $(LDFLAGS) -o $@
+
+$(TARGET)/%.S.o: src/%.S
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(TARGET)/%.c.o: src/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(TARGET)/vendors/%.S.o: vendors/%.S
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(TARGET)/vendors/%.c.o: vendors/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+.PHONY: all
