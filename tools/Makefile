@@ -1,23 +1,25 @@
-OBJ_DIR ?= target
+ROOTDIR ?= .
+TARGET ?= $(ROOTDIR)/target/tools
 CC := gcc
+CPPFLAGS := -Iinclude
 
-all: $(OBJ_DIR)/gdt $(OBJ_DIR)/indices $(OBJ_DIR)/stacks $(OBJ_DIR)/testelf
+all: $(TARGET)/gdt $(TARGET)/indices $(TARGET)/stacks $(TARGET)/testelf
 
 
-$(OBJ_DIR)/gdt: src/gdt.c
+$(TARGET)/gdt: src/gdt.c
 	@mkdir -p $(dir $@)
-	$(CC) -Iinclude -o $@ $<
+	$(CC) $(CPPFLAGS) -o $@ $<
 
-$(OBJ_DIR)/indices: src/indices.c
+$(TARGET)/indices: src/indices.c
 	@mkdir -p $(dir $@)
-	$(CC) -Iinclude -o $@ $<
+	$(CC) $(CPPFLAGS) -o $@ $<
 
-$(OBJ_DIR)/stacks: src/stacks.c
+$(TARGET)/stacks: src/stacks.c
 	@mkdir -p $(dir $@)
-	$(CC) -Iinclude -o $@ $<
+	$(CC) $(CPPFLAGS) -o $@ $<
 
-$(OBJ_DIR)/testelf: src/testelf.c
+$(TARGET)/testelf: src/testelf.c
 	@mkdir -p $(dir $@)
-	$(CC) -Iinclude -o $@ $<
+	$(CC) $(CPPFLAGS) -o $@ $<
 
 .PHONY: all

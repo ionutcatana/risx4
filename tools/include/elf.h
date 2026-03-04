@@ -1,1 +1,1 @@
-../../sys/include/elf.h
+../../sys/risx/include/elf.h
