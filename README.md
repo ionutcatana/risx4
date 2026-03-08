@@ -11,3 +11,4 @@
     - Memory management mechanism (policy in userspace!)
     - Process creation mechanism (policy in userspace!)
     - Scheduling
+- (08/03/2026) Focus on UEFI machines from now on
