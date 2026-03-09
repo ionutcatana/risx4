@@ -27,7 +27,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdnoreturn.h>
 
 __attribute__((used, section(".limine_requests_start")))
 static volatile LIMINE_REQUESTS_START_MARKER
@@ -38,34 +37,32 @@ static volatile LIMINE_REQUESTS_END_MARKER
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4)
 
-noreturn void panic(const char* message) {
+void panic(const char* message) {
     printf("PANIC: %s\n", message);
     abort();
 }
 
-pair_t boostrap() {
+void boostrap(void) {
+    /* basic display and communication                                        */
     initprintf();
     initserial();
     initconsole();
 
+    /* servers and drivers                                                    */
     initmodules();
 
-    initpmm();  printf("physical frame allocator initialized.\n");
-    initvmm();  printf("virtual page allocator initialized.\n");
-    initmp();   printf("bootstrap successful.\n");
+    /* memory management mechanisms                                           */
+    initpmm(); printf("[CPU %llu] physical frame allocator initialized.\n", readlapicid());
+    initvmm(); printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
 
-    pair_t pair;
-    pair.value0 = 0;
-    pair.value1 = 0;
-
-    return pair;
+    /* start all cores                                                        */
+    initmp();
 }
 
 void setup(struct limine_mp_info* info) {
-    (void)info;
 #if defined (__x86_64__)
-    initgdt();  printf("GDT installed.\n");
-    initidt();  printf("IDT installed.\n");
+    initgdt(); printf("[CPU %llu] GDT installed.\n", info->processor_id);
+    initidt(); printf("[CPU %llu] IDT installed.\n", info->processor_id);
 //  initacpi();
 //  extern struct rsdp_t* rsdp;
 //  extern struct xsdp_t* xsdp;
@@ -83,11 +80,11 @@ void setup(struct limine_mp_info* info) {
 
     intenable();
 
-    printf("setup successful.\n");
+    printf("[CPU %llu] setup successful.\n", info->processor_id);
 }
 
-noreturn void risx(void) {
-    printf("[CPU %lu] entered RISX.\n", readlapicid());
+void risx(void) {
+    // printf("[CPU %lu] entered RISX.\n", readlapicid());
 
     schedule();
     panic("unexpected return from scheduler.\n");
