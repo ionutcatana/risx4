@@ -5,6 +5,8 @@
         # # # # # # # # # # # # # # # #
         .global _start_bootstrap
         .global _start_application
+        .global _stacks
+        .global _guards
 
         # # # # # # # # # # # # # # # #
         #       TEXT SECTION          #
