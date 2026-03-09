@@ -11,11 +11,11 @@ static volatile struct limine_module_request modulereq = {
 
 void initmodules(void) {
     if (modulereq.response == NULL) {
-        printf("no modules loaded\n");
+//      printf("no modules loaded\n");
         return;
     }
 
     for (size_t i = 0; i < modulereq.response->module_count; i++) {
-        printf("module address: 0x%016llx\nmodule string: %s\n", modulereq.response->modules[i]->address, modulereq.response->modules[i]->string);
+//      printf("module address: 0x%016llx\nmodule string: %s\n", modulereq.response->modules[i]->address, modulereq.response->modules[i]->string);
     }
 }
