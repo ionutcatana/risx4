@@ -9,12 +9,20 @@
         .global _guards
 
         # # # # # # # # # # # # # # # #
+        #       EXTERNAL SYMBOLS      #
+        # # # # # # # # # # # # # # # #
+        .extern bootstrap
+        .extern setup
+        .extern risx
+        .extern abort
+
+        # # # # # # # # # # # # # # # #
         #       TEXT SECTION          #
         # # # # # # # # # # # # # # # #
         .code64
         .section .text
 _start_bootstrap:                       # entry point on bootstrap cpu
-        call    setup                   # load new address space after setup
+        call    boostrap                # load new address space after setup
 _start_application:                     # all cores execute this
 #       lea     rax, kernelpagetbl
 #       mov     cr3, rax
@@ -23,6 +31,7 @@ _start_application:                     # all cores execute this
 #       xor     rbp, rbp
 #       xor     rbp, rbp
 #       lea     rsp, _stack0 + 0x4000   # use own stack
+        call    setup
         call    risx                    # should never return
         call    abort
 

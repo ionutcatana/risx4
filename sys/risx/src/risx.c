@@ -24,7 +24,6 @@
 #if defined (__riscv)
 #endif
 
-#include <stdatomic.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -44,10 +43,7 @@ noreturn void panic(const char* message) {
     abort();
 }
 
-static atomic_bool initialized;
-
-void setup() {
-    atomic_init(&initialized, false);
+void boostrap() {
     initprintf();
     initserial();
     initconsole();
@@ -58,6 +54,10 @@ void setup() {
 //  initvmm(stackbase); printf("virtual page allocator initialized.\n");
 //  initmp();           printf("multiprocessing initialized.\n");
 
+    printf("bootstrap successful.\n");
+}
+
+void setup() {
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");
     initidt();  printf("IDT installed.\n");
@@ -79,11 +79,9 @@ void setup() {
     intenable();
 
     printf("setup successful.\n");
-    atomic_store_explicit(&initialized, true, memory_order_release);
 }
 
 noreturn void risx(void) {
-    while (!atomic_load_explicit(&initialized, memory_order_acquire));
     printf("[CPU %lu] entered RISX.\n", readlapicid());
 
     schedule();

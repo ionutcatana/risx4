@@ -11,6 +11,7 @@ typedef struct {
 } pair_t;
 
 // risx.c
+void boostrap();
 void setup();
 noreturn void risx(void);
 
