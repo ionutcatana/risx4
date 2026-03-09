@@ -9,7 +9,7 @@
 
 // mm.c
 void initpmm(void);
-void initvmm(uint64_t stackbase);
+void initvmm(void);
 
 #endif
 

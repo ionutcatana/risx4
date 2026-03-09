@@ -34,11 +34,9 @@ void initpmm(void) {
     initkpalloc(memmapreq.response);
 }
 
-void initvmm(uint64_t stackbase) {
+void initvmm() {
     if (addrreq.response == NULL)
         panic("null executable addr response.");
 
-    (void)stackbase;
-
-    initkvalloc(addrreq.response->physical_base, addrreq.response->virtual_base, stackbase, memmapreq.response);
+    initkvalloc(addrreq.response->physical_base, addrreq.response->virtual_base, memmapreq.response);
 }

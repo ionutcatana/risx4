@@ -39,10 +39,10 @@ void intpop(void) {
         intenable();
 }
 
-void sethandler(size_t vector, uint64_t handler, uint8_t attributes) {
+void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist) {
     _idt[vector].base_lower  = (uint16_t)(handler & 0xFFFF);
     _idt[vector].selector    = RISX_CODE_SEG;
-    _idt[vector].ist         = 0;
+    _idt[vector].ist         = ist & 0x7;
     _idt[vector].attributes  = attributes;
     _idt[vector].base_middle = (uint16_t)((handler >> 16) & 0xFFFF);
     _idt[vector].base_upper  = (uint32_t)((handler >> 32) & 0xFFFFFFFF);
@@ -120,7 +120,11 @@ void initidt(void) {
     desc.base = (uint64_t)_idt;
 
     for (size_t i = 0; i < NENTRIES_IDT; i++)
-        sethandler(i,_vectors[i], IDT_INTERRUPT_GATE_RING0);
+        sethandler(i,_vectors[i], IDT_INTERRUPT_GATE_RING0, 0);
+
+    sethandler(X86_INTERRUPT_DF, _vectors[X86_INTERRUPT_DF], IDT_INTERRUPT_GATE_RING0, 1);
+    sethandler(X86_INTERRUPT_NMI, _vectors[X86_INTERRUPT_NMI], IDT_INTERRUPT_GATE_RING0, 1);
+    sethandler(X86_INTERRUPT_PF, _vectors[X86_INTERRUPT_PF], IDT_INTERRUPT_GATE_RING0, 1);
 
     loadidt(&desc);
 }

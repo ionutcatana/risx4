@@ -15,7 +15,7 @@ void istub(void);
 // arch/x86_64/interrupts.c
 void intpush(void);
 void intpop(void);
-void sethandler(size_t vector, uint64_t handler, uint8_t attributes);
+void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist);
 void idispatch(trapframe_t* tf);
 
 #endif

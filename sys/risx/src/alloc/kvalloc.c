@@ -27,14 +27,16 @@ extern char __data_end[];
 extern char __bss_start[];
 extern char __bss_end[];
 
+extern uint64_t _guards[NCPU];
+extern uint64_t _iguards[NCPU];
+
 static pagetable_t* kerneltable_addr = NULL;
 
 pagetable_t* kerneltable() {
     return kerneltable_addr;
 }
 
-void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, uint64_t stackbase, struct limine_memmap_response* memmap) {
-    (void)stackbase;
+void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, struct limine_memmap_response* memmap) {
     kerneltable_addr = virtual(allocframe(1));
     memset(kerneltable_addr, 0, sizeof(pagetable_t));
 
@@ -54,8 +56,7 @@ void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, uint64_t stackb
             currflags = PAGE_RISX_TEXT;
         else if (curr_virtaddr >= (uint64_t) __rodata_start && curr_virtaddr < (uint64_t) __rodata_end)
             currflags = PAGE_RISX_RODATA;
-        else if ((curr_virtaddr >= (uint64_t) __data_start && curr_virtaddr < (uint64_t) __data_end) ||
-                 (curr_virtaddr >= (uint64_t) __bss_start && curr_virtaddr < (uint64_t) __bss_end))
+        else if ((curr_virtaddr >= (uint64_t) __data_start && curr_virtaddr < (uint64_t) __data_end) || (curr_virtaddr >= (uint64_t) __bss_start && curr_virtaddr < (uint64_t) __bss_end))
             currflags = PAGE_RISX_DATA;
         else
             break;
@@ -63,27 +64,40 @@ void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, uint64_t stackb
         mappage(kerneltable_addr, curr_virtaddr, curr_physaddr, currflags);
     }
 
-    /* map `NCPU` 16kib stacks and guard pages for kernel code                */
-    /* map `NCPU` 16kib stacks and guard pages for interrupts                 */
-    for (size_t cpu = 0; cpu < 2 * NCPU; cpu++) {
-        uint64_t stack_virt = STACK0 - cpu * DISTANCE;
-        uint64_t stack_physaddr = allocframe(4);
-        for (size_t i = 0; i < 4; i++) {
-            mappage(kerneltable_addr, stack_virt + i * PAGE_SIZE, stack_physaddr + i * PAGE_SIZE, PAGE_RISX_STACK);
-        }
+    /* Unmap the guard pages for the 32 kernel and 32 interrupt stacks        */
+    for (size_t i = 0; i < 32; i++) {
+        unmappage(kerneltable_addr, _guards[i], 1);
+        unmappage(kerneltable_addr, _iguards[i], 1);
     }
-
-    loadcr3(physical(kerneltable_addr));
 }
 
 void unmappage(pagetable_t* globaltbl, uint64_t start_virtaddr, size_t count) {
-    (void) globaltbl;
-    (void) start_virtaddr;
-    (void) count;
+    for (size_t i = 0; i < count; i++) {
+        uint64_t virtaddr = start_virtaddr + i * PAGE_SIZE;
+
+        uint64_t index = LVL4_INDEX(virtaddr);
+        if (!(globaltbl->entries[index] & PAGE_PRESENT))
+            continue;
+
+        pagetable_t* lvl3tbl = virtual(globaltbl->entries[index] & PTE_ADDRESS_MASK);
+        index = LVL3_INDEX(virtaddr);
+        if (!(lvl3tbl->entries[index] & PAGE_PRESENT))
+            continue;
+
+        pagetable_t* lvl2tbl = virtual(lvl3tbl->entries[index] & PTE_ADDRESS_MASK);
+        index = LVL2_INDEX(virtaddr);
+        if (!(lvl2tbl->entries[index] & PAGE_PRESENT))
+            continue;
+
+        pagetable_t* lvl1tbl = virtual(lvl2tbl->entries[index] & PTE_ADDRESS_MASK);
+        index = LVL1_INDEX(virtaddr);
+
+        /* Clear the page table entry to unmap it                             */
+        lvl1tbl->entries[index] = 0;
+    }
 }
 
-void mappage(pagetable_t* globaltbl, uint64_t virtaddr,
-                                     uint64_t physaddr, uint64_t flags) {
+void mappage(pagetable_t* globaltbl, uint64_t virtaddr, uint64_t physaddr, uint64_t flags) {
     uint64_t index;
     index = LVL4_INDEX(virtaddr);
     if (!(globaltbl->entries[index] & PAGE_PRESENT)) {
@@ -109,4 +123,31 @@ void mappage(pagetable_t* globaltbl, uint64_t virtaddr,
     index = LVL1_INDEX(virtaddr);
 
     lvl1tbl->entries[index] = physaddr | flags;
+}
+
+uint64_t* walk(pagetable_t* pagetable, uint64_t virtaddr) {
+    if (!pagetable) return NULL;
+
+    uint64_t index = LVL4_INDEX(virtaddr);
+    if (!(pagetable->entries[index] & PAGE_PRESENT)) {
+        return NULL; /* Not mapped */
+    }
+
+    pagetable_t* lvl3tbl = virtual(pagetable->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL3_INDEX(virtaddr);
+    if (!(lvl3tbl->entries[index] & PAGE_PRESENT)) {
+        return NULL;
+    }
+
+    pagetable_t* lvl2tbl = virtual(lvl3tbl->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL2_INDEX(virtaddr);
+    if (!(lvl2tbl->entries[index] & PAGE_PRESENT)) {
+        return NULL;
+    }
+
+    pagetable_t* lvl1tbl = virtual(lvl2tbl->entries[index] & PTE_ADDRESS_MASK);
+    index = LVL1_INDEX(virtaddr);
+
+    /* return a pointer to the pte so the caller can read or modify it        */
+    return &lvl1tbl->entries[index];
 }
