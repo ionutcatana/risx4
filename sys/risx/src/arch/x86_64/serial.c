@@ -6,12 +6,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-static spinlock_t seriallock;
+static spinlock_t seriallk;
 
 static bool initialized = false;
 
 int initserial(void) {
-    initlock(&seriallock, "serial");
+    initlock(&seriallk, "serial");
 
     writes(X86_64_SERIAL_PORT + 1, 0x00);    // disable all interrupts
     writes(X86_64_SERIAL_PORT + 3, 0x80);    // enable dlab (set baud rate divisor)
@@ -36,7 +36,7 @@ int initserial(void) {
 }
 
 void serialputchar(int c) {
-    acquire(&seriallock);
+    acquire(&seriallk);
     if (initialized) {
         while((reads(X86_64_SERIAL_PORT + 5) & 0x20) == 0);
         if(c == '\n') {
@@ -46,6 +46,6 @@ void serialputchar(int c) {
             writes(X86_64_SERIAL_PORT, (uint8_t)c);
         }
     }
-    release(&seriallock);
+    release(&seriallk);
 }
 

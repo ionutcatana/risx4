@@ -12,52 +12,52 @@
 #include "sync/spinlock.h"
 #include <stdarg.h>
 
-static spinlock_t wrapperlock;
-static spinlock_t snprintflock;
-static spinlock_t vsnprintflock;
-static spinlock_t printflock;
+static spinlock_t wrapperlk;
+static spinlock_t snprintflk;
+static spinlock_t vsnprintflk;
+static spinlock_t printflk;
 
 void initprintf(void) {
-    initlock(&wrapperlock, "wrapperlock");
-    initlock(&snprintflock, "snprintf");
-    initlock(&vsnprintflock, "vsnprintf");
-    initlock(&printflock, "printf");
+    initlock(&wrapperlk, "wrapper_npf_putc");
+    initlock(&snprintflk, "npf_snprintf");
+    initlock(&vsnprintflk, "npf_vsnprintf");
+    initlock(&printflk, "npf_vpprintf");
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static void wrapper_npf_putc(int c, void* ctx) {
-    acquire(&wrapperlock);
+    acquire(&wrapperlk);
     serialputchar(c);
     consoleputchar(c);
-    release(&wrapperlock);
+    release(&wrapperlk);
 }
 
 int snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... ) {
-    acquire(&snprintflock);
+    acquire(&snprintflk);
     va_list val;
     va_start(val, format);
-    int const rv = npf_vsnprintf(buffer, bufsz, format, val);
+    int const rv = npf_snprintf(buffer, bufsz, format, val);
     va_end(val);
-    release(&snprintflock);
+    release(&snprintflk);
 
     return rv;
 }
 
 int vsnprintf(char* restrict buffer, size_t bufsz, const char* restrict format, va_list vlist ) {
-    acquire(&vsnprintflock);
+    acquire(&vsnprintflk);
     int const rv = npf_vsnprintf(buffer, bufsz, format, vlist);
-    release(&vsnprintflock);
+    release(&vsnprintflk);
 
     return rv;
 }
 
 int printf(const char* restrict format, ... ) {
-    acquire(&printflock);
+    acquire(&printflk);
     va_list val;
     va_start(val, format);
     int const rv = npf_vpprintf(wrapper_npf_putc, NULL, format, val);
     va_end(val);
-    release(&printflock);
+    release(&printflk);
 
     return rv;
 }
