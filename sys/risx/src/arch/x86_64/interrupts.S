@@ -8,6 +8,7 @@
         .global istub
         .global _vectors
         .global _istacks                # uint64_t _istacks[32]
+        .global _iguards
         .global _idt                    # intdesc_t _idt[256]
         .global loadidt                 # loadidt(intdesc_t* desc)
 
@@ -314,6 +315,41 @@ _istacks:                               # uint64_t _istacks[32]
         .quad   _istack30
         .quad   _istack31
 
+        .align  16
+_iguards:                               # uint64_t _iguards[32]
+        .quad   _iguard0
+        .quad   _iguard1
+        .quad   _iguard2
+        .quad   _iguard3
+        .quad   _iguard4
+        .quad   _iguard5
+        .quad   _iguard6
+        .quad   _iguard7
+        .quad   _iguard8
+        .quad   _iguard9
+        .quad   _iguard10
+        .quad   _iguard11
+        .quad   _iguard12
+        .quad   _iguard13
+        .quad   _iguard14
+        .quad   _iguard15
+        .quad   _iguard16
+        .quad   _iguard17
+        .quad   _iguard18
+        .quad   _iguard19
+        .quad   _iguard20
+        .quad   _iguard21
+        .quad   _iguard22
+        .quad   _iguard23
+        .quad   _iguard24
+        .quad   _iguard25
+        .quad   _iguard26
+        .quad   _iguard27
+        .quad   _iguard28
+        .quad   _iguard29
+        .quad   _iguard30
+        .quad   _iguard31
+
         # # # # # # # # # # # # # # # #
         #       BSS SECTION           #
         # # # # # # # # # # # # # # # #
@@ -321,102 +357,198 @@ _istacks:                               # uint64_t _istacks[32]
         .align  16
 _idt:   .space  0x1000
 
-        .align  0x1000
-_istack0:                               # 32 stacks for interrupts
+                .align  0x1000
+_istack0:                                # 32 stacks for interrupts
         .space  0x4000
+        .align  0x1000
+_iguard0:
+        .space  0x1000
         .align  0x1000
 _istack1:
         .space  0x4000
         .align  0x1000
+_iguard1:
+        .space  0x1000
+        .align  0x1000
 _istack2:
         .space  0x4000
+        .align  0x1000
+_iguard2:
+        .space  0x1000
         .align  0x1000
 _istack3:
         .space  0x4000
         .align  0x1000
+_iguard3:
+        .space  0x1000
+        .align  0x1000
 _istack4:
         .space  0x4000
+        .align  0x1000
+_iguard4:
+        .space  0x1000
         .align  0x1000
 _istack5:
         .space  0x4000
         .align  0x1000
+_iguard5:
+        .space  0x1000
+        .align  0x1000
 _istack6:
         .space  0x4000
+        .align  0x1000
+_iguard6:
+        .space  0x1000
         .align  0x1000
 _istack7:
         .space  0x4000
         .align  0x1000
+_iguard7:
+        .space  0x1000
+        .align  0x1000
 _istack8:
         .space  0x4000
+        .align  0x1000
+_iguard8:
+        .space  0x1000
         .align  0x1000
 _istack9:
         .space  0x4000
         .align  0x1000
+_iguard9:
+        .space  0x1000
+        .align  0x1000
 _istack10:
         .space  0x4000
+        .align  0x1000
+_iguard10:
+        .space  0x1000
         .align  0x1000
 _istack11:
         .space  0x4000
         .align  0x1000
+_iguard11:
+        .space  0x1000
+        .align  0x1000
 _istack12:
         .space  0x4000
+        .align  0x1000
+_iguard12:
+        .space  0x1000
         .align  0x1000
 _istack13:
         .space  0x4000
         .align  0x1000
+_iguard13:
+        .space  0x1000
+        .align  0x1000
 _istack14:
         .space  0x4000
+        .align  0x1000
+_iguard14:
+        .space  0x1000
         .align  0x1000
 _istack15:
         .space  0x4000
         .align  0x1000
+_iguard15:
+        .space  0x1000
+        .align  0x1000
 _istack16:
         .space  0x4000
+        .align  0x1000
+_iguard16:
+        .space  0x1000
         .align  0x1000
 _istack17:
         .space  0x4000
         .align  0x1000
+_iguard17:
+        .space  0x1000
+        .align  0x1000
 _istack18:
         .space  0x4000
+        .align  0x1000
+_iguard18:
+        .space  0x1000
         .align  0x1000
 _istack19:
         .space  0x4000
         .align  0x1000
+_iguard19:
+        .space  0x1000
+        .align  0x1000
 _istack20:
         .space  0x4000
+        .align  0x1000
+_iguard20:
+        .space  0x1000
         .align  0x1000
 _istack21:
         .space  0x4000
         .align  0x1000
+_iguard21:
+        .space  0x1000
+        .align  0x1000
 _istack22:
         .space  0x4000
+        .align  0x1000
+_iguard22:
+        .space  0x1000
         .align  0x1000
 _istack23:
         .space  0x4000
         .align  0x1000
+_iguard23:
+        .space  0x1000
+        .align  0x1000
 _istack24:
         .space  0x4000
+        .align  0x1000
+_iguard24:
+        .space  0x1000
         .align  0x1000
 _istack25:
         .space  0x4000
         .align  0x1000
+_iguard25:
+        .space  0x1000
+        .align  0x1000
 _istack26:
         .space  0x4000
+        .align  0x1000
+_iguard26:
+        .space  0x1000
         .align  0x1000
 _istack27:
         .space  0x4000
         .align  0x1000
+_iguard27:
+        .space  0x1000
+        .align  0x1000
 _istack28:
         .space  0x4000
+        .align  0x1000
+_iguard28:
+        .space  0x1000
         .align  0x1000
 _istack29:
         .space  0x4000
         .align  0x1000
+_iguard29:
+        .space  0x1000
+        .align  0x1000
 _istack30:
         .space  0x4000
         .align  0x1000
+_iguard30:
+        .space  0x1000
+        .align  0x1000
 _istack31:
         .space  0x4000
+        .align  0x1000
+_iguard31:
+        .space  0x1000
         .align  0x1000
 
         # # # # # # # # # # # # # # # #
