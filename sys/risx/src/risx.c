@@ -46,12 +46,11 @@ noreturn void panic(const char* message) {
 
 static atomic_bool initialized;
 
-void setup(uint64_t stackbase) {
+void setup() {
     atomic_init(&initialized, false);
     initprintf();
     initserial();
     initconsole();
-    printf("stack top: 0x%016lx\n", stackbase);
 
     initmodules();
 

@@ -3,19 +3,22 @@
         # # # # # # # # # # # # # # # #
         #       EXPORTED SYMBOLS      #
         # # # # # # # # # # # # # # # #
-        .global _start
+        .global _start_bootstrap
+        .global _start_application
 
         # # # # # # # # # # # # # # # #
         #       TEXT SECTION          #
         # # # # # # # # # # # # # # # #
         .code64
         .section .text
-_start: call    setup                   # load new address space after setup
+_start_bootstrap:                       # entry point on bootstrap cpu
+        call    setup                   # load new address space after setup
 #       lea     rax, kernelpagetbl
 #       mov     cr3, rax
 #       mov     rax, 0xffffffffffffe000
 #       mov     rsp, rax
 #       xor     rbp, rbp
+_start_application:                     # all cores execute this
         call    risx                    # should never return
         call    abort
 
