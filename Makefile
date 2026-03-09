@@ -3,12 +3,6 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ARCH ?= x86_64
 TARGET := $(CURDIR)/target
-QEMU64 := qemu-system-$(ARCH)
-
-ifeq ($(ARCH), x86_64)
-QEMUFLAGS := -machine q35 -bios /usr/share/ovmf/OVMF.fd -smp cores=6 -m 4G
-QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
-endif
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #				recipes					      #
@@ -41,6 +35,11 @@ iso: sys
 clean:
 	@rm -rf $(TARGET)
 
+QEMU64 := qemu-system-$(ARCH)
+ifeq ($(ARCH), x86_64)
+QEMUFLAGS := -machine q35 -bios /usr/share/ovmf/OVMF.fd -smp cores=6 -m 4G
+QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
+endif
 qemu: iso
 	$(QEMU64) $(QEMUFLAGS) -cdrom $(ISOFILE)
 
