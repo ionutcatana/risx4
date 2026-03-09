@@ -53,8 +53,8 @@ void inittss(void) {
     // initialize only what's needed for now
     for (size_t i = 0; i < NCPU; i++) {
         _tssaddrs[i]->iomap_base = sizeof(tss_t);
-        _tssaddrs[i]->rsp0 = _istacks[i] - STACK_SIZE;
-        _tssaddrs[i]->ist[0] = _istacks[i] - STACK_SIZE;
+        _tssaddrs[i]->rsp0 = _istacks[i] + STACK_SIZE;
+        _tssaddrs[i]->ist[0] = _istacks[i] + STACK_SIZE;
     }
 }
 
