@@ -319,105 +319,105 @@ _istacks:                               # uint64_t _istacks[32]
         # # # # # # # # # # # # # # # #
         .section .bss
         .align  16
-_idt:   .space  4096
+_idt:   .space  0x1000
 
-        .align  16
+        .align  0x1000
 _istack0:                               # 32 stacks for interrupts
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack1:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack2:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack3:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack4:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack5:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack6:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack7:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack8:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack9:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack10:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack11:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack12:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack13:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack14:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack15:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack16:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack17:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack18:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack19:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack20:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack21:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack22:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack23:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack24:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack25:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack26:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack27:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack28:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack29:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack30:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 _istack31:
-        .space  16384
-        .align  16
+        .space  0x4000
+        .align  0x1000
 
         # # # # # # # # # # # # # # # #
         #       TEXT SECTION          #
