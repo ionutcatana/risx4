@@ -43,7 +43,7 @@ noreturn void panic(const char* message) {
     abort();
 }
 
-void boostrap() {
+pair_t boostrap() {
     initprintf();
     initserial();
     initconsole();
@@ -52,11 +52,16 @@ void boostrap() {
 
     initpmm();  printf("physical frame allocator initialized.\n");
     initvmm();  printf("virtual page allocator initialized.\n");
+    initmp();   printf("bootstrap successful.\n");
 
-    printf("bootstrap successful.\n");
+    pair_t pair;
+    pair.value0 = 0;
+    pair.value1 = 0;
+
+    return pair;
 }
 
-void setup(struct limine_mp_info info) {
+void setup(struct limine_mp_info* info) {
     (void)info;
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");

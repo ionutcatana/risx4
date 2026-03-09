@@ -23,7 +23,8 @@
         .section .text
 _start_bootstrap:                       # entry point on bootstrap cpu
         call    boostrap                # load new address space after setup
-_start_application:                     # all cores execute this
+_start_application:                     # void _start_application(struct limine_mp_info* info)
+#       push    rdi                     # save info
 #       lea     rax, kernelpagetbl
 #       mov     cr3, rax
 #       mov     rax, 0xffffffffffffe000
@@ -31,7 +32,8 @@ _start_application:                     # all cores execute this
 #       xor     rbp, rbp
 #       xor     rbp, rbp
 #       lea     rsp, _stack0 + 0x4000   # use own stack
-        call    setup
+#       pop     rdi                     # restore info
+        call    setup                   # void setup(struct limine_mp_info* info)
         call    risx                    # should never return
         call    abort
 

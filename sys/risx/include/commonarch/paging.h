@@ -25,7 +25,4 @@ typedef struct {
     uint64_t entries[NENTRIES_PT];
 } pagetable_t;
 
-// arch/x86_64/alloc/virt_allocator.c
-uint64_t   readkernelpgtbl(void);
-
 #endif

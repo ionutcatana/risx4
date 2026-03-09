@@ -7,12 +7,7 @@
 #include "lib/printf.h"
 #include <stddef.h>
 #include <stdint.h>
-#include <stdatomic.h>
 #include "alloc/kvalloc.h"
-
-void initgdt(void);
-void loadidt(void);
-noreturn void enterrisx(uint64_t stack_top);
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_mp_request mpreq = {
@@ -20,38 +15,31 @@ static volatile struct limine_mp_request mpreq = {
     .revision = LIMINE_API_REVISION
 };
 
-inline uint64_t cpucount() {
+uint64_t cpucount(void) {
     return mpreq.response->cpu_count;
 }
 
-inline uint32_t bootstrapcpu() {
+uint32_t bootstrapcpu(void) {
     return mpreq.response->bsp_lapic_id;
 }
 
-void enumeratecpus() {
+void enumeratecpus(void) {
     printf("bootstrap cpu lapic id %llu\n", bootstrapcpu());
-    printf("%10s%15s%20s\n", "lapic id", "processor id", "goto address");
+    printf("%10s%15s\n", "lapic id", "processor id");
     for (uint64_t i = 0; i < cpucount(); i++)
-        printf("%10lu%15lu%20lx\n", mpreq.response->cpus[i]->lapic_id, mpreq.response->cpus[i]->processor_id, mpreq.response->cpus[i]->goto_address);
-}
-
-void mpentrypoint(struct limine_mp_info *info) {
-    loadcr3((uint64_t)kerneltable());
-    initgdt();
-    loadidt();
-
-    uint64_t stack_top = STACK_BASE_VIRT + ((info->processor_id + 1) * STACK_SIZE);
-    enterrisx(stack_top);
+        printf("%10lu%15lu\n", mpreq.response->cpus[i]->lapic_id, mpreq.response->cpus[i]->processor_id);
 }
 
 void initmp(void) {
     if (mpreq.response == NULL)
         return; // doesn't panic; systems may not have multiple processors
 
+    enumeratecpus();
+
     for (uint64_t i = 0; i < mpreq.response->cpu_count; i++) {
         if (mpreq.response->cpus[i]->lapic_id == mpreq.response->bsp_lapic_id)
             continue;
 
-        atomic_store_explicit((_Atomic limine_goto_address*)&mpreq.response->cpus[i]->goto_address, (limine_goto_address)mpentrypoint, memory_order_seq_cst);
+        mpreq.response->cpus[i]->goto_address = &_start_application;
     }
 }

@@ -33,7 +33,7 @@ extern uint64_t _iguards[NCPU];
 
 static pagetable_t* kerneltable_addr = NULL;
 
-pagetable_t* kerneltable() {
+pagetable_t* kerneltable(void) {
     return kerneltable_addr;
 }
 
