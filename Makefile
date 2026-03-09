@@ -6,7 +6,7 @@ TARGET := $(CURDIR)/target
 QEMU64 := qemu-system-$(ARCH)
 
 ifeq ($(ARCH), x86_64)
-QEMUFLAGS := -machine pc -smp cores=6 -m 4G
+QEMUFLAGS := -machine q35 -bios /usr/share/ovmf/OVMF.fd -smp cores=6 -m 4G
 QEMUDEBUGFLAGS := -d int -s -S -monitor stdio
 endif
 
@@ -28,16 +28,15 @@ usr:
 ISOROOT ?= $(TARGET)/$(ARCH)/iso_root
 ISOFILE ?= $(TARGET)/$(ARCH)/risx.iso
 iso: sys
-	@cp -r ./boot $(TARGET)/$(ARCH)/iso_root
-	@xorriso					\
-		-as mkisofs				\
-		-b boot/limine/limine-bios-cd.bin	\
-		-boot-info-table			\
-		-boot-load-size 4			\
-		-no-emul-boot				\
-		-o $(ISOFILE)				\
+	@mkdir -p $(TARGET)/$(ARCH)/iso_root
+	@cp -r ./boot/* $(TARGET)/$(ARCH)/iso_root
+	@xorriso				\
+		-as mkisofs 			\
+		-e limine/limine-uefi-cd.bin	\
+		-isohybrid-gpt-basdat		\
+		-no-emul-boot			\
+		-o $(ISOFILE)			\
 		$(ISOROOT)
-	@limine bios-install $(ISOFILE)
 
 clean:
 	@rm -rf $(TARGET)
