@@ -1,10 +1,11 @@
-#include "console.h"
+#include "commonarch/console.h"
 #include "flanterm_backends/fb.h"
 #include "flanterm.h"
 #include "lib/string.h"
 #include "limine.h"
 #include "panic.h"
 #include "risx.h"
+#include "sync/spinlock.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -14,11 +15,15 @@ static volatile struct limine_framebuffer_request fbreq = {
     .revision = LIMINE_API_REVISION
 };
 
-struct flanterm_context* ft_ctx = NULL;
+static spinlock_t consolelock;
+
+static struct flanterm_context* ft_ctx = NULL;
 
 int initconsole(void) {
     if (fbreq.response == NULL || fbreq.response->framebuffer_count == 0)
         panic("invalid framebuffer response.");
+
+    initlock(&consolelock, "console");
 
     struct limine_framebuffer fb;
     memcpy(
@@ -48,6 +53,10 @@ int initconsole(void) {
 }
 
 void consoleputchar(int c) {
-    if (ft_ctx != NULL) flanterm_write(ft_ctx, (const char*)&c, 1);
+    acquire(&consolelock);
+    if (ft_ctx != NULL)
+        flanterm_write(ft_ctx, (const char*)&c, 1);
+
+    release(&consolelock);
 }
 

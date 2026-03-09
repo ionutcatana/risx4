@@ -6,34 +6,48 @@
 #define NANOPRINTF_USE_BINARY_FORMAT_SPECIFIERS 1
 #define NANOPRINTF_USE_WRITEBACK_FORMAT_SPECIFIERS 0
 
+#include "commonarch/console.h"
 #include "commonarch/serial.h"
-#include "console.h"
 #include "nanoprintf.h"
 #include "sync/spinlock.h"
 #include <stdarg.h>
 
+static spinlock_t wrapperlock;
+static spinlock_t snprintflock;
+static spinlock_t vsnprintflock;
 static spinlock_t printflock;
+
 void initprintf(void) {
+    initlock(&wrapperlock, "wrapperlock");
+    initlock(&snprintflock, "snprintf");
+    initlock(&vsnprintflock, "vsnprintf");
     initlock(&printflock, "printf");
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static void wrapper_npf_putc(int c, void* ctx) {
+    acquire(&wrapperlock);
     serialputchar(c);
     consoleputchar(c);
+    release(&wrapperlock);
 }
 
 int snprintf(char* restrict buffer, size_t bufsz, const char* restrict format, ... ) {
+    acquire(&snprintflock);
     va_list val;
     va_start(val, format);
     int const rv = npf_vsnprintf(buffer, bufsz, format, val);
     va_end(val);
+    release(&snprintflock);
 
     return rv;
 }
 
 int vsnprintf(char* restrict buffer, size_t bufsz, const char* restrict format, va_list vlist ) {
+    acquire(&vsnprintflock);
     int const rv = npf_vsnprintf(buffer, bufsz, format, vlist);
+    release(&vsnprintflock);
+
     return rv;
 }
 

@@ -7,6 +7,7 @@
 #include "limine.h"
 #include "panic.h"
 #include "risx.h"
+#include "sync/spinlock.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -20,8 +21,12 @@ static size_t    size       = 0;
 static uint64_t  freepages  = 0;
 static uint64_t  totalpages = 0;
 
+static spinlock_t kpalloclk;
+
 void initkpalloc(const struct limine_memmap_response* memmap) {
     enumeratememmap(memmap);
+
+    initlock(&kpalloclk, "kpalloc");
 
     // compute addr of the end of memory
     for (size_t i = 0; i < memmap->entry_count; i++)
@@ -77,6 +82,8 @@ uint64_t allocframe(size_t count) {
     if (count > freepages)
         panic("requested more memory than available.");
 
+    acquire(&kpalloclk);
+
     for (size_t i = 0; i + count <= totalpages; i++) {
         bool found = true;
         for (size_t k = 0; k < count; k++)
@@ -93,6 +100,8 @@ uint64_t allocframe(size_t count) {
             freepages -= count;
             uint64_t p = i * PAGE_SIZE;
             memset(virtual(p), 0, count * PAGE_SIZE);
+
+            release(&kpalloclk);
             return p;
         }
     }
@@ -101,10 +110,14 @@ uint64_t allocframe(size_t count) {
 }
 
 void freeframe(uint64_t frameptr, size_t count) {
+    acquire(&kpalloclk);
+
     uint64_t frameidx = frameptr / PAGE_SIZE;
     for (size_t i = frameidx; i < frameidx + count; i++)
         unsetbit(bitmap, i);
 
     freepages += count;
+
+    release(&kpalloclk);
 }
 

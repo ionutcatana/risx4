@@ -2,12 +2,17 @@
 #include "arch/x86_64/serial.h"
 #include "commonarch/io.h"
 #include "commonarch/serial.h"
+#include "sync/spinlock.h"
 #include <stdbool.h>
 #include <stdint.h>
+
+static spinlock_t seriallock;
 
 static bool initialized = false;
 
 int initserial(void) {
+    initlock(&seriallock, "serial");
+
     writes(X86_64_SERIAL_PORT + 1, 0x00);    // disable all interrupts
     writes(X86_64_SERIAL_PORT + 3, 0x80);    // enable dlab (set baud rate divisor)
     writes(X86_64_SERIAL_PORT + 0, 0x03);    // set divisor to 3 (lo byte) 38400 baud
@@ -31,6 +36,7 @@ int initserial(void) {
 }
 
 void serialputchar(int c) {
+    acquire(&seriallock);
     if (initialized) {
         while((reads(X86_64_SERIAL_PORT + 5) & 0x20) == 0);
         if(c == '\n') {
@@ -40,5 +46,6 @@ void serialputchar(int c) {
             writes(X86_64_SERIAL_PORT, (uint8_t)c);
         }
     }
+    release(&seriallock);
 }
 

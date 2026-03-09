@@ -7,6 +7,7 @@
 #include "memlayout.h"
 #include "panic.h"
 #include "risx.h"
+#include "sync/spinlock.h"  // TODO: ADD SPINLOCKS HERE
 #include <stddef.h>
 #include <stdint.h>
 

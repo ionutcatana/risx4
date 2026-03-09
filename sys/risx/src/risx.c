@@ -3,7 +3,7 @@
 #include "commonarch/interrupts.h"
 #include "commonarch/mp.h"
 #include "commonarch/serial.h"
-#include "console.h"
+#include "commonarch/console.h"
 #include "lib/printf.h"
 #include "limine.h"
 #include "mm.h"
@@ -50,14 +50,14 @@ void boostrap() {
 
     initmodules();
 
-    initpmm();          printf("physical frame allocator initialized.\n");
-//  initvmm(stackbase); printf("virtual page allocator initialized.\n");
-//  initmp();           printf("multiprocessing initialized.\n");
+    initpmm();  printf("physical frame allocator initialized.\n");
+    initvmm();  printf("virtual page allocator initialized.\n");
 
     printf("bootstrap successful.\n");
 }
 
-void setup() {
+void setup(struct limine_mp_info info) {
+    (void)info;
 #if defined (__x86_64__)
     initgdt();  printf("GDT installed.\n");
     initidt();  printf("IDT installed.\n");
