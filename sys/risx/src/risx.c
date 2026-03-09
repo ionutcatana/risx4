@@ -37,7 +37,7 @@ static volatile LIMINE_REQUESTS_END_MARKER
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4)
 
-void panic(const char* message) {
+noreturn void panic(const char* message) {
     printf("PANIC: %s\n", message);
     abort();
 }
