@@ -22,13 +22,6 @@ static volatile struct limine_executable_address_request addrreq = {
     .revision = LIMINE_API_REVISION
 };
 
-__attribute__((used, section(".limine_requests")))
-static volatile struct limine_stack_size_request stacksizereq = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = LIMINE_API_REVISION,
-    .stack_size = STACK_SIZE
-};
-
 void initpmm(void) {
     if (hhdmreq.response == NULL)
         panic("null hddm response.");
@@ -44,9 +37,6 @@ void initpmm(void) {
 void initvmm(uint64_t stackbase) {
     if (addrreq.response == NULL)
         panic("null executable addr response.");
-
-    if (stacksizereq.response == NULL)
-        panic("null stack size response.");
 
     (void)stackbase;
 
