@@ -14,7 +14,7 @@
 #define STACK_SIZE          65536
 #define NCPU                32
 
-/* kernel heap base address (hhdm + 4tib)                                       */
+/* kernel heap base address (hhdm + 4tib)                                     */
 #define KERNEL_HEAP_BASE    0xffffa00000000000
 
 #endif

@@ -25,16 +25,17 @@ void initkpalloc(const struct limine_memmap_response* memmap) {
 
     // compute addr of the end of memory
     for (size_t i = 0; i < memmap->entry_count; i++)
-        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED &&
-            memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
-            uint64_t endaddr = memmap->entries[i]->base +
-                               memmap->entries[i]->length;
+        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED && memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
+            uint64_t endaddr = memmap->entries[i]->base + memmap->entries[i]->length;
             if (endaddr > mmendptr) mmendptr = endaddr;
         }
 
     // determine bitmap size
     totalpages = ((mmendptr + 1) / PAGE_SIZE);
-    size = (totalpages / sizeof(uint32_t)); if (totalpages % sizeof(uint32_t) != 0) size++;
+    size = (totalpages / sizeof(uint32_t));
+
+    if (totalpages % sizeof(uint32_t) != 0)
+        size++;
 
     for (size_t i = 0; i < memmap->entry_count; i++)
         // find a space for bitmap
@@ -45,7 +46,8 @@ void initkpalloc(const struct limine_memmap_response* memmap) {
             break;
         }
 
-    if (bitmap == NULL) panic("bitmap doesn't fit in memory.");
+    if (bitmap == NULL)
+        panic("bitmap doesn't fit in memory.");
 
     const uint64_t bitmap_startaddr = physical(bitmap);
     const uint64_t bitmap_endaddr = (bitmap_startaddr + size * sizeof(uint32_t) + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1); // round up to nearest page
@@ -69,19 +71,25 @@ void initkpalloc(const struct limine_memmap_response* memmap) {
 }
 
 uint64_t allocframe(size_t count) {
-    if (count == 0) panic("allocated 0 page frames.");
-    if (count > freepages) panic("requested more memory than available.");
+    if (count == 0)
+        panic("allocated 0 page frames.");
+
+    if (count > freepages)
+        panic("requested more memory than available.");
 
     for (size_t i = 0; i + count <= totalpages; i++) {
         bool found = true;
-        for (size_t k = 0; k < count; k++) if (checkbit(bitmap, i + k) != 0) {
-            found = false;
-            i += k;
-            break;
-        }
+        for (size_t k = 0; k < count; k++)
+            if (checkbit(bitmap, i + k) != 0) {
+                found = false;
+                i += k;
+                break;
+            }
 
         if (found) {
-            for (size_t k = 0; k < count; k++) setbit(bitmap, i + k);
+            for (size_t k = 0; k < count; k++)
+                setbit(bitmap, i + k);
+
             freepages -= count;
             uint64_t p = i * PAGE_SIZE;
             memset(virtual(p), 0, count * PAGE_SIZE);
@@ -94,7 +102,9 @@ uint64_t allocframe(size_t count) {
 
 void freeframe(uint64_t frameptr, size_t count) {
     uint64_t frameidx = frameptr / PAGE_SIZE;
-    for (size_t i = frameidx; i < frameidx + count; i++) unsetbit(bitmap, i);
+    for (size_t i = frameidx; i < frameidx + count; i++)
+        unsetbit(bitmap, i);
+
     freepages += count;
 }
 

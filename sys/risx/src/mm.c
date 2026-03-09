@@ -30,18 +30,25 @@ static volatile struct limine_stack_size_request stacksizereq = {
 };
 
 void initpmm(void) {
-    if (hhdmreq.response == NULL) panic("null hddm response.");
-    if (memmapreq.response == NULL) panic("null memmap response.");
+    if (hhdmreq.response == NULL)
+        panic("null hddm response.");
+
+    if (memmapreq.response == NULL)
+        panic("null memmap response.");
+
 
     initoffset(hhdmreq.response->offset);
     initkpalloc(memmapreq.response);
 }
 
 void initvmm(uint64_t stackbase) {
-    if (addrreq.response == NULL) panic("null executable addr response.");
-    if (stacksizereq.response == NULL) panic("null stack size response.");
+    if (addrreq.response == NULL)
+        panic("null executable addr response.");
+
+    if (stacksizereq.response == NULL)
+        panic("null stack size response.");
+
     (void)stackbase;
 
-    initkvalloc(addrreq.response->physical_base,
-                addrreq.response->virtual_base, stackbase, memmapreq.response);
+    initkvalloc(addrreq.response->physical_base, addrreq.response->virtual_base, stackbase, memmapreq.response);
 }

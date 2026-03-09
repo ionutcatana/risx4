@@ -16,7 +16,6 @@ void initmodules(void) {
     }
 
     for (size_t i = 0; i < modulereq.response->module_count; i++) {
-        printf("module address: 0x%016llx\nmodule string: %s\n", modulereq.response->modules[i]->address,
-                                                                 modulereq.response->modules[i]->string);
+        printf("module address: 0x%016llx\nmodule string: %s\n", modulereq.response->modules[i]->address, modulereq.response->modules[i]->string);
     }
 }

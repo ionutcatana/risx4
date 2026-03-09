@@ -33,17 +33,14 @@ pagetable_t* kerneltable() {
     return kerneltable_addr;
 }
 
-void initkvalloc(uint64_t base_physaddr,
-                 uint64_t base_virtaddr, uint64_t stackbase,
-                 struct limine_memmap_response* memmap) {
+void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, uint64_t stackbase, struct limine_memmap_response* memmap) {
     (void)stackbase;
     kerneltable_addr = virtual(allocframe(1));
     memset(kerneltable_addr, 0, sizeof(pagetable_t));
 
     /* map the entire physical memory into higher half using an offset        */
     for (size_t i = 0; i < memmap->entry_count; i++)
-        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED &&
-            memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
+        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED && memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
             for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
                 uint64_t curraddr = memmap->entries[i]->base + j;
                 mappage(kerneltable_addr, base_virtaddr + curraddr, curraddr, PAGE_RISX_DATA);
@@ -51,9 +48,7 @@ void initkvalloc(uint64_t base_physaddr,
         }
 
     /* map the kernel's code and data                                         */
-    for (uint64_t curr_virtaddr = base_virtaddr, curr_physaddr = base_physaddr;
-         curr_virtaddr <= (uint64_t)__kernel_end;
-         curr_physaddr += PAGE_SIZE, curr_virtaddr += PAGE_SIZE) {
+    for (uint64_t curr_virtaddr = base_virtaddr, curr_physaddr = base_physaddr; curr_virtaddr <= (uint64_t)__kernel_end; curr_physaddr += PAGE_SIZE, curr_virtaddr += PAGE_SIZE) {
         uint64_t currflags = 0;
         if (curr_virtaddr >= (uint64_t) __text_start && curr_virtaddr < (uint64_t) __text_end)
             currflags = PAGE_RISX_TEXT;
@@ -64,6 +59,7 @@ void initkvalloc(uint64_t base_physaddr,
             currflags = PAGE_RISX_DATA;
         else
             break;
+
         mappage(kerneltable_addr, curr_virtaddr, curr_physaddr, currflags);
     }
 
@@ -73,8 +69,7 @@ void initkvalloc(uint64_t base_physaddr,
         uint64_t stack_virt = STACK0 - cpu * DISTANCE;
         uint64_t stack_physaddr = allocframe(4);
         for (size_t i = 0; i < 4; i++) {
-            mappage(kerneltable_addr, stack_virt + i * PAGE_SIZE,
-                                      stack_physaddr + i * PAGE_SIZE, PAGE_RISX_STACK);
+            mappage(kerneltable_addr, stack_virt + i * PAGE_SIZE, stack_physaddr + i * PAGE_SIZE, PAGE_RISX_STACK);
         }
     }
 
