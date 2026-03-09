@@ -3,7 +3,6 @@
 #include "panic.h"
 #include "risx.h"
 #include <stddef.h>
-#include <stdnoreturn.h>
 
 __attribute__((used, section(".limine_requests")))
 static volatile struct limine_rsdp_request rsdpreq = {

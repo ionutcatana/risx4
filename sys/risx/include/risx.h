@@ -4,7 +4,6 @@
 #include "limine.h"
 #include "risx/config.h"
 #include <stdint.h>
-#include <stdnoreturn.h>
 
 typedef struct {
     uint64_t value0; // stack top address
@@ -12,8 +11,8 @@ typedef struct {
 } __attribute__((packed)) pair_t;
 
 // risx.c
-pair_t  boostrap();
-void    setup(struct limine_mp_info* info);
-noreturn void risx(void);
+void boostrap(void);
+void setup(struct limine_mp_info* info);
+void risx(void);
 
 #endif
