@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 // arch/x86_64/interrupts.h
-typedef struct trapframe trapframe_t;
+struct trapframe;
 
 // arch/x86_64/interrupts.S
 void intenable(void);
@@ -16,6 +16,6 @@ void istub(void);
 void intpush(void);
 void intpop(void);
 void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist);
-void idispatch(trapframe_t* tf);
+void idispatch(struct trapframe* tf);
 
 #endif

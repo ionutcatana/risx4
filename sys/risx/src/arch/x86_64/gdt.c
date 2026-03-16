@@ -6,16 +6,17 @@
 #include "risx.h"
 #include <stdint.h>
 
-static gdtr_t desc __attribute__((aligned(16)));
+static struct gdtr desc __attribute__((aligned(16)));
 
 // from arch/x86_64/gdt.S
 extern segdesc_t _gdt[NENTRIES_GDT];
-extern tss_t*    _tssaddrs[NCPU];
+extern struct tss* _tssaddrs[NCPU];
 
 // from arch/x86_64/interrupts.S
 extern uint64_t  _istacks[NCPU];
 
-void initgdt(void) {
+void initgdt(void)
+{
     desc.limit = sizeof(segdesc_t) * NENTRIES_GDT - 1;
     desc.base = (uint64_t)_gdt;
 
@@ -26,8 +27,9 @@ void initgdt(void) {
     loadtr(RISX_TSS0_SEG + (readlapicid() * 2 * sizeof(segdesc_t)));
 }
 
-void inittssdescriptors(void) {
-    uint64_t limit = sizeof(tss_t) - 1;
+void inittssdescriptors(void)
+{
+    uint64_t limit = sizeof(struct tss) - 1;
     for (size_t i = 0; i < NCPU; i++) {
         // tss descriptors start at index 5, each is 2 entries
         size_t idx1 = 5 + (i * 2);
@@ -49,10 +51,11 @@ void inittssdescriptors(void) {
     }
 }
 
-void inittss(void) {
+void inittss(void)
+{
     // initialize only what's needed for now
     for (size_t i = 0; i < NCPU; i++) {
-        _tssaddrs[i]->iomap_base = sizeof(tss_t);
+        _tssaddrs[i]->iomap_base = sizeof(struct tss);
         _tssaddrs[i]->rsp0 = _istacks[i] + STACK_SIZE;
         _tssaddrs[i]->ist[0] = _istacks[i] + STACK_SIZE;
     }

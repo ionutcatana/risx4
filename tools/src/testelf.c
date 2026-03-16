@@ -9,8 +9,8 @@ int main(int argc, char* argv[]) {
     }
 
     FILE* f = fopen(argv[1], "rb");
-    elfheader_t* header = malloc(sizeof(elfheader_t));
-    fread(header, sizeof(elfheader_t), 1, f);
+    struct elfheader* header = malloc(sizeof(struct elfheader));
+    fread(header, sizeof(struct elfheader), 1, f);
 
     printf("ELF Header:\n");
     printf("* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\n");
@@ -146,10 +146,10 @@ int main(int argc, char* argv[]) {
     printf("Section names index: %u\n", header->e_shstrndx);
 
     fseek(f, header->e_phoff, SEEK_SET);
-    elfprogramheader_t* programheaders = malloc(sizeof(elfprogramheader_t) * header->e_phnum);
+    struct elfprogramheader* programheaders = malloc(sizeof(struct elfprogramheader) * header->e_phnum);
 
     /* read all program headers at once */
-    fread(programheaders, sizeof(elfprogramheader_t), header->e_phnum, f);
+    fread(programheaders, sizeof(struct elfprogramheader), header->e_phnum, f);
 
     for (size_t i = 0; i < header->e_phnum; i++) {
         printf("\n");
@@ -207,16 +207,16 @@ int main(int argc, char* argv[]) {
     }
 
     fseek(f, header->e_shoff, SEEK_SET);
-    elfsectionheader_t* sectionheaders = malloc(sizeof(elfsectionheader_t) * header->e_shnum);
+    struct elfsectionheader* sectionheaders = malloc(sizeof(struct elfsectionheader) * header->e_shnum);
 
     /* read all section headers at once so we can locate the section-name string table */
-    fread(sectionheaders, sizeof(elfsectionheader_t), header->e_shnum, f);
+    fread(sectionheaders, sizeof(struct elfsectionheader), header->e_shnum, f);
 
     /* load section header string table (shstrtab) */
     char* shstrtab = NULL;
     uint64_t shstr_size = 0;
     if (header->e_shstrndx < header->e_shnum) {
-        elfsectionheader_t* shstr_sh = &sectionheaders[header->e_shstrndx];
+        struct elfsectionheader* shstr_sh = &sectionheaders[header->e_shstrndx];
         shstr_size = shstr_sh->sh_size;
         shstrtab = malloc(shstr_size + 1);
         if (shstrtab) {

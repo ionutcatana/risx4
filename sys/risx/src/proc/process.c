@@ -5,6 +5,7 @@
 #include "lib/string.h"
 #include <stdbool.h>
 
-void schedule(void) {
+void schedule(void)
+{
     while(true);
 }

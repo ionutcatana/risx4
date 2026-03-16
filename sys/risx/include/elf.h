@@ -40,7 +40,7 @@
 #define ELF_IDENTIFIER_MACHINE_ARM64 ((uint16_t)0xb7)
 #define ELF_IDENTIFIER_MACHINE_RISCV ((uint16_t)0xf3)
 
-typedef struct {
+struct elfheader {
     uint8_t ei_magic[4];
     uint8_t ei_class;
     uint8_t ei_data;
@@ -61,7 +61,7 @@ typedef struct {
     uint16_t e_shentsize;
     uint16_t e_shnum;
     uint16_t e_shstrndx;
-} elfheader_t __attribute__((packed));
+} __attribute__((packed));
 
 #define ELF_PROGRAM_TYPE_NULL    ((uint32_t)0x00000000)
 #define ELF_PROGRAM_TYPE_LOAD    ((uint32_t)0x00000001)
@@ -80,7 +80,7 @@ typedef struct {
 #define ELF_PROGRAM_FLAG_WRITE   ((uint32_t)0x2)
 #define ELF_PROGRAM_FLAG_READ    ((uint32_t)0x4)
 
-typedef struct {
+struct elfprogramheader {
     uint32_t p_type;
     uint32_t p_flags;
     uint64_t p_offset;
@@ -89,7 +89,7 @@ typedef struct {
     uint64_t p_filesz;
     uint64_t p_memsz;
     uint64_t p_align;
-} elfprogramheader_t __attribute__((packed)) ;
+} __attribute__((packed));
 
 #define ELF_SECTION_TYPE_NULL          ((uint32_t)0x0)
 #define ELF_SECTION_TYPE_PROGBITS      ((uint32_t)0x1)
@@ -126,7 +126,7 @@ typedef struct {
 #define ELF_SECTION_FLAG_ORDERED          ((uint64_t)0x4000000)
 #define ELF_SECTION_FLAG_EXCLUDE          ((uint64_t)0x8000000)
 
-typedef struct {
+struct elfsectionheader {
     uint32_t sh_name;
     uint32_t sh_type;
     uint64_t sh_flags;
@@ -137,6 +137,6 @@ typedef struct {
     uint32_t sh_info;
     uint64_t sh_addralign;
     uint64_t sh_entsize;
-} elfsectionheader_t __attribute__((packed));
+} __attribute__((packed));
 
 #endif

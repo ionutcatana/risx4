@@ -21,8 +21,8 @@
 
 #define NENTRIES_PT         (512)
 
-typedef struct {
+struct pagetable {
     uint64_t entries[NENTRIES_PT];
-} pagetable_t;
+};
 
 #endif

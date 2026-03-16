@@ -13,3 +13,4 @@
     - Scheduling
 - (08/03/2026) Focus on UEFI machines from now on
 - (10/03/2026) TODO: fix kernel stacks later
+- (16/03/2026) Adopt style guide close to Linux kernel

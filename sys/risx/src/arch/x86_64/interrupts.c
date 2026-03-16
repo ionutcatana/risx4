@@ -7,7 +7,7 @@
 #include "risx.h"
 #include <stdint.h>
 
-static idtr_t desc __attribute__((aligned(16)));
+static struct idtr desc __attribute__((aligned(16)));
 static volatile int64_t ninterrupts[NPROC] = {0}; // signed!
 static volatile uint64_t intenabled[NPROC] = {0};
 
@@ -15,7 +15,8 @@ static volatile uint64_t intenabled[NPROC] = {0};
 extern uint64_t  _vectors[NENTRIES_IDT];
 extern intdesc_t _idt[NENTRIES_IDT];
 
-void intpush(void) {
+void intpush(void)
+{
     uint64_t rflags = readrflags();
     intdisable();
 
@@ -25,7 +26,8 @@ void intpush(void) {
     ninterrupts[id]++;
 }
 
-void intpop(void) {
+void intpop(void)
+{
     uint64_t id = readlapicid();
 
     ninterrupts[id]--;
@@ -39,7 +41,8 @@ void intpop(void) {
         intenable();
 }
 
-void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist) {
+void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist)
+{
     _idt[vector].base_lower  = (uint16_t)(handler & 0xFFFF);
     _idt[vector].selector    = RISX_CODE_SEG;
     _idt[vector].ist         = ist & 0x7;
@@ -49,7 +52,8 @@ void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist
     _idt[vector].reserved    = 0;
 }
 
-void idispatch(trapframe_t* tf) {
+void idispatch(struct trapframe* tf)
+{
     printf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
 
     // handle the interrupt after it has been announced on the serial port
@@ -115,7 +119,8 @@ void idispatch(trapframe_t* tf) {
     return;
 }
 
-void initidt(void) {
+void initidt(void)
+{
     desc.limit = sizeof(intdesc_t) * 256 - 1;
     desc.base = (uint64_t)_idt;
 

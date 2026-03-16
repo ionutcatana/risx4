@@ -22,7 +22,8 @@ static volatile struct limine_executable_address_request addrreq = {
     .revision = LIMINE_API_REVISION
 };
 
-void initpmm(void) {
+void initpmm(void)
+{
     if (hhdmreq.response == NULL)
         panic("null hddm response.");
 
@@ -34,7 +35,8 @@ void initpmm(void) {
     initkpalloc(memmapreq.response);
 }
 
-void initvmm() {
+void initvmm()
+{
     if (addrreq.response == NULL)
         panic("null executable addr response.");
 

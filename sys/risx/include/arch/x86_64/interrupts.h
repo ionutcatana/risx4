@@ -25,7 +25,7 @@
 #define X86_INTERRUPT_XF    (19)    // simd error                   // no
 
 // overrides commonarch/interrupts.h
-typedef struct trapframe {
+struct trapframe {
     uint64_t r15;
     uint64_t r14;
     uint64_t r13;
@@ -48,6 +48,6 @@ typedef struct trapframe {
     uint64_t rflags;
     uint64_t rsp;
     uint64_t ss;
-} __attribute__((packed)) trapframe_t;
+} __attribute__((packed));
 
 #endif

@@ -12,10 +12,10 @@
 
 #define NENTRIES_GDT    (5 + (NCPU * 2))
 
-typedef struct {
+struct gdtr {
     uint16_t limit;
     uint64_t base;
-} __attribute__((packed)) gdtr_t;
+} __attribute__((packed));
 
 typedef union {
     struct {
@@ -29,7 +29,7 @@ typedef union {
     uint64_t value;
 } segdesc_t;
 
-typedef struct {
+struct tss {
     uint32_t reserved0;
     uint64_t rsp0;
     uint64_t rsp1;
@@ -39,10 +39,10 @@ typedef struct {
     uint64_t reserved2;
     uint16_t reserved3;
     uint16_t iomap_base;
-} __attribute__((packed)) tss_t;
+} __attribute__((packed));
 
 // arch/x86_64/gdt.S
-void loadgdt(gdtr_t* desc);
+void loadgdt(struct gdtr* desc);
 void loadtr(uint16_t selector);
 
 // arch/x86_64/gdt.c

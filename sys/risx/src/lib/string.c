@@ -4,7 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t n) {
+void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t n)
+{
     unsigned char* dst = (unsigned char*)dstptr;
     const unsigned char* src = (const unsigned char*)srcptr;
     for (size_t i = 0; i < n; i++) dst[i] = src[i];
@@ -12,7 +13,8 @@ void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t n) {
     return dstptr;
 }
 
-void* memmove(void* dstptr, const void* srcptr, size_t n) {
+void* memmove(void* dstptr, const void* srcptr, size_t n)
+{
     unsigned char* dst = (unsigned char*)dstptr;
     const unsigned char* src = (const unsigned char*)srcptr;
     if (dst < src) {
@@ -24,7 +26,8 @@ void* memmove(void* dstptr, const void* srcptr, size_t n) {
     return dstptr;
 }
 
-int memcmp(const void* aptr, const void* bptr, size_t n) {
+int memcmp(const void* aptr, const void* bptr, size_t n)
+{
     const unsigned char* a = (const unsigned char*)aptr;
     const unsigned char* b = (const unsigned char*)bptr;
     for (size_t i = 0; i < n; i++) {
@@ -35,21 +38,24 @@ int memcmp(const void* aptr, const void* bptr, size_t n) {
     return 0;
 }
 
-void* memset(void* bufptr, int value, size_t n) {
+void* memset(void* bufptr, int value, size_t n)
+{
     unsigned char* buf = (unsigned char*)bufptr;
     for (size_t i = 0; i < n; i++) buf[i] = (unsigned char)value;
 
     return bufptr;
 }
 
-char* strcpy(char* restrict dst, const char* restrict src) {
+char* strcpy(char* restrict dst, const char* restrict src)
+{
     char* ret = dst;
     while ((*dst++ = *src++));
 
     return ret;
 }
 
-int strcmp(const char* s1, const char* s2) {
+int strcmp(const char* s1, const char* s2)
+{
     while (*s1 && (*s1 == *s2)) {
         s1++;
         s2++;
@@ -58,7 +64,8 @@ int strcmp(const char* s1, const char* s2) {
     return *(const unsigned char*)s1 - *(const unsigned char*)s2;
 }
 
-size_t strlen(const char* str) {
+size_t strlen(const char* str)
+{
     size_t len = 0;
     while (str[len]) len++;
 

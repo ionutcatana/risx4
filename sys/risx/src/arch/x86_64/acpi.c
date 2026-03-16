@@ -10,11 +10,12 @@ static volatile struct limine_rsdp_request rsdpreq = {
     .revision = LIMINE_API_REVISION
 };
 
-rsdp_t*    rsdp    = NULL;
-xsdp_t*    xsdp    = NULL;
+struct rsdp* rsdp = NULL;
+struct xsdp* xsdp = NULL;
 static int version = ACPI_VERSION_1;
 
-void initacpi(void) {
+void initacpi(void)
+{
     if (rsdpreq.response == NULL || rsdpreq.response->address == NULL)
         panic("ACPI is not supported.");
 
@@ -26,6 +27,7 @@ void initacpi(void) {
     }
 }
 
-int acpiversion(void) {
+int acpiversion(void)
+{
     return version;
 }

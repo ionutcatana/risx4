@@ -21,9 +21,10 @@ static size_t    size       = 0;
 static uint64_t  freepages  = 0;
 static uint64_t  totalpages = 0;
 
-static spinlock_t bitmaplk;
+static struct spinlock bitmaplk;
 
-void initkpalloc(const struct limine_memmap_response* memmap) {
+void initkpalloc(const struct limine_memmap_response* memmap)
+{
 //  enumeratememmap(memmap);
     initlock(&bitmaplk, "bitmap");
 
@@ -74,7 +75,8 @@ void initkpalloc(const struct limine_memmap_response* memmap) {
 //  printf("free pages: %lu (approx. %lu megabytes)\n", freepages, freepages * PAGE_SIZE / MEGABYTE);
 }
 
-uint64_t allocframe(size_t count) {
+uint64_t allocframe(size_t count)
+{
     if (count == 0)
         panic("allocated 0 page frames.");
 
@@ -108,7 +110,8 @@ uint64_t allocframe(size_t count) {
     panic("out of contiguous memory.");
 }
 
-void freeframe(uint64_t frameptr, size_t count) {
+void freeframe(uint64_t frameptr, size_t count)
+{
     acquire(&bitmaplk);
 
     uint64_t frameidx = frameptr / PAGE_SIZE;

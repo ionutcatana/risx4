@@ -15,11 +15,12 @@ static volatile struct limine_framebuffer_request fbreq = {
     .revision = LIMINE_API_REVISION
 };
 
-static spinlock_t consolelk;
+static struct spinlock consolelk;
 
 static struct flanterm_context* ft_ctx = NULL;
 
-int initconsole(void) {
+int initconsole(void)
+{
     if (fbreq.response == NULL || fbreq.response->framebuffer_count == 0)
         panic("invalid framebuffer response.");
 
@@ -52,7 +53,8 @@ int initconsole(void) {
     return 0;
 }
 
-void consoleputchar(int c) {
+void consoleputchar(int c)
+{
     acquire(&consolelk);
     if (ft_ctx != NULL)
         flanterm_write(ft_ctx, (const char*)&c, 1);

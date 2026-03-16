@@ -6,11 +6,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-static spinlock_t seriallk;
+static struct spinlock seriallk;
 
 static bool initialized = false;
 
-int initserial(void) {
+int initserial(void)
+{
     initlock(&seriallk, "serial");
 
     writes(X86_64_SERIAL_PORT + 1, 0x00);    // disable all interrupts
@@ -35,7 +36,8 @@ int initserial(void) {
     return 0;
 }
 
-void serialputchar(int c) {
+void serialputchar(int c)
+{
     acquire(&seriallk);
     if (initialized) {
         while((reads(X86_64_SERIAL_PORT + 5) & 0x20) == 0);

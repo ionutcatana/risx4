@@ -13,24 +13,28 @@ static volatile struct limine_mp_request mpreq = {
     .revision = LIMINE_API_REVISION
 };
 
-uint64_t cpucount(void) {
+uint64_t cpucount(void)
+{
     return mpreq.response->cpu_count;
 }
 
-uint32_t bootstrapcpu(void) {
+uint32_t bootstrapcpu(void)
+{
 #if defined (__x86_64__)
     return mpreq.response->bsp_lapic_id;
 #endif
 }
 
-void enumeratecpus(void) {
+void enumeratecpus(void)
+{
     printf("processors:\n");
     printf("%8s%13s\n", "lapic id", "processor id");
     for (uint64_t i = 0; i < cpucount(); i++)
         printf("%8lu%13lu %s\n", mpreq.response->cpus[i]->lapic_id, mpreq.response->cpus[i]->processor_id, mpreq.response->cpus[i]->processor_id == bootstrapcpu() ? "(!)" : "");
 }
 
-void initmp(void) {
+void initmp(void)
+{
     if (mpreq.response == NULL)
         return; // doesn't panic; systems may not have multiple processors
 

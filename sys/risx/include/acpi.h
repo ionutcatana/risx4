@@ -7,15 +7,15 @@
 #define ACPI_VERSION_SUBSEQUENT 2   // 2.0-6.1
 
 /* root system description pointer */
-typedef struct {
+struct rsdp {
     char signature[8];
     uint8_t checksum;
     char oemid[6];
     uint8_t revision;
     uint32_t rsdpaddr;
-} __attribute__((packed)) rsdp_t;
+} __attribute__((packed));
 
-typedef struct {
+struct xsdp {
     char signature[8];
     uint8_t checksum;
     char oemid[6];
@@ -25,10 +25,10 @@ typedef struct {
     uint64_t xsdtaddr;
     uint8_t xchecksum;
     uint8_t reserved[8];
-} __attribute__((packed)) xsdp_t;
+} __attribute__((packed));
 
 /* root table header */
-typedef struct {
+struct sdtheader {
     char signature[4];
     uint32_t length;
     uint8_t revision;
@@ -38,26 +38,26 @@ typedef struct {
     uint32_t oemrevision;
     uint32_t creatorid;
     uint32_t creatorrevision;
-} __attribute__((packed)) sdtheader_t;
+} __attribute__((packed));
 
-// typedef struct {
-//     sdtheader_t header;
-//     uint32_t sdtaddr[(header.length - sizeof(sdtheader_t)) / 4];
-// } __attribute__((packed)) rsdt_t;
+// struct rsdt {
+//     struct sdtheader header;
+//     uint32_t sdtaddr[(header.length - sizeof(struct sdtheader)) / 4];
+// } __attribute__((packed));
 
-// typedef struct  {
-//     sdtheader_t header;
-//     uint64_t sdtaddr[(header.length - sizeof(sdtheader_t)) / 8];
-// } __attribute__((packed)) xsdt_t;
+// struct xsdt {
+//     struct sdtheader header;
+//     uint64_t sdtaddr[(header.length - sizeof(struct sdtheader)) / 8];
+// } __attribute__((packed));
 
 /* fixed acpi description table */
-typedef struct {
+struct genericaddress {
   uint8_t address_space;
   uint8_t bit_width;
   uint8_t bit_offset;
   uint8_t access_size;
   uint64_t address;
-} __attribute__((packed)) genericaddress_t;
+} __attribute__((packed));
 
 #define PREFERRED_UNSPECIFIED       ((uint8_t)0)
 #define PREFERRED_DESKTOP           ((uint8_t)1)
@@ -68,8 +68,8 @@ typedef struct {
 #define PREFERRED_APPLIANCE_PC      ((uint8_t)6)
 #define PREFERRED_PERFORMANCE       ((uint8_t)7)
 
-typedef struct {
-    sdtheader_t header;
+struct fadt {
+    struct sdtheader header;
     uint32_t firmware_ctrl;
     uint32_t dsdt_addr;
     uint8_t  reserved; // field used in acpi 1.0
@@ -108,32 +108,32 @@ typedef struct {
     uint16_t boot_architecture_flags; // reserved in acpi 1.0; used since acpi 2.0+
     uint8_t  reserved2;
     uint32_t flags;
-    genericaddress_t reset_reg;
+    struct genericaddress reset_reg;
     uint8_t  reset_value;
     uint8_t  reser_ved3[3];
     uint64_t x_firmwarecontrol; // 64bit pointers - available on acpi 2.0+
     uint64_t x_dsdt;
-    genericaddress_t x_pm1_aevent_block;
-    genericaddress_t x_pm1_bevent_block;
-    genericaddress_t x_pm1_acontrol_block;
-    genericaddress_t x_pm1_bcontrol_block;
-    genericaddress_t x_pm2_control_block;
-    genericaddress_t x_pm_timer_block;
-    genericaddress_t x_gpe0_block;
-    genericaddress_t x_gpe1_block;
-} __attribute__((packed)) fadt_t;
+    struct genericaddress x_pm1_aevent_block;
+    struct genericaddress x_pm1_bevent_block;
+    struct genericaddress x_pm1_acontrol_block;
+    struct genericaddress x_pm1_bcontrol_block;
+    struct genericaddress x_pm2_control_block;
+    struct genericaddress x_pm_timer_block;
+    struct genericaddress x_gpe0_block;
+    struct genericaddress x_gpe1_block;
+} __attribute__((packed));
 
 /* multiple apic description table */
-typedef struct {
-    sdtheader_t header;
+struct madtheader {
+    struct sdtheader header;
     uint32_t local_apic_addr;
     uint32_t flags;
-} __attribute__((packed)) madtheader_t;
+} __attribute__((packed));
 
-typedef struct {
+struct madtrecordheader {
     uint8_t entry_type;
     uint8_t record_length;
-} __attribute__((packed)) madtrecordheader_t;
+} __attribute__((packed));
 
 #define MADT_RECORD_LAPIC                             ((uint8_t)0)
 #define MADT_RECORD_IO_APIC                           ((uint8_t)1)
@@ -142,26 +142,26 @@ typedef struct {
 #define MADT_RECORD_LAPIC_NMI                         ((uint8_t)4)
 #define MADT_RECORD_LAPIC_ADDRESS_OVERRIDE            ((uint8_t)5)
 #define MADT_RECORD_LX2APIC                           ((uint8_t)9)
-// typedef struct {
+// struct reserved_madt_record {
 
-// } __attribute__((packed)) _t;
+// } __attribute__((packed));
 // https://wiki.osdev.org/MADT
 #define LAPIC_FLAG_ENABLED ((uint8_t)0)
 #define LAPIC_FLAG_ONLINE  ((uint8_t)1)
 // represents a single logical processor and its local interrupt controller.
-typedef struct {
+struct record_lapic {
     uint8_t acpi_processor_id;
     uint8_t acpi_id;
     uint32_t flags;
-} __attribute__((packed)) record_lapic_t;
+} __attribute__((packed));
 
 // represents a i/o apic.
-typedef struct {
+struct record_io_apic {
     uint8_t io_apic_id;
     uint8_t reserved; // = 0
     uint32_t io_apic_address;
     uint32_t global_system_interrupt_base;
-} __attribute__((packed)) record_io_apic_t;
+} __attribute__((packed));
 
 // #define MADT_RECORD_FLAG_POLARITY_NO_OVERRIDE (0)
 // #define MADT_RECORD_FLAG_POLARITY_DEFAULT (0)
@@ -171,37 +171,37 @@ typedef struct {
 // #define MADT_RECORD_FLAG_TRIGGER_MODE_DEFAULT (0)
 // #define MADT_RECORD_FLAG_TRIGGER_MODE_EDGE_TRIGGERED (1)
 // #define MADT_RECORD_FLAG_TRIGGER_MODE_LEVEL_TRIGGERED (3)
-typedef struct {
+struct record_io_apic_iso {
     uint8_t bus_source;
     uint8_t irq_source;
     uint32_t global_system_interrupt;
     uint16_t flags;
-} __attribute__((packed)) record_io_apic_iso_t;
+} __attribute__((packed));
 
-typedef struct {
+struct record_io_apic_nmis {
     uint8_t nmi_source;
     uint8_t reserved;
     uint16_t flags;
     uint32_t global_system_interrupt;
-} __attribute__((packed)) record_io_apic_nmis_t;
+} __attribute__((packed));
 
-typedef struct {
+struct record_io_lapic_nmi {
     uint8_t acpi_processord_id;
     uint16_t flags;
     uint8_t lint_number;
-} __attribute__((packed)) record_io_lapic_nmi_t;
+} __attribute__((packed));
 
-typedef struct {
+struct record_io_lapic_ao {
     uint16_t reserved;
     uint64_t lapic_address;
-} __attribute__((packed)) record_io_lapic_ao_t;
+} __attribute__((packed));
 
-typedef struct {
+struct record_io_lx2apic {
     uint16_t reserved;
     uint32_t lx2apic_id;
     uint32_t flags;
     uint32_t acpi_id;
-} __attribute__((packed)) record_io_lx2apic_t;
+} __attribute__((packed));
 
 // arch/x86/acpi.c
 void initacpi(void);

@@ -3,12 +3,12 @@
 
 #include <stdint.h>
 
-typedef struct {
+struct semaphore {
     _Atomic uint64_t count;
-} semaphore_t;
+};
 
-void initsemaphore(semaphore_t* sem, uint64_t initial_count);
-void proberen(semaphore_t* sem); // `wait`, `down`
-void verhogen(semaphore_t* sem); // `signal`, `up`
+void initsemaphore(struct semaphore* sem, uint64_t initial_count);
+void proberen(struct semaphore* sem); // `wait`, `down`
+void verhogen(struct semaphore* sem); // `signal`, `up`
 
 #endif

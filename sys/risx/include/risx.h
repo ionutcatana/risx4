@@ -5,10 +5,10 @@
 #include "risx/config.h"
 #include <stdint.h>
 
-typedef struct {
+struct pair {
     uint64_t value0; // stack top address
     uint64_t value1; // physical address of kernel page table
-} __attribute__((packed)) pair_t;
+} __attribute__((packed));
 
 // risx.c
 void boostrap(void);

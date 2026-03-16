@@ -3,15 +3,15 @@
 
 #include <stdint.h>
 
-typedef struct message_t {
+struct message {
     uint32_t sender;
     uint32_t type;
     union {
         uint64_t part[3];   // work in progress
     } payload;
-} __attribute__((packed)) message_t;
+} __attribute__((packed));
 
-int send(int dest, message_t* msg);
-int receive(int src, message_t* msg);
+int send(int dest, struct message* msg);
+int receive(int src, struct message* msg);
 
 #endif

@@ -18,10 +18,10 @@
 
 #define NENTRIES_IDT    (256)
 
-typedef struct {
+struct idtr {
     uint16_t limit;
     uint64_t base;
-} __attribute__((packed)) idtr_t;
+} __attribute__((packed));
 
 typedef union {
     struct {
@@ -40,7 +40,7 @@ typedef union {
 } __attribute__((packed)) intdesc_t;
 
 // arch/x86_86/interrupts.S
-void loadidt(idtr_t* desc);
+void loadidt(struct idtr* desc);
 
 // arch/x86_86/interrupts.c
 void initidt(void);

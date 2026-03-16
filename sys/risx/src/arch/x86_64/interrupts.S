@@ -1594,7 +1594,7 @@ istub:  push    rax                     # save the general purpose registers
         push    r15
 
         mov     rdi, rsp                # move trapframe into first argument
-        call    idispatch               # void idispatch(trapframe_t* tf)
+        call    idispatch               # void idispatch(struct trapframe* tf)
 
         pop     r15
         pop     r14

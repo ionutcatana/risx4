@@ -37,12 +37,14 @@ static volatile LIMINE_REQUESTS_END_MARKER
 __attribute__((used, section(".limine_requests")))
 static volatile LIMINE_BASE_REVISION(4)
 
-noreturn void panic(const char* message) {
+noreturn void panic(const char* message)
+{
     printf("PANIC: %s\n", message);
     abort();
 }
 
-void boostrap(void) {
+void boostrap(void)
+{
     /* basic display and communication                                        */
     initprintf();
     initserial();
@@ -59,13 +61,14 @@ void boostrap(void) {
     initmp();
 }
 
-void setup(struct limine_mp_info* info) {
+void setup(struct limine_mp_info* info)
+{
 #if defined (__x86_64__)
     initgdt(); printf("[CPU %llu] GDT installed.\n", info->processor_id);
     initidt(); printf("[CPU %llu] IDT installed.\n", info->processor_id);
 //  initacpi();
-//  extern struct rsdp_t* rsdp;
-//  extern struct xsdp_t* xsdp;
+//  extern struct rsdp* rsdp;
+//  extern struct xsdp* xsdp;
     switch (acpiversion()) {
     case ACPI_VERSION_1:
 //      printf("ACPI 1.0\n");
@@ -83,7 +86,8 @@ void setup(struct limine_mp_info* info) {
     printf("[CPU %llu] setup successful.\n", info->processor_id);
 }
 
-void risx(void) {
+void risx(void)
+{
     // printf("[CPU %lu] entered RISX.\n", readlapicid());
 
     schedule();

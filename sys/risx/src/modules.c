@@ -9,7 +9,8 @@ static volatile struct limine_module_request modulereq = {
     .revision = LIMINE_API_REVISION
 };
 
-void initmodules(void) {
+void initmodules(void)
+{
     if (modulereq.response == NULL) {
 //      printf("no modules loaded\n");
         return;
