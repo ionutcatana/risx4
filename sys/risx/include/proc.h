@@ -1,6 +1,10 @@
 #ifndef PROC_H
 #define PROC_H 1
 
+#include <stdint.h>
+#include "commonarch/paging.h"
+#include "commonarch/interrupts.h"
+
 // TODO: wip
 enum procstate {
     UNUSED,
@@ -9,6 +13,10 @@ enum procstate {
     RUNNABLE,
     RUNNING,
     ZOMBIE
+};
+
+struct cpu {
+    uint32_t lapicid;
 };
 
 struct proc {
@@ -21,10 +29,6 @@ struct proc {
     struct trapframe* trapframe;
     struct proc* parent;
     struct cpu* cpu;
-};
-
-struct cpu {
-    uint32_t lapicid;
 };
 
 #endif
