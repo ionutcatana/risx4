@@ -57,6 +57,22 @@ void boostrap(void)
     initpmm(); printf("[CPU %llu] physical frame allocator initialized.\n", readlapicid());
     initvmm(); printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
 
+#if defined (__x86_64__)
+    extern struct rsdp* rsdp;
+    extern struct xsdp* xsdp;
+    initacpi();
+    switch (acpiversion()) {
+    case ACPI_VERSION_1:
+        printf("[CPU %llu] ACPI 1.0\n", readlapicid());
+        printf("[CPU %llu] RSDT addr: 0x%016lx\n", readlapicid(), rsdp->rsdpaddr);
+        break;
+    case ACPI_VERSION_SUBSEQUENT:
+        printf("[CPU %llu] ACPI >= 2.0\n", readlapicid());
+        printf("[CPU %llu] XSDT addr: 0x%016lx\n", readlapicid(), xsdp->xsdtaddr);
+        break;
+    }
+#endif
+
     /* start all cores                                                        */
     initmp();
 }
@@ -66,19 +82,6 @@ void setup(struct limine_mp_info* info)
 #if defined (__x86_64__)
     initgdt(); printf("[CPU %llu] GDT installed.\n", info->processor_id);
     initidt(); printf("[CPU %llu] IDT installed.\n", info->processor_id);
-//  initacpi();
-//  extern struct rsdp* rsdp;
-//  extern struct xsdp* xsdp;
-    switch (acpiversion()) {
-    case ACPI_VERSION_1:
-//      printf("ACPI 1.0\n");
-//      printf("RSDT addr: 0x%016lx\n", rsdp->rsdpaddr);
-        break;
-    case ACPI_VERSION_SUBSEQUENT:
-//      printf("ACPI >= 2.0\n");
-//      printf("XSDT addr: 0x%016lx\n", xsdp->xsdtaddr);
-        break;
-    }
 #endif
 
     intenable();
