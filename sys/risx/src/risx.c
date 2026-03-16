@@ -86,10 +86,9 @@ void setup(struct limine_mp_info* info)
     printf("[CPU %llu] setup successful.\n", info->processor_id);
 }
 
-void risx(void)
+noreturn void risx(void)
 {
-    // printf("[CPU %lu] entered RISX.\n", readlapicid());
-
+    /* start the ball rolling.                                                */
     schedule();
     panic("unexpected return from scheduler.\n");
 }
