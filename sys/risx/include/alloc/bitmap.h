@@ -6,8 +6,8 @@
 #include <stdint.h>
 
 // alloc/bitmap.c
-void setbit(uint32_t* bitmap, size_t idx);
-void unsetbit(uint32_t* bitmap, size_t idx);
-bool checkbit(uint32_t* bitmap, size_t idx);
+void setbit(uint32_t bitmap[], size_t idx);
+void unsetbit(uint32_t bitmap[], size_t idx);
+bool checkbit(uint32_t bitmap[], size_t idx);
 
 #endif
