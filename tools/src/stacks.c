@@ -1,16 +1,25 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define STACK0      ((uint64_t)0xffffffffffffb000)
-#define STACKBASE0  ((uint64_t)0xffffffffffffefff)
-#define NCPU        (32)
-#define DISTANCE    ((uint64_t)0x5000)
+/* stacks are made of 4 pages, preceeded by a guard page                      */
+#define DISTANCE      ((uint64_t) 0x5000)             // 20K
+#define STACK_SIZE    ((uint64_t) 0x4000)             // 16K
+
+/* 32 kernel stacks                                                           */
+#define STACKKBASE0   ((uint64_t) 0xfffffffffffff000) // -4K
+#define STACKK0       ((uint64_t) 0xffffffffffffe000) // -8K
+
+/* 32 interrupt stacks                                                        */
+#define STACKIBASE0   ((uint64_t) 0x00007ffffffff000) //
+#define STACKI0       ((uint64_t) 0x00007fffffffe000) //
+
+#define NCPU          (32)
 
 int main() {
-    uint64_t current_stack = STACK0;
-    uint64_t current_stackbase = STACKBASE0;
+    uint64_t current_stack = STACKK0;
+    uint64_t current_stackbase = STACKKBASE0;
 
-    printf("KERNEL STACKS\n");
+    printf("\nKERNEL STACKS\n");
     printf("NCPU STACK              STACKBASE\n");
     for (size_t i = 0; i < NCPU; i++) {
         current_stack -= i * DISTANCE;
