@@ -3,18 +3,10 @@
 
 #include <stdint.h>
 
-#define ACPI_VERSION_1 0            // 1.0
-#define ACPI_VERSION_SUBSEQUENT 2   // 2.0-6.1
+#define ACPI_VERSION_1          ((uint64_t)0) // 1.0
+#define ACPI_VERSION_SUBSEQUENT ((uint64_t)2) // 2.0-6.1
 
 /* root system description pointer */
-struct rsdp {
-    char signature[8];
-    uint8_t checksum;
-    char oemid[6];
-    uint8_t revision;
-    uint32_t rsdpaddr;
-} __attribute__((packed));
-
 struct xsdp {
     char signature[8];
     uint8_t checksum;

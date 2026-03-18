@@ -10,7 +10,6 @@
 #define NTASK               32
 
 /* risx uses 32 cores and 16kib kernel stacks                                 */
-#define STACK_SIZE          0x4000
 #define NCPU                32
 
 /* kernel heap base address (hhdm + 4tib)                                     */

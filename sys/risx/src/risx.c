@@ -58,19 +58,10 @@ void boostrap(void)
     initvmm(); printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
 
 #if defined (__x86_64__)
-    extern struct rsdp* rsdp;
     extern struct xsdp* xsdp;
     initacpi();
-    switch (acpiversion()) {
-    case ACPI_VERSION_1:
-        printf("[CPU %llu] ACPI 1.0\n", readlapicid());
-        printf("[CPU %llu] RSDT addr: 0x%016lx\n", readlapicid(), rsdp->rsdpaddr);
-        break;
-    case ACPI_VERSION_SUBSEQUENT:
-        printf("[CPU %llu] ACPI >= 2.0\n", readlapicid());
-        printf("[CPU %llu] XSDT addr: 0x%016lx\n", readlapicid(), xsdp->xsdtaddr);
-        break;
-    }
+    printf("[CPU %llu] ACPI >= 2.0\n", readlapicid());
+    printf("[CPU %llu] XSDT addr: 0x%016lx\n", readlapicid(), virtual(xsdp->xsdtaddr));
 #endif
 
     /* start all cores                                                        */
