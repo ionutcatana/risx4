@@ -1,0 +1,3 @@
+#ifndef PRIVATE_ACPI_TYPES_H
+#define PRIVATE_ACPI_TYPES_H 1
+#endif

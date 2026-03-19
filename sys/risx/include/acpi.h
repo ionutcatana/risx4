@@ -1,10 +1,10 @@
 #ifndef ACPI_H
 #define ACPI_H 1
 
+#include "acpi/constants.h"
+#include "acpi/defs.h"
+#include "acpi/types.h"
 #include <stdint.h>
-
-#define ACPI_VERSION_1          ((uint64_t)0) // 1.0
-#define ACPI_VERSION_SUBSEQUENT ((uint64_t)2) // 2.0-6.1
 
 /* root system description pointer */
 struct xsdp {
@@ -194,16 +194,5 @@ struct record_io_lx2apic {
     uint32_t flags;
     uint32_t acpi_id;
 } __attribute__((packed));
-
-// arch/x86/acpi.c
-void initacpi(void);
-int  acpiversion(void);
-void validate_dsp(uint64_t dsp_address);
-void validate_dst(uint64_t dst_address);
-
-void parse_rdsp();
-void parse_xdsp();
-void parse_rdst();
-void parse_xdst();
 
 #endif
