@@ -22,14 +22,11 @@
 
 #define NENTRIES_PT         (512)
 
-struct {
+struct pagetable {
     uint64_t entries[NENTRIES_PT];
-} pagetable;
+};
 
 // arch/x86_64/alloc/virt_allocator.c
 uint64_t readkernelpgtbl(void);
-
-// TODO: unimplemented yet
-uint64_t walk(struct pagetable* pagetable, uint64_t virtaddr, bool create);
 
 #endif
