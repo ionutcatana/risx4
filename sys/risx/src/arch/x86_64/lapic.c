@@ -45,21 +45,21 @@ initlapic(void)
 	lapic_base = (volatile uint32_t *)virtual(ai->lapic_addr);
 
 	// enable apic, set spurious interrupt vector
-	lapicwrite(lapic_svr, lapic_svr_enable | vec_lapic_spurious);
+	lapicwrite(LAPIC_SVR, LAPIC_SVR_ENABLE | VEC_LAPIC_SPURIOUS);
 
 	// mask lint0, lint1. the ioapic will handle external interrupts.
 	// nmi is configured per the madt lapic nmi record.
-	lapicwrite(lapic_lint0, lapic_lvt_masked);
+	lapicwrite(LAPIC_LINT0, LAPIC_LVT_MASKED);
 	if (ai->nmi_lint == 1)
-		lapicwrite(lapic_lint1, 0x400);         // nmi delivery mode
+		lapicwrite(LAPIC_LINT1, 0x400);         // nmi delivery mode
 	else
-		lapicwrite(lapic_lint0, 0x400);
+		lapicwrite(LAPIC_LINT0, 0x400);
 
-	lapicwrite(lapic_esr, 0);   	            // clear error status
-	lapicwrite(lapic_esr, 0);
+	lapicwrite(LAPIC_ESR, 0);                   // clear error status
+	lapicwrite(LAPIC_ESR, 0);
 	lapiceoi();                                 // ack any outstanding interrupts
-	lapicwrite(lapic_tpr, 0);                   // set task priority to 0 so we accept all interrupts
-	lapicwrite(lapic_error, vec_lapic_error);	// set error interrupt vector
+	lapicwrite(LAPIC_TPR, 0);                   // set task priority to 0 so we accept all interrupts
+	lapicwrite(LAPIC_ERROR, VEC_LAPIC_ERROR);   // set error interrupt vector
 
 
 	printf("[cpu %u] lapic initialized, id=%u.\n", lapicid(), lapicid());
