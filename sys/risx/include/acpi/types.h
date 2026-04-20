@@ -29,7 +29,7 @@ struct sdtheader {
     uint32_t creatorrevision;
 } __attribute__((packed));
 
-/* fixed acpi description table */
+/* generic address structure (used by FADT)                                   */
 struct genericaddress {
   uint8_t address_space;
   uint8_t bit_width;
@@ -38,6 +38,7 @@ struct genericaddress {
   uint64_t address;
 } __attribute__((packed));
 
+/* fixed acpi description table */
 struct fadt {
     struct sdtheader header;
     uint32_t firmware_ctrl;
@@ -91,6 +92,12 @@ struct fadt {
     struct genericaddress x_pm_timer_block;
     struct genericaddress x_gpe0_block;
     struct genericaddress x_gpe1_block;
+} __attribute__((packed));
+
+/* differentiated system description table (contains AML bytecode)            */
+struct dsdt {
+    struct sdtheader header;
+    /* AML bytecode follows the header; length = header.length - sizeof(header) */
 } __attribute__((packed));
 
 /* multiple apic description table */
@@ -150,6 +157,48 @@ struct record_io_lx2apic {
     uint32_t lx2apic_id;
     uint32_t flags;
     uint32_t acpi_id;
+} __attribute__((packed));
+
+/* system resource affinity table (SRAT)                                      */
+struct sratheader {
+    struct sdtheader header;
+    uint32_t reserved1;
+    uint64_t reserved2;
+} __attribute__((packed));
+
+struct sratrecordheader {
+    uint8_t type;
+    uint8_t length;
+} __attribute__((packed));
+
+struct record_srat_lapic_affinity {
+    uint8_t  proximity_domain_lo;
+    uint8_t  apic_id;
+    uint32_t flags;
+    uint8_t  sapic_eid;
+    uint8_t  proximity_domain_hi[3];
+    uint32_t clock_domain;
+} __attribute__((packed));
+
+struct record_srat_memory_affinity {
+    uint32_t proximity_domain;
+    uint16_t reserved1;
+    uint32_t base_address_lo;
+    uint32_t base_address_hi;
+    uint32_t length_lo;
+    uint32_t length_hi;
+    uint32_t reserved2;
+    uint32_t flags;
+    uint64_t reserved3;
+} __attribute__((packed));
+
+struct record_srat_lx2apic_affinity {
+    uint16_t reserved1;
+    uint32_t proximity_domain;
+    uint32_t lx2apic_id;
+    uint32_t flags;
+    uint32_t clock_domain;
+    uint32_t reserved2;
 } __attribute__((packed));
 
 #endif
