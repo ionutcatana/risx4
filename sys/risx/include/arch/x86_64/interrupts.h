@@ -24,6 +24,21 @@
 #define X86_INTERRUPT_MC    (18)    // machine check                // no
 #define X86_INTERRUPT_XF    (19)    // simd error                   // no
 
+// idt vector assignments for the x86_64 apic interrupt model.
+// vectors 32-47 are used for ioapic-routed irqs (isa mapping).
+#define IRQ_BASE            32
+#define IRQ_TIMER_PIT       (IRQ_BASE + 0)  // ISA IRQ 0 -> vector 32
+#define IRQ_KEYBOARD        (IRQ_BASE + 1)  // ISA IRQ 1 -> vector 33
+#define IRQ_COM2            (IRQ_BASE + 3)  // ISA IRQ 3 -> vector 35
+#define IRQ_COM1            (IRQ_BASE + 4)  // ISA IRQ 4 -> vector 36
+
+// vector 48 is the lapic timer.
+#define VEC_LAPIC_TIMER     48
+#define VEC_LAPIC_ERROR     49
+
+// vector 255 is the lapic spurious interrupt.
+#define VEC_LAPIC_SPURIOUS  255
+
 // overrides commonarch/interrupts.h
 struct trapframe {
     uint64_t r15;
