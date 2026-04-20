@@ -1,6 +1,7 @@
 #include "arch/x86_64/interrupts.h"
 #include "arch/x86_64/specific/gdt.h" // for `RISX_CODE_SEG`
 #include "arch/x86_64/specific/idt.h"
+#include "arch/x86_64/specific/lapic.h"
 #include "arch/x86_64/specific/registers.h"
 #include "lib/printf.h"
 #include "panic.h"
@@ -52,10 +53,11 @@ void sethandler(size_t vector, uint64_t handler, uint8_t attributes, uint8_t ist
     _idt[vector].reserved    = 0;
 }
 
+// from arch/x86_64/timer.c
+extern void timertick(void);
+
 void idispatch(struct trapframe* tf)
 {
-    printf("Interrupt: %d; Error: %d\n", tf->vector, tf->error);
-
     // handle the interrupt after it has been announced on the serial port
     // exceptions 9 & 15 not defined yet
     switch (tf->vector) {
@@ -97,8 +99,9 @@ void idispatch(struct trapframe* tf)
         break;
     case X86_INTERRUPT_GP:
         panic("general protection fault.");
+        break;
     case X86_INTERRUPT_PF:
-        printf("virtaddr: 0x%016lx\n", readcr2());
+        printf("virtaddr: 0x%016llx\n", readcr2());
         panic("unresolved page fault.");
     case X86_INTERRUPT_MF:
         panic("unresolved fpu unit fault.");
@@ -112,7 +115,25 @@ void idispatch(struct trapframe* tf)
     case X86_INTERRUPT_XF:
         panic("unresolved simd error.");
         break;
+    case VEC_LAPIC_TIMER:
+        timertick();
+        lapiceoi();
+        break;
+    case VEC_LAPIC_ERROR:
+        printf("LAPIC: error interrupt received.\n");
+        lapiceoi();
+        break;
+    case VEC_LAPIC_SPURIOUS:
+        // spurious interrupt: don't send EOI
+        break;
     default:
+        // for any other ioapic-routed irq, acknowledge and return
+        if (tf->vector >= IRQ_BASE && tf->vector < VEC_LAPIC_TIMER) {
+            lapiceoi();
+            break;
+        }
+
+        printf("Interrupt: %lu; Error: %lu\n", tf->vector, tf->error);
         panic("unimplemented interrupt handler.");
     }
 
