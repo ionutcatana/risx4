@@ -12,7 +12,4 @@
 /* risx uses 32 cores and 16kib kernel stacks                                 */
 #define NCPU                32
 
-/* kernel heap base address (hhdm + 4tib)                                     */
-#define KERNEL_HEAP_BASE    0xffffa00000000000
-
 #endif
