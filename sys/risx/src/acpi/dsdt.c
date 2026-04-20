@@ -28,6 +28,5 @@ parsedsdt(struct dsdt *ptr)
 	}
 
 	amlsz = ptr->header.length - sizeof(struct sdtheader);
-	printf("ACPI: DSDT revision=%u OEM=%.6s AML_size=%zu\n",
-	    ptr->header.revision, ptr->header.oemid, amlsz);
+	printf("ACPI: DSDT revision=%u OEM=%.6s AML_size=%zu\n", ptr->header.revision, ptr->header.oemid, amlsz);
 }

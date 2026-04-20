@@ -52,8 +52,11 @@ parsesrat(struct sratheader *ptr)
 			    ((uint32_t)r->proximity_domain_hi[0] << 8) |
 			    ((uint32_t)r->proximity_domain_hi[1] << 16) |
 			    ((uint32_t)r->proximity_domain_hi[2] << 24);
-			printf("ACPI:  SRAT LAPIC apic=%u domain=%u "
-			    "flags=0x%08x\n", r->apic_id, domain, r->flags);
+			printf("ACPI:  SRAT LAPIC apic=%u domain=%u flags=0x%08x\n",
+                r->apic_id,
+                domain,
+                r->flags);
+
 			break;
 		}
 		case SRAT_RECORD_MEMORY_AFFINITY: {
@@ -66,11 +69,10 @@ parsesrat(struct sratheader *ptr)
 			    r->base_address_lo;
 			memlen = ((uint64_t)r->length_hi << 32) |
 			    r->length_lo;
-			printf("ACPI:  SRAT MEM domain=%u base=0x%016llx "
-			    "len=0x%016llx flags=0x%08x\n",
+			printf("ACPI:  SRAT MEM domain=%u base=0x%016llx len=0x%016llx flags=0x%08x\n",
 			    r->proximity_domain,
-			    (unsigned long long)membase,
-			    (unsigned long long)memlen,
+			    membase,
+			    memlen,
 			    r->flags);
 			break;
 		}
@@ -79,15 +81,14 @@ parsesrat(struct sratheader *ptr)
 
 			r = (struct record_srat_lx2apic_affinity *)(base +
 			    sizeof(struct sratrecordheader));
-			printf("ACPI:  SRAT x2APIC id=%u domain=%u "
-			    "flags=0x%08x\n",
-			    r->lx2apic_id, r->proximity_domain,
+			printf("ACPI:  SRAT x2APIC id=%u domain=%u flags=0x%08x\n",
+			    r->lx2apic_id,
+             r->proximity_domain,
 			    r->flags);
 			break;
 		}
 		default:
-			printf("ACPI:  SRAT unknown record type=%u len=%u\n",
-			    rec->type, rec->length);
+			printf("ACPI:  SRAT unknown record type=%u len=%u\n", rec->type, rec->length);
 			break;
 		}
 

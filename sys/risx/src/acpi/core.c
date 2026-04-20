@@ -65,8 +65,7 @@ parsexsdp(struct xsdp *ptr)
 	if (!validxsdp(ptr))
 		panic("XSDP validation failed.");
 
-	printf("ACPI: XSDP OEM=%.6s revision=%u\n", ptr->oemid,
-	    ptr->revision);
+	printf("ACPI: XSDP OEM=%.6s revision=%u\n", ptr->oemid, ptr->revision);
 
 	xsdt = virtual(ptr->xsdtaddr);
 	parsexsdt(xsdt);
@@ -97,8 +96,7 @@ parsexsdt(struct sdtheader *hdr)
 		if (table == NULL)
 			continue;
 
-		printf("ACPI: found table '%.4s' len=%u\n",
-		    table->signature, table->length);
+		printf("ACPI: found table '%.4s' len=%u\n", table->signature, table->length);
 
 		if (memcmp(table->signature, SDT_SIG_FACP, 4) == 0)
 			parsefadt((struct fadt *)table);

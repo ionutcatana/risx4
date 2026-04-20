@@ -61,6 +61,5 @@ initlapic(void)
 	lapicwrite(LAPIC_TPR, 0);                   // set task priority to 0 so we accept all interrupts
 	lapicwrite(LAPIC_ERROR, VEC_LAPIC_ERROR);   // set error interrupt vector
 
-
-	printf("[cpu %u] lapic initialized, id=%u.\n", lapicid(), lapicid());
+//  printf("[CPU %u] lapic initialized, id=%u.\n", lapicid(), lapicid());
 }

@@ -29,7 +29,7 @@ parsefadt(struct fadt *ptr)
 		return;
 	}
 
-	printf("ACPI: FADT revision=%u profile=%u sci_int=%u\n",
+    printf("ACPI: FADT revision=%u profile=%u sci_int=%u\n",
 	    ptr->header.revision,
 	    ptr->preferred_power_management_profile,
 	    ptr->sci_interrupt);
