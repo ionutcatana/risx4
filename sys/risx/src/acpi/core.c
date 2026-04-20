@@ -10,7 +10,7 @@ static volatile struct limine_rsdp_request rsdpreq = {
     .revision = LIMINE_API_REVISION
 };
 
-struct xsdp* xsdp = NULL;
+static struct xsdp* xsdp = NULL;
 
 void initacpi(void)
 {

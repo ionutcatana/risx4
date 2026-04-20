@@ -1,6 +1,7 @@
 #ifndef COMMONARCH_PAGING_H
 #define COMMONARCH_PAGING_H 1
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define PAGE_SIZE           (0x1000)
@@ -24,5 +25,8 @@
 struct pagetable {
     uint64_t entries[NENTRIES_PT];
 };
+
+// arch/x86_64/alloc/virt_allocator.c
+uint64_t readkernelpgtbl(void);
 
 #endif

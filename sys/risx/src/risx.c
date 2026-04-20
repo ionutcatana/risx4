@@ -57,12 +57,8 @@ void boostrap(void)
     initpmm(); printf("[CPU %llu] physical frame allocator initialized.\n", readlapicid());
     initvmm(); printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
 
-#if defined (__x86_64__)
-    extern struct xsdp* xsdp;
+    /* acpi table parsing                                                     */
     initacpi();
-    printf("[CPU %llu] ACPI >= 2.0\n", readlapicid());
-    printf("[CPU %llu] XSDT addr: 0x%016lx\n", readlapicid(), virtual(xsdp->xsdtaddr));
-#endif
 
     /* start all cores                                                        */
     initmp();
