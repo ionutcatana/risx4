@@ -1,9 +1,11 @@
 #include "acpi.h"
+#include "acpi/apicinfo.h"
 #include "commonarch/abort.h"
+#include "commonarch/console.h"
 #include "commonarch/interrupts.h"
 #include "commonarch/mp.h"
 #include "commonarch/serial.h"
-#include "commonarch/console.h"
+#include "commonarch/timer.h"
 #include "lib/printf.h"
 #include "limine.h"
 #include "mm.h"
@@ -15,6 +17,9 @@
 #if defined(__x86_64__)
 #include "arch/x86_64/specific/gdt.h"
 #include "arch/x86_64/specific/idt.h"
+#include "arch/x86_64/specific/ioapic.h"
+#include "arch/x86_64/specific/lapic.h"
+#include "arch/x86_64/specific/pic.h"
 #include "arch/x86_64/specific/registers.h"
 #endif
 
@@ -60,6 +65,19 @@ void boostrap(void)
     /* acpi table parsing                                                     */
     initacpi();
 
+#if defined(__x86_64__)
+    /* disable legacy pic before enabling apic                                */
+    disablepic();
+
+    /* map lapic and ioapic mmio pages into the active page table             */
+    struct apicinfo *ai = getapicinfo();
+    mapmmio(ai->lapic_addr, 1);
+    mapmmio((uint64_t)ai->ioapic.address, 1);
+
+    /* initialize ioapic                                                      */
+    initioapic();
+#endif
+
     /* start all cores                                                        */
     initmp();
 }
@@ -69,6 +87,8 @@ void setup(struct limine_mp_info* info)
 #if defined (__x86_64__)
     initgdt(); printf("[CPU %llu] GDT installed.\n", info->processor_id);
     initidt(); printf("[CPU %llu] IDT installed.\n", info->processor_id);
+    initlapic();
+    inittimer();
 #endif
 
     intenable();
