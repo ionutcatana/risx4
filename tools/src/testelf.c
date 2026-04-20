@@ -124,9 +124,9 @@ int main(int argc, char* argv[]) {
     }
 
     printf("Version: %u\n", header->e_version);
-    printf("Entry point address %016lx\n", header->e_entry);
-    printf("Program header offset: %016lx\n", header->e_phoff);
-    printf("Section header offset: %016lx\n", header->e_shoff);
+    printf("Entry point address %016llx\n", header->e_entry);
+    printf("Program header offset: %016llx\n", header->e_phoff);
+    printf("Section header offset: %016llx\n", header->e_shoff);
 
     printf("Flags: %u (hex: %08lx)\n", header->e_flags,
                                        header->e_flags);
@@ -198,12 +198,12 @@ int main(int argc, char* argv[]) {
 
         printf("Flags: %u (hex: %08lx)\n", programheaders[i].p_flags,
                                            programheaders[i].p_flags);
-        printf("Offset: %016lx\n", programheaders[i].p_offset);
-        printf("Virtual address: %016lx\n", programheaders[i].p_vaddr);
-        printf("Physical address: %016lx\n", programheaders[i].p_paddr);
-        printf("File size: %016lx\n", programheaders[i].p_filesz);
-        printf("Memory size: %016lx\n", programheaders[i].p_memsz);
-        printf("Alignment: %016lx\n", programheaders[i].p_align);
+        printf("Offset: %016llx\n", programheaders[i].p_offset);
+        printf("Virtual address: %016llx\n", programheaders[i].p_vaddr);
+        printf("Physical address: %016llx\n", programheaders[i].p_paddr);
+        printf("File size: %016llx\n", programheaders[i].p_filesz);
+        printf("Memory size: %016llx\n", programheaders[i].p_memsz);
+        printf("Alignment: %016llx\n", programheaders[i].p_align);
     }
 
     fseek(f, header->e_shoff, SEEK_SET);
@@ -300,15 +300,15 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        printf("Flags: %u (hex: %016lx)\n", sectionheaders[i].sh_flags,
+        printf("Flags: %u (hex: %016llx)\n", sectionheaders[i].sh_flags,
                                             sectionheaders[i].sh_flags);
-        printf("Virtual address: %016lx\n", sectionheaders[i].sh_addr);
-        printf("Offset: %016lx\n", sectionheaders[i].sh_offset);
-        printf("Size: %016lx\n", sectionheaders[i].sh_size);
+        printf("Virtual address: %016llx\n", sectionheaders[i].sh_addr);
+        printf("Offset: %016llx\n", sectionheaders[i].sh_offset);
+        printf("Size: %016llx\n", sectionheaders[i].sh_size);
         printf("Link: %u\n", sectionheaders[i].sh_link);
         printf("Info: %u\n", sectionheaders[i].sh_info);
-        printf("Address alignment: %016lx\n", sectionheaders[i].sh_addralign);
-        printf("Entry size (if section holds table): %016lx\n", sectionheaders[i].sh_entsize);
+        printf("Address alignment: %016llx\n", sectionheaders[i].sh_addralign);
+        printf("Entry size (if section holds table): %016llx\n", sectionheaders[i].sh_entsize);
     }
 
     fclose(f);

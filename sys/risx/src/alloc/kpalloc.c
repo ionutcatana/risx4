@@ -71,7 +71,7 @@ void initkpalloc(const struct limine_memmap_response* memmap)
             }
 
 
-//  printf("bitmap location: %016lx\n", bitmap);
+//  printf("bitmap location: %016llx\n", bitmap);
 //  printf("free pages: %lu (approx. %lu megabytes)\n", freepages, freepages * PAGE_SIZE / MEGABYTE);
 }
 
