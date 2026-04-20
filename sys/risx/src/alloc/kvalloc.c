@@ -157,3 +157,17 @@ uint64_t* walk(struct pagetable* pagetable, uint64_t virtaddr)
     /* return a pointer to the pte so the caller can read or modify it        */
     return &lvl1tbl->entries[index];
 }
+
+void mapmmio(uint64_t physaddr, size_t npages)
+{
+    uint64_t cr3 = readcr3();
+    struct pagetable* active = virtual(cr3 & PTE_ADDRESS_MASK);
+    uint64_t flags = PAGE_PRESENT | PAGE_WRITABLE | PAGE_CACHE_DISABLED |
+        PAGE_WRITE_THROUGH | PAGE_NO_EXECUTE | PAGE_GLOBAL;
+
+    for (size_t i = 0; i < npages; i++) {
+        uint64_t pa = physaddr + i * PAGE_SIZE;
+        uint64_t va = (uint64_t)virtual(pa);
+        mappage(active, va, pa, flags);
+    }
+}
