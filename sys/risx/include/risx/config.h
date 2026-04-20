@@ -9,6 +9,9 @@
 #define NPROC               224
 #define NTASK               32
 
+/* maximum number of limine boot modules                                      */
+#define MAX_MODULES         16
+
 /* risx uses 32 cores and 16kib kernel stacks                                 */
 #define NCPU                32
 
