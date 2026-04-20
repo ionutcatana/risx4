@@ -55,12 +55,12 @@ void boostrap(void)
     initserial();
     initconsole();
 
+    /* memory management mechanisms                                           */
+    initpmm(); // printf("[CPU %llu] physical frame allocator initialized.\n", readlapicid());
+    initvmm(); // printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
+
     /* servers and drivers                                                    */
     initmodules();
-
-    /* memory management mechanisms                                           */
-    initpmm(); printf("[CPU %llu] physical frame allocator initialized.\n", readlapicid());
-    initvmm(); printf("[CPU %llu] virtual page allocator initialized.\n", readlapicid());
 
     /* acpi table parsing                                                     */
     initacpi();
@@ -85,8 +85,8 @@ void boostrap(void)
 void setup(struct limine_mp_info* info)
 {
 #if defined (__x86_64__)
-    initgdt(); printf("[CPU %llu] GDT installed.\n", info->processor_id);
-    initidt(); printf("[CPU %llu] IDT installed.\n", info->processor_id);
+    initgdt(); // printf("[CPU %llu] GDT installed.\n", info->processor_id);
+    initidt(); // printf("[CPU %llu] IDT installed.\n", info->processor_id);
     initlapic();
     inittimer();
 #endif
