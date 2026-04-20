@@ -45,7 +45,8 @@ void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, struct limine_m
 
     /* map the entire physical memory into higher half using an offset        */
     for (size_t i = 0; i < memmap->entry_count; i++)
-        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED && memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
+        if (memmap->entries[i]->type != LIMINE_MEMMAP_RESERVED &&
+            memmap->entries[i]->type != LIMINE_MEMMAP_BAD_MEMORY) {
             for (uint64_t j = 0; j < memmap->entries[i]->length; j += PAGE_SIZE) {
                 uint64_t curraddr = memmap->entries[i]->base + j;
                 mappage(kerneltable_addr, base_virtaddr + curraddr, curraddr, PAGE_RISX_DATA);
@@ -59,7 +60,8 @@ void initkvalloc(uint64_t base_physaddr, uint64_t base_virtaddr, struct limine_m
             currflags = PAGE_RISX_TEXT;
         else if (curr_virtaddr >= (uint64_t) __rodata_start && curr_virtaddr < (uint64_t) __rodata_end)
             currflags = PAGE_RISX_RODATA;
-        else if ((curr_virtaddr >= (uint64_t) __data_start && curr_virtaddr < (uint64_t) __data_end) || (curr_virtaddr >= (uint64_t) __bss_start && curr_virtaddr < (uint64_t) __bss_end))
+        else if ((curr_virtaddr >= (uint64_t) __data_start && curr_virtaddr < (uint64_t) __data_end) ||
+                 (curr_virtaddr >= (uint64_t) __bss_start && curr_virtaddr < (uint64_t) __bss_end))
             currflags = PAGE_RISX_DATA;
         else
             break;
@@ -162,8 +164,13 @@ void mapmmio(uint64_t physaddr, size_t npages)
 {
     uint64_t cr3 = readcr3();
     struct pagetable* active = virtual(cr3 & PTE_ADDRESS_MASK);
-    uint64_t flags = PAGE_PRESENT | PAGE_WRITABLE | PAGE_CACHE_DISABLED |
-        PAGE_WRITE_THROUGH | PAGE_NO_EXECUTE | PAGE_GLOBAL;
+
+    uint64_t flags = PAGE_PRESENT
+                   | PAGE_WRITABLE
+                   | PAGE_CACHE_DISABLED
+                   | PAGE_WRITE_THROUGH
+                   | PAGE_NO_EXECUTE
+                   | PAGE_GLOBAL;
 
     for (size_t i = 0; i < npages; i++) {
         uint64_t pa = physaddr + i * PAGE_SIZE;
