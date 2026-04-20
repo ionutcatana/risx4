@@ -105,25 +105,36 @@ void unmappage(struct pagetable* globaltbl, uint64_t start_virtaddr, size_t coun
 
 void mappage(struct pagetable* globaltbl, uint64_t virtaddr, uint64_t physaddr, uint64_t flags)
 {
+    /* intermediate table flags; propagate PAGE_USER if leaf needs it         */
+    uint64_t tblflags = PAGE_TABLE_FLAGS;
+    if (flags & PAGE_USER)
+        tblflags |= PAGE_USER;
+
     uint64_t index;
     index = LVL4_INDEX(virtaddr);
     if (!(globaltbl->entries[index] & PAGE_PRESENT)) {
         uint64_t p = allocframe(1);
-        globaltbl->entries[index] = p | PAGE_TABLE_FLAGS;
+        globaltbl->entries[index] = p | tblflags;
+    } else if (tblflags & PAGE_USER) {
+        globaltbl->entries[index] |= PAGE_USER;
     }
 
     struct pagetable* lvl3tbl = virtual(globaltbl->entries[index] & PTE_ADDRESS_MASK);
     index = LVL3_INDEX(virtaddr);
     if (!(lvl3tbl->entries[index] & PAGE_PRESENT)) {
         uint64_t p = allocframe(1);
-        lvl3tbl->entries[index] = p | PAGE_TABLE_FLAGS;
+        lvl3tbl->entries[index] = p | tblflags;
+    } else if (tblflags & PAGE_USER) {
+        lvl3tbl->entries[index] |= PAGE_USER;
     }
 
     struct pagetable* lvl2tbl = virtual(lvl3tbl->entries[index] & PTE_ADDRESS_MASK);
     index = LVL2_INDEX(virtaddr);
     if (!(lvl2tbl->entries[index] & PAGE_PRESENT)) {
         uint64_t p = allocframe(1);
-        lvl2tbl->entries[index] = p | PAGE_TABLE_FLAGS;
+        lvl2tbl->entries[index] = p | tblflags;
+    } else if (tblflags & PAGE_USER) {
+        lvl2tbl->entries[index] |= PAGE_USER;
     }
 
     struct pagetable* lvl1tbl = virtual(lvl2tbl->entries[index] & PTE_ADDRESS_MASK);
