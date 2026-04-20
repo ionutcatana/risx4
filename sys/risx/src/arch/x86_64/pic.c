@@ -11,23 +11,23 @@
 void
 disablepic(void)
 {
-	/* icw1: begin initialization sequence */
-	writes(PIC1_CMD, 0x11);
-	writes(PIC2_CMD, 0x11);
+    /* icw1: begin initialization sequence */
+    writes(PIC1_CMD, 0x11);
+    writes(PIC2_CMD, 0x11);
 
-	/* icw2: remap IRQs to vectors 0x20-0x2F */
-	writes(PIC1_DATA, 0x20);
-	writes(PIC2_DATA, 0x28);
+    /* icw2: remap IRQs to vectors 0x20-0x2F */
+    writes(PIC1_DATA, 0x20);
+    writes(PIC2_DATA, 0x28);
 
-	/* icw3: cascading */
-	writes(PIC1_DATA, 0x04);
-	writes(PIC2_DATA, 0x02);
+    /* icw3: cascading */
+    writes(PIC1_DATA, 0x04);
+    writes(PIC2_DATA, 0x02);
 
-	/* icw4: 8086 mode */
-	writes(PIC1_DATA, 0x01);
-	writes(PIC2_DATA, 0x01);
+    /* icw4: 8086 mode */
+    writes(PIC1_DATA, 0x01);
+    writes(PIC2_DATA, 0x01);
 
-	/* mask all IRQs */
-	writes(PIC1_DATA, 0xFF);
-	writes(PIC2_DATA, 0xFF);
+    /* mask all IRQs */
+    writes(PIC1_DATA, 0xFF);
+    writes(PIC2_DATA, 0xFF);
 }
