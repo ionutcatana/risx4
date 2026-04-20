@@ -6,7 +6,7 @@
 // straight from wikipedia
 // https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
 
-#define ELF_IDENTIFIER_MAGIC         { 0x7F, 'E', 'L', 'F' };
+#define ELF_IDENTIFIER_MAGIC         { 0x7F, 'E', 'L', 'F' }
 
 #define ELF_IDENTIFIER_CLASS_32_BIT  ((uint8_t)1)
 #define ELF_IDENTIFIER_CLASS_64_BIT  ((uint8_t)2)
